@@ -1,0 +1,138 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="fr.formation.matelli.mistra.Home">
+
+   <LinearLayout
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent"
+       android:orientation="vertical"
+       >
+
+
+
+    <ImageView
+        android:id="@+id/homeWithLogo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/background_home_with_logo"
+        android:scaleType="fitXY"
+        android:layout_weight="0.4"
+        android:contentDescription="@string/background_home_with_logo"/>
+
+    <LinearLayout
+        android:id="@+id/listeMenuHome"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:layout_weight="0.6"
+
+       >
+
+
+        <Button
+            android:id="@+id/vagueHome"
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/vague_home"
+            android:clickable="false"
+
+            />
+        <Button
+            android:id="@+id/buttonFormation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bouton_menu_formation_home"
+            android:text="@string/formations"
+            android:textColor="@android:color/white"
+            android:drawableStart="@drawable/ico_formation_home"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:enabled="true"
+            android:paddingStart="@dimen/icon_horizontal_margin"
+            android:paddingEnd="@dimen/icon_horizontal_margin"
+            android:drawablePadding="-30dp"
+
+             />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#ffffff"
+            />
+
+        <Button
+            android:id="@+id/buttonTutos"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bouton_menu_tutoriaux_home"
+            android:text="@string/tutos"
+            android:textColor="@android:color/white"
+            android:drawableStart="@drawable/ico_tutoriaux_home"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:paddingStart="@dimen/icon_horizontal_margin"
+            android:paddingEnd="@dimen/icon_horizontal_margin"
+            android:drawablePadding="-40dp"
+
+            />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#ffffff"
+            />
+
+        <Button
+            android:id="@+id/buttonDevis"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bouton_menu_devis_home"
+            android:text="@string/devis"
+            android:textColor="@android:color/white"
+            android:drawableStart="@drawable/ico_devis_home"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:paddingStart="@dimen/icon_horizontal_margin"
+            android:paddingEnd="@dimen/icon_horizontal_margin"
+            android:drawablePadding="15dp"
+            />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#ffffff"
+            />
+        <Button
+            android:id="@+id/buttonContact"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bouton_menu_contact_home"
+            android:text="@string/contact"
+            android:textColor="@android:color/white"
+            android:drawableStart="@drawable/ico_contact_home"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:paddingStart="@dimen/icon_horizontal_margin"
+            android:paddingEnd="@dimen/icon_horizontal_margin"
+            android:drawablePadding="-5dp"
+            />
+    </LinearLayout>
+       <TextView
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/border"
+           android:text="@string/footMistraFormation"
+           android:gravity="center"
+           android:textColor="@android:color/white"
+           android:padding="5dp"
+           android:textSize="8sp"/>
+
+   </LinearLayout>
+
+</RelativeLayout>

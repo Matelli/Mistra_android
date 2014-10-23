@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Mistra</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_home">Home</string>
+    <string name="background_home_with_logo">background_home_with_logo</string>
+    <string name="formations">Formations</string>
+    <string name="tutos">Tutoriaux</string>
+    <string name="devis">Demande de devis</string>
+    <string name="devisMenu">Devis</string>
+    <string name="contact">Nous contacter</string>
+    <string name="contactMenu">Contact</string>
+    <string name="footMistraFormation">(c) MISTRA FORMATION </string>
+    <string name="title_activity_list_formations">ListFormations</string>
+    <string name="retour">Retour home</string>
+    <string name="title_activity_devis">Devis</string>
+
+</resources>

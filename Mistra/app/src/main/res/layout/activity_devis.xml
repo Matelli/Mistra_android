@@ -1,0 +1,264 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="fr.formation.matelli.mistra.Devis">
+
+
+    <RelativeLayout
+        android:id="@+id/headerFormations"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_degade_head">
+
+        <ImageButton
+            android:id="@+id/btnRetourHome"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:background="@null"
+            android:contentDescription="@string/retour"
+            android:padding="15dp"
+            android:src="@drawable/arrow_right" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/devis"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/btnSendDevis"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            android:contentDescription="@string/retour"
+            android:padding="15dp"
+            android:src="@android:drawable/ic_menu_send" />
+
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/view"
+        android:layout_below="@+id/headerFormations"
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/view"
+            android:layout_below="@+id/headerFormations"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearSaisie"
+                android:layout_width="fill_parent"
+                android:layout_height="329dp"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_edit_text"
+                    android:gravity="center_vertical"
+                    android:hint="Objet"
+                    android:inputType="text"
+                    android:padding="5dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_edit_text"
+                    android:gravity="center_vertical"
+                    android:hint="Nom"
+                    android:inputType="text"
+                    android:padding="5dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_edit_text"
+                    android:gravity="center_vertical"
+                    android:hint="Téléphone"
+                    android:inputType="phone"
+                    android:padding="5dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_edit_text"
+                    android:gravity="center_vertical"
+                    android:hint="Email"
+                    android:inputType="textWebEmailAddress"
+                    android:padding="5dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_edit_text"
+                    android:gravity="center_vertical"
+                    android:hint="Ville"
+                    android:inputType="text"
+                    android:padding="5dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_edit_text"
+                    android:gravity="center_vertical"
+                    android:hint="Société"
+                    android:inputType="text"
+                    android:padding="5dp"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/degrade_cellule"
+                    android:drawableRight="@drawable/fleche_commentaire"
+                    android:padding="10dp"
+                    android:text="Commentaires (max: 500 car)"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@drawable/border_edit_text"
+                    android:hint="Sub title"
+                    android:inputType="textMultiLine"
+                    android:maxLength="500"
+                    android:padding="12dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/linearMenu"
+        android:background="@android:color/background_dark" />
+
+    <LinearLayout
+        android:id="@+id/linearMenu"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+
+        <Button
+            android:id="@+id/btnFormationFooterDevis"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:drawableTop="@drawable/ico_formation_footer"
+            android:gravity="center"
+            android:text="@string/formations"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnTutosFooterDevis"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:drawableTop="@drawable/ico_tuto_footer"
+            android:gravity="center"
+            android:text="@string/tutos"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnDevisFooterDevis"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:drawableTop="@drawable/ico_devis_footer_active"
+            android:gravity="center"
+            android:text="@string/devisMenu"
+            android:textColor="@android:color/holo_purple"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnContactFooterDevis"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:drawableTop="@drawable/ico_contact_footer"
+            android:gravity="center"
+            android:text="@string/contactMenu"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+
+
+
+
+
+

@@ -1,0 +1,132 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="fr.formation.matelli.mistra.ListFormations"
+   >
+
+    <RelativeLayout
+        android:id= "@+id/headerFormations"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_degade_head"
+        android:layout_alignParentTop="true"
+        >
+
+        <ImageButton
+            android:id="@+id/btnRetourHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_right"
+            android:layout_alignParentStart="false"
+            android:background="@null"
+            android:contentDescription="@string/retour"
+            android:padding="15dp"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/formations"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"/>
+
+
+        </RelativeLayout>
+
+    <ExpandableListView
+        android:id="@+id/expandablelisteFormations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerFormations"
+        android:layout_alignBottom="@+id/view"
+        android:groupIndicator="@null"
+        android:divider="@null"
+        android:childDivider="@drawable/degrade_cellule"
+        android:background="@android:color/white"
+        />
+
+
+    <View
+        android:id = "@+id/view"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/background_dark"
+        android:layout_above="@+id/linearMenu"
+        />
+    <LinearLayout
+        android:id="@+id/linearMenu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:background="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        style="?android:attr/buttonBarStyle"
+        >
+
+
+
+        <Button
+            android:id="@+id/btnFormationFooter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ico_formation_footer_active"
+            android:text="@string/formations"
+            android:textColor="@android:color/holo_purple"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:background="@android:color/white"
+            style="?android:attr/buttonBarStyle"/>
+        <Button
+            android:id="@+id/btnTutosFooter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ico_tuto_footer"
+            android:text="@string/tutos"
+            android:textColor="@android:color/darker_gray"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:background="@android:color/white"
+            style="?android:attr/buttonBarStyle"/>
+        <Button
+            android:id="@+id/btnDevisFooter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ico_devis_footer"
+            android:text="@string/devisMenu"
+            android:textColor="@android:color/darker_gray"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:background="@android:color/white"
+            style="?android:attr/buttonBarStyle"/>
+        <Button
+            android:id="@+id/btnContactFooter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ico_contact_footer"
+            android:text="@string/contactMenu"
+            android:textColor="@android:color/darker_gray"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:background="@android:color/white"
+            style="?android:attr/buttonBarStyle"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
+
+
+
+
+
