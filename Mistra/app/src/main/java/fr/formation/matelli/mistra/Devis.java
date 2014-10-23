@@ -1,13 +1,24 @@
 package fr.formation.matelli.mistra;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
+
+import java.security.cert.LDAPCertStoreParameters;
 
 
 public class Devis extends Activity {
 
+    ImageButton btnRetour, btnSend;
+    Button btnFormations, btnTutos,btnDevis, btnContact;
+    EditText etObjet, etNom, etNumTel,etEmail, etVille, etSociete;
 
 
 
@@ -15,6 +26,58 @@ public class Devis extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_devis);
+        // ImageButton
+        btnRetour = (ImageButton) findViewById(R.id.btnRetourHome);
+        btnSend = (ImageButton) findViewById(R.id.btnSendDevis);
+        // Button
+        btnFormations = (Button) findViewById(R.id.btnFormationFooterDevis);
+        btnTutos = (Button) findViewById(R.id.btnTutosFooterDevis);
+        btnDevis  = (Button) findViewById(R.id.btnDevisFooterDevis);
+        btnContact = (Button) findViewById(R.id.btnContactFooterDevis);
+        // EditText
+        etObjet = (EditText) findViewById(R.id.editObjet);
+        etNom = (EditText) findViewById(R.id.editNom);
+        etNumTel = (EditText) findViewById(R.id.editTel);
+        etEmail = (EditText) findViewById(R.id.editEmail);
+        etVille = (EditText) findViewById(R.id.editVille);
+        etSociete = (EditText) findViewById(R.id.editSociete);
+
+        btnRetour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Devis.this, Home.class);
+                startActivity(i);
+            }
+        });
+
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Devis.this,"Devis envoyé", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnFormations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Devis.this, ListFormations.class);
+                startActivity(i);
+            }
+        });
+
+        btnTutos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Devis.this, ListTutoriaux.class);
+                startActivity(i);
+            }
+        });
+
+
+
+
+
     }
 
 

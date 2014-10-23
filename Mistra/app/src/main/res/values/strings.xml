@@ -16,5 +16,7 @@
     <string name="title_activity_list_formations">ListFormations</string>
     <string name="retour">Retour home</string>
     <string name="title_activity_devis">Devis</string>
+    <string name="title_activity_list_tutoriaux">ListTutoriaux</string>
+    <string name="title_activity_contact">Contact</string>
 
 </resources>

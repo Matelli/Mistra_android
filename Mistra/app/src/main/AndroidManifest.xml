@@ -31,7 +31,17 @@
             android:name=".Devis"
             android:label="@string/title_activity_devis"
             android:theme="@android:style/Theme.NoTitleBar"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".ListTutoriaux"
+            android:label="@string/title_activity_list_tutoriaux"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".Contact"
+            android:label="@string/title_activity_contact"
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
     </application>
 

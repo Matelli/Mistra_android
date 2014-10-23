@@ -16,7 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class ListFormations extends Activity {
+public class ListTutoriaux extends Activity {
+
     ImageButton btnRetourHome;
     Button btnFormations;
     Button btnTutos;
@@ -30,23 +31,23 @@ public class ListFormations extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_formations);
+        setContentView(R.layout.activity_list_tutoriaux);
+
         // ImageButton
         btnRetourHome = (ImageButton) findViewById(R.id.btnRetourHome);
         // Button
-        btnFormations = (Button) findViewById(R.id.btnFormationFooter);
-        btnTutos = (Button) findViewById(R.id.btnTutosFooter);
-        btnDevis = (Button) findViewById(R.id.btnDevisFooter);
-        btnContact = (Button) findViewById(R.id.btnContactFooter);
+        btnFormations = (Button) findViewById(R.id.btnFormationFooterTutos);
+        btnTutos = (Button) findViewById(R.id.btnTutosFooterDevis);
+        btnDevis = (Button) findViewById(R.id.btnDevisFooterTutos);
+        btnContact = (Button) findViewById(R.id.btnContactFooterDevis);
         // ExpandableList
-        expListView = (ExpandableListView) findViewById(R.id.expandablelisteFormations);
-
+        expListView = (ExpandableListView) findViewById(R.id.expandablelisteTutos);
 
         // Listeners
         btnRetourHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ListFormations.this, Home.class);
+                Intent i = new Intent(ListTutoriaux.this, Home.class);
                 startActivity(i);
             }
         });
@@ -54,15 +55,15 @@ public class ListFormations extends Activity {
         btnDevis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ListFormations.this, Devis.class);
+                Intent i = new Intent(ListTutoriaux.this, Devis.class);
                 startActivity(i);
             }
         });
 
-        btnTutos.setOnClickListener(new View.OnClickListener() {
+        btnFormations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ListFormations.this, ListTutoriaux.class);
+                Intent i = new Intent(ListTutoriaux.this, ListFormations.class);
                 startActivity(i);
             }
         });
@@ -72,7 +73,7 @@ public class ListFormations extends Activity {
         // preparing list data
         prepareListData();
 
-        listAdapter = new CustomExpandableList(ListFormations.this, listDataHeader, listDataChild);
+        listAdapter = new CustomExpandableList(ListTutoriaux.this, listDataHeader, listDataChild);
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
@@ -91,33 +92,43 @@ public class ListFormations extends Activity {
         listDataHeader.add("ANDROID");
 
         // Adding child data
-        List<String> fjava = new ArrayList<String>();
-        fjava.add("Formation Java 01");
-        fjava.add("Formation Java 02");
-        fjava.add("Formation Java 03");
-        fjava.add("Formation Java 04");
-        fjava.add("Formation Java 05");
-        fjava.add("Formation Java 06");
-        fjava.add("Formation Java 07");
+        List<String> tjava = new ArrayList<String>();
+        tjava.add("Tutoriel Java 01");
+        tjava.add("Tutoriel Java 02");
+        tjava.add("Tutoriel Java 03");
+        tjava.add("Tutoriel Java 04");
+        tjava.add("Tutoriel Java 05");
+        tjava.add("Tutoriel Java 06");
+        tjava.add("Tutoriel Java 07");
 
-        List<String> fmicrosoft = new ArrayList<String>();
-        fmicrosoft.add("Formation Microsoft .net 01 ");
-        fmicrosoft.add("Formation Microsoft .net 02");
-        fmicrosoft.add("Formation Microsoft .net 03");
-        fmicrosoft.add("Formation Microsoft .net 04");
-        fmicrosoft.add("Formation Microsoft .net 05");
-        fmicrosoft.add("Formation Microsoft .net 06");
+        List<String> tmicrosoft = new ArrayList<String>();
+        tmicrosoft.add("Tutoriel Microsoft .net 01 ");
+        tmicrosoft.add("Tutoriel Microsoft .net 02");
+        tmicrosoft.add("Tutoriel Microsoft .net 03");
+        tmicrosoft.add("Tutoriel Microsoft .net 04");
+        tmicrosoft.add("Tutoriel Microsoft .net 05");
+        tmicrosoft.add("Tutoriel Microsoft .net 06");
 
-        List<String> fandroid = new ArrayList<String>();
-        fandroid.add("Formation Android 01");
-        fandroid.add("Formation Android 02");
-        fandroid.add("Formation Android 03");
-        fandroid.add("Formation Android 04");
-        fandroid.add("Formation Android 05");
+        List<String> tandroid = new ArrayList<String>();
+        tandroid.add("Tutoriel Android 01");
+        tandroid.add("Tutoriel Android 02");
+        tandroid.add("Tutoriel Android 03");
+        tandroid.add("Tutoriel Android 04");
+        tandroid.add("Tutoriel Android 05");
 
-        listDataChild.put(listDataHeader.get(0), fjava); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), fmicrosoft);
-        listDataChild.put(listDataHeader.get(2), fandroid);
+        listDataChild.put(listDataHeader.get(0), tjava); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), tmicrosoft);
+        listDataChild.put(listDataHeader.get(2), tandroid);
+
+
+
+
+
+
+
+
+
+        
 
 
 
@@ -129,7 +140,7 @@ public class ListFormations extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.list_formations, menu);
+        getMenuInflater().inflate(R.menu.list_tutoriaux, menu);
         return true;
     }
 

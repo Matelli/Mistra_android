@@ -36,8 +36,8 @@ public class Home extends Activity {
         btnTutos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(Home.this, ListTutoriaux.class);
-//                startActivity(i);
+                Intent i = new Intent(Home.this, ListTutoriaux.class);
+                startActivity(i);
             }
         });
 
@@ -49,11 +49,14 @@ public class Home extends Activity {
             }
         });
 
+
+
+
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(Home.this, NousContacter.class);
-//                startActivity(i);
+                Intent i = new Intent(Home.this, Contact.class);
+                startActivity(i);
             }
         });
 
