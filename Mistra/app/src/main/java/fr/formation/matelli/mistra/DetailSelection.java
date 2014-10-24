@@ -1,0 +1,88 @@
+package fr.formation.matelli.mistra;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+
+public class DetailSelection extends Activity {
+
+    ImageButton btnRetourPrevious, btnShare;
+    TextView detailTitre;
+    Button btnContact, btnDevis;
+    WebView pageView ;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail_selection);
+        // ImageButon
+        btnRetourPrevious = (ImageButton) findViewById(R.id.btnRetourPrevious);
+        btnShare  = (ImageButton) findViewById(R.id.btnShare);
+        // TextView
+        detailTitre = (TextView) findViewById(R.id.detailTitre);
+        // Button
+        btnContact = (Button) findViewById(R.id.btnGoContact);
+        btnDevis = (Button) findViewById(R.id.btnGoDevis);
+        // WebView
+        pageView = (WebView) findViewById(R.id.webView );
+
+        // Listeners
+
+        detailTitre.setText("Titre");
+        pageView.getSettings().setJavaScriptEnabled(true);
+
+        pageView.getSettings().setLoadWithOverviewMode(true);
+        pageView.getSettings().setUseWideViewPort(true);
+        pageView.getSettings().setBuiltInZoomControls(true);
+
+        pageView.loadUrl("https://www.mistra.fr/formations-initiations/formation-conception-objet.html");
+
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DetailSelection.this, Contact.class);
+                startActivity(i);
+            }
+        });
+
+        btnDevis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DetailSelection.this, Devis.class);
+                startActivity(i);
+            }
+        });
+
+
+
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.detail_selection, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}

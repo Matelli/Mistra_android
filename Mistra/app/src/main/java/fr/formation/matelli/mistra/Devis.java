@@ -73,6 +73,13 @@ public class Devis extends Activity {
                 startActivity(i);
             }
         });
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Devis.this, Contact.class);
+                startActivity(i);
+            }
+        });
 
 
 

@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="fr.formation.matelli.mistra.Devis">
+
+
+    <RelativeLayout
+        android:id="@+id/headerDetail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_degade_head">
+
+        <ImageButton
+            android:id="@+id/btnRetourPrevious"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:background="@null"
+            android:contentDescription="@string/retour"
+            android:padding="15dp"
+            android:src="@drawable/arrow_right" />
+
+        <TextView
+            android:id="@+id/detailTitre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:hint="Item"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/btnShare"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            android:contentDescription="@string/retour"
+            android:padding="15dp"
+            android:src="@android:drawable/ic_menu_share" />
+
+
+    </RelativeLayout>
+
+
+    <WebView
+        android:id= "@+id/webView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerDetail"
+        android:layout_above="@+id/headerFormations"
+     >
+        </WebView>
+
+    <RelativeLayout
+        android:id="@+id/headerFormations"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#EEEEEE">
+
+        <Button
+            android:id="@+id/btnGoContact"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:background="@null"
+            android:text="@string/contactMenu"
+            android:textColor="@android:color/holo_purple"
+            android:padding="15dp"
+             />
+
+
+
+        <Button
+            android:id="@+id/btnGoDevis"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@null"
+            android:text="@string/devisMenu"
+            android:textColor="@android:color/holo_purple"
+            android:padding="15dp"
+             />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

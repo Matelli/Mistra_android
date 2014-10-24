@@ -47,6 +47,7 @@
         android:divider="@null"
         android:childDivider="@drawable/degrade_cellule"
         android:background="@android:color/white"
+
         />
 
 

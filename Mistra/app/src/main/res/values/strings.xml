@@ -18,5 +18,12 @@
     <string name="title_activity_devis">Devis</string>
     <string name="title_activity_list_tutoriaux">ListTutoriaux</string>
     <string name="title_activity_contact">Contact</string>
+    <string name="adresseText">Adresse</string>
+    <string name="adresseMistra">19 rue Béranger, 75003 Paris </string>
+    <string name="telephoneText">Téléphone</string>
+    <string name="telephoneMistra">01 82 52 25 25 </string>
+    <string name="emailText">E-mail</string>
+    <string name="emailMistra">formation@mistra.fr</string>
+    <string name="title_activity_detail_selection">DetailSelection</string>
 
 </resources>

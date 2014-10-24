@@ -1,6 +1,7 @@
 package fr.formation.matelli.mistra;
 
 import android.app.Activity;
+import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +69,14 @@ public class ListFormations extends Activity {
             }
         });
 
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ListFormations.this, Contact.class);
+                startActivity(i);
+            }
+        });
+
 
         // affichage de l'expandable list
         // preparing list data
@@ -120,10 +130,27 @@ public class ListFormations extends Activity {
         listDataChild.put(listDataHeader.get(2), fandroid);
 
 
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                Toast.makeText(ListFormations.this,"clicked",Toast.LENGTH_LONG).show();
+                Intent i = new Intent(ListFormations.this, DetailSelection.class);
+                startActivity(i);
+
+                return false;
+            }
+        });
+
+
+
 
 
 
     }
+
+
+
 
 
     @Override

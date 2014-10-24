@@ -1,17 +1,35 @@
 package fr.formation.matelli.mistra;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 
 public class Contact extends Activity {
 
+    ImageButton btnRetour;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
+
+        btnRetour = (ImageButton) findViewById(R.id.btnRetourHome);
+
+        btnRetour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Contact.this, Home.class);
+                startActivity(i);
+            }
+        });
+
+
+
     }
 
 

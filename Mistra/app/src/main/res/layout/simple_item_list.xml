@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <TextView
         android:id="@+id/itemSubList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -12,10 +12,33 @@
         android:textSize="16sp"
         android:background="@drawable/degrade_cellule"
         android:drawableStart="@drawable/liste_formation"
-        android:padding="7dp"
+        android:padding="10dp"
         android:gravity="start"
         style="?android:attr/buttonBarStyle"
 
 
+
+
         />
 </LinearLayout>
+
+<!--
+
+<Button
+android:id="@+id/itemSubList"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:hint="Test"
+android:textColor="@android:color/black"
+android:textSize="16sp"
+android:background="@drawable/degrade_cellule"
+android:drawableStart="@drawable/liste_formation"
+android:padding="10dp"
+android:gravity="start"
+style="?android:attr/buttonBarStyle"
+android:focusable="false"
+android:clickable="true"
+android:enabled="true"
+
+
+    />-->

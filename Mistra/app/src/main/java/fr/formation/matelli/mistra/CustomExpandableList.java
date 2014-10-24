@@ -60,7 +60,7 @@ public class CustomExpandableList extends BaseExpandableListAdapter {
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 
     @Override
@@ -91,7 +91,7 @@ public class CustomExpandableList extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.simple_item_list, null);
         }
 
-        Button txtListChild = (Button) convertView
+        TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.itemSubList);
 
         txtListChild.setText(childText);

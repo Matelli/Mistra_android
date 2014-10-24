@@ -37,9 +37,9 @@ public class ListTutoriaux extends Activity {
         btnRetourHome = (ImageButton) findViewById(R.id.btnRetourHome);
         // Button
         btnFormations = (Button) findViewById(R.id.btnFormationFooterTutos);
-        btnTutos = (Button) findViewById(R.id.btnTutosFooterDevis);
+        btnTutos = (Button) findViewById(R.id.btnTutosFooterTutos);
         btnDevis = (Button) findViewById(R.id.btnDevisFooterTutos);
-        btnContact = (Button) findViewById(R.id.btnContactFooterDevis);
+        btnContact = (Button) findViewById(R.id.btnContactFooterTutos);
         // ExpandableList
         expListView = (ExpandableListView) findViewById(R.id.expandablelisteTutos);
 
@@ -64,6 +64,14 @@ public class ListTutoriaux extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ListTutoriaux.this, ListFormations.class);
+                startActivity(i);
+            }
+        });
+
+        btnContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ListTutoriaux.this, Contact.class);
                 startActivity(i);
             }
         });
