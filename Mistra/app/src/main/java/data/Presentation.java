@@ -12,7 +12,7 @@ public class Presentation {
 
     }
 
-    public Presentation(String type, int id, String title, String content){
+    public Presentation(int id, String title,String type, String content){
         this.type = type;
         this.id= id;
         this.title = title;

@@ -2,6 +2,8 @@
 package data;
 
 
+import android.database.sqlite.SQLiteDatabase;
+
 import java.util.List;
 
 /**
@@ -13,7 +15,7 @@ public class Categorie {
     int id;
     List<Presentation> content;
 
-    public Categorie(String description, String type, String title, int id, List<Presentation> content) {
+    public Categorie(int id, String title, String type, String description, List<Presentation> content) {
         this.description = description;
         this.type = type;
         this.title = title;
@@ -72,5 +74,7 @@ public class Categorie {
                 ", content=" + content +
                 '}';
     }
+
+
 }
 
