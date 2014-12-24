@@ -87,6 +87,28 @@
             />
 
         <Button
+            android:id="@+id/buttonBlog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bouton_menu_devis_home"
+            android:text="@string/blog"
+            android:textColor="@android:color/white"
+            android:drawableStart="@drawable/ico_devis_home"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:paddingStart="@dimen/icon_horizontal_margin"
+            android:paddingEnd="@dimen/icon_horizontal_margin"
+            android:drawablePadding="15dp"
+            />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#ffffff"
+            />
+
+        <Button
             android:id="@+id/buttonDevis"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

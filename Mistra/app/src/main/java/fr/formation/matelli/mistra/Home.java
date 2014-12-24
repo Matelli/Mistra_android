@@ -12,6 +12,7 @@ import android.widget.Button;
 public class Home extends Activity {
     private Button btnFormation;
     private Button btnTutos;
+    private Button btnBlog;
     private Button btnDevis;
     private Button btnContact;
 
@@ -23,6 +24,7 @@ public class Home extends Activity {
         btnFormation = (Button) findViewById(R.id.buttonFormation);
         btnTutos = (Button) findViewById(R.id.buttonTutos);
         btnDevis = (Button) findViewById(R.id.buttonDevis);
+        btnBlog = (Button) findViewById(R.id.buttonBlog);
         btnContact = (Button) findViewById(R.id.buttonContact);
 
         btnFormation.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +47,14 @@ public class Home extends Activity {
             @Override
             public void onClick(View v) {
                Intent i = new Intent(Home.this, Devis.class);
+                startActivity(i);
+            }
+        });
+
+        btnBlog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Home.this, Blog.class);
                 startActivity(i);
             }
         });

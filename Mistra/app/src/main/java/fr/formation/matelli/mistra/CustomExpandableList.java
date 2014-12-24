@@ -2,6 +2,7 @@ package fr.formation.matelli.mistra;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +27,16 @@ public class CustomExpandableList extends BaseExpandableListAdapter {
                                  HashMap<String, List<String>> listChildData) {
         this.context = context;
         this.listDataHeader = listDataHeader;
+        this.listDataChild = listChildData;
+    }
+    public CustomExpandableList(Context context,  HashMap<String, List<String>> listChildData) {
+        this.context = context;
+        this.listDataHeader = new ArrayList<>();
+        for(String entry : listChildData.keySet() ){
+            this.listDataHeader.add(entry);
+          //  Log.e("==> titre :",entry);
+
+        }
         this.listDataChild = listChildData;
     }
 

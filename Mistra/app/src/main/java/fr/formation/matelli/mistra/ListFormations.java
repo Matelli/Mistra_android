@@ -2,8 +2,12 @@ package fr.formation.matelli.mistra;
 
 import android.app.Activity;
 import android.app.ExpandableListActivity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,9 +17,29 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.androidquery.util.XmlDom;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import data.Categorie;
+import data.Presentation;
 
 
 public class ListFormations extends Activity {
@@ -28,6 +52,9 @@ public class ListFormations extends Activity {
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+    HashMap<Categorie, List<Presentation>> listOfCategories;
+
+    JSONArray formations = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,17 +107,46 @@ public class ListFormations extends Activity {
 
         // affichage de l'expandable list
         // preparing list data
-        prepareListData();
+        //prepareListData();
 
-        listAdapter = new CustomExpandableList(ListFormations.this, listDataHeader, listDataChild);
+        // Appel du web service pour la récup des infos
+         new DataFormation(this).execute();
 
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
+
+        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                long p = parent.getSelectedPosition();
+                Presentation presentation = null;
+                String item = (String ) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
+                String itemParentName = (String ) parent.getExpandableListAdapter().getGroup(groupPosition);
+
+                Log.i("==> item clicked :",item);
+                Log.i("==> item parent clicked :",itemParentName+" at position :"+ groupPosition);
+                for (Categorie c : listOfCategories.keySet()){
+                    if (c.getTitle().equals(itemParentName)){
+                        presentation = c.getContent().get(childPosition);
+                    }
+                }
+
+                Log.i("==> item object clicked :",presentation.toString());
+                Toast.makeText(ListFormations.this,"clicked",Toast.LENGTH_LONG).show();
+                //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
+
+                Intent i = new Intent(ListFormations.this, DetailSelection.class);
+                i.putExtra("htmlcode", presentation.getContent());
+                startActivity(i);
+
+                return false;
+            }
+        });
+
     }
 
     /*
      * Preparing the list data
      */
+    /*
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
@@ -130,24 +186,30 @@ public class ListFormations extends Activity {
         listDataChild.put(listDataHeader.get(2), fandroid);
 
 
+        listAdapter = new CustomExpandableList(ListFormations.this, listDataHeader, listDataChild);
+
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
+
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-
-                Toast.makeText(ListFormations.this,"clicked",Toast.LENGTH_LONG).show();
+                long p = parent.getSelectedPosition();
+                String item = (String ) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
+                Log.i("==> item clicked :",item);
+                //Toast.makeText(ListFormations.this,"clicked",Toast.LENGTH_LONG).show();
+                Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
                 Intent i = new Intent(ListFormations.this, DetailSelection.class);
+
+
+
+
                 startActivity(i);
 
                 return false;
             }
         });
-
-
-
-
-
-
-    }
+    }*/
 
 
 
@@ -170,5 +232,118 @@ public class ListFormations extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+    // Class de collect des titres et sous-titre
+
+    public class DataFormation extends AsyncTask<Void, Void, Void> {
+
+        private ProgressDialog progressDialog;
+        private static final String urlFormation = "http://api.mistra.fr/full.php";
+
+        public DataFormation(Context c) {
+            this.progressDialog = new ProgressDialog(c);
+            this.progressDialog.setMessage("Please wait ");
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            listOfCategories = new HashMap<>();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            this.progressDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            if (this.progressDialog.isShowing()){
+                this.progressDialog.dismiss();
+            }
+            listAdapter = new CustomExpandableList(ListFormations.this, listDataChild);
+
+            // setting list adapter
+            expListView.setAdapter(listAdapter);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params)  {
+            String fullcode = null;
+            listDataChild = new HashMap<String, List<String>>();
+            try {
+                fullcode = getDataFromURL(urlFormation);
+                return titlesFromInputStream(fullcode);
+            }catch (IOException e){
+                e.printStackTrace();
+            }catch(SAXException e){
+                e.printStackTrace();
+            }
+            Log.i("Error in doInBackground ", "return null");
+            return null;
+        }
+
+        private String getDataFromURL(String url)
+                throws ClientProtocolException, IOException {
+            HttpClient client = new DefaultHttpClient();
+            HttpUriRequest request = new HttpGet(url);
+            HttpResponse response = client.execute(request);
+            HttpEntity httpEntity = response.getEntity();
+            return EntityUtils.toString(httpEntity);
+        }
+
+        private  Void  titlesFromInputStream(String fullcode)
+                throws SAXException {
+            //ArrayList<String> arrayList = new ArrayList<String>();
+            String titre= null;
+            Presentation presentation;
+           if (fullcode != null){
+               try{
+                   JSONObject jsonObject = new JSONObject(fullcode);
+                   Log.e("==> fullcode :",fullcode);
+
+                   formations = jsonObject.getJSONArray("formation");
+
+                   for( int i =0; i<formations.length(); i++){
+                       JSONObject titreObject = formations.getJSONObject(i);
+                       titre = new String(titreObject.getString("title").getBytes("UTF8"));
+                       int idC = Integer.parseInt(titreObject.getString("id"));
+                       String typeCategorie = titreObject.getString("type");
+                       String description = titreObject.getString("description");
+                       List<Presentation> listItemCategorie = new ArrayList<>();
+                       Log.e("==> titre :",titre);
+                       JSONArray tabItems = titreObject.getJSONArray("content");
+                       List<String > listItems  = new ArrayList<>();
+                       for( int j =0 ; j< tabItems.length();j++ ){
+                           JSONObject item = tabItems.getJSONObject(j);
+                           String name = item.getString("title");
+                           int idI = Integer.parseInt(item.getString("id"));
+                           String typeItem = item.getString("type");
+                           String contentItem = item.getString("content");
+                           presentation = new Presentation(typeItem,idI,name,contentItem);
+                           listItemCategorie.add(presentation);
+                           listItems.add(name);
+
+
+                       }
+                       listDataChild.put(titre, listItems);
+                       listOfCategories.put(new Categorie(description,typeCategorie,titre,idC,listItemCategorie),listItemCategorie);
+                   }
+
+               }catch(JSONException e ){
+                   e.printStackTrace();
+               }catch(Exception e){
+                   e.printStackTrace();
+               }
+           }else{
+               Log.e("web service", "Couldn't get any data from the url");
+           }
+            return null;
+        }
     }
 }

@@ -9,6 +9,7 @@
     <string name="formations">Formations</string>
     <string name="tutos">Tutoriaux</string>
     <string name="devis">Demande de devis</string>
+    <string name="blog">Blog Mistra</string>
     <string name="devisMenu">Devis</string>
     <string name="contact">Nous contacter</string>
     <string name="contactMenu">Contact</string>
@@ -25,5 +26,6 @@
     <string name="emailText">E-mail</string>
     <string name="emailMistra">formation@mistra.fr</string>
     <string name="title_activity_detail_selection">DetailSelection</string>
+    <string name="title_activity_blog">Blog</string>
 
 </resources>

@@ -2,6 +2,7 @@ package fr.formation.matelli.mistra;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,15 @@ public class DetailSelection extends Activity {
         // WebView
         pageView = (WebView) findViewById(R.id.webView );
 
+
+
+
+
+
+
+
+
+
         // Listeners
 
         detailTitre.setText("Titre");
@@ -43,7 +53,15 @@ public class DetailSelection extends Activity {
         pageView.getSettings().setUseWideViewPort(true);
         pageView.getSettings().setBuiltInZoomControls(true);
 
-        pageView.loadUrl("https://www.mistra.fr/formations-initiations/formation-conception-objet.html");
+        // Get list of Items
+        String htmlcode = getIntent().getExtras().getString("htmlcode");
+//        pageView.loadUrl("https://www.mistra.fr/formations-initiations/formation-conception-objet.html");
+        pageView.loadDataWithBaseURL("https://www.mistra.fr/", htmlcode, "text/html", "utf-8", null);
+        if (Build.VERSION.SDK_INT >= 11) {
+            pageView.setBackgroundColor(0x01000000);
+        } else {
+            pageView.setBackgroundColor(0x00000000);
+        }
 
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +79,7 @@ public class DetailSelection extends Activity {
             }
         });
 
-
+        //
 
 
     }

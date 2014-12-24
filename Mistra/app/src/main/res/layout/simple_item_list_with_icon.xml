@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/iconBlog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="@android:integer/config_shortAnimTime"
+        android:src="@drawable/app_icon"
+
+        />
+
+
+    <TextView
+        android:id="@+id/itemSubList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Test"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:background="@drawable/degrade_cellule"
+        android:drawableStart="@drawable/liste_formation"
+        android:padding="10dp"
+        android:gravity="start"
+        style="?android:attr/buttonBarStyle"
+        android:layout_weight="@android:integer/config_mediumAnimTime"
+
+
+
+
+        />
+
+</LinearLayout>
