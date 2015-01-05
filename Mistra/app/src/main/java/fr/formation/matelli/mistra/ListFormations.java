@@ -1,10 +1,12 @@
 package fr.formation.matelli.mistra;
 
 import android.app.Activity;
-import android.app.ExpandableListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +18,6 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
-import com.androidquery.util.XmlDom;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -33,12 +33,12 @@ import org.json.JSONObject;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import data.Categorie;
+import dao.DBHandler;
+import data.Formation;
 import data.Presentation;
 
 
@@ -52,7 +52,9 @@ public class ListFormations extends Activity {
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
-    HashMap<Categorie, List<Presentation>> listOfCategories;
+    HashMap<Formation, List<Presentation>> listOfFormations;
+    // Handler de db
+    DBHandler db;
 
     JSONArray formations = null;
 
@@ -71,10 +73,12 @@ public class ListFormations extends Activity {
         expListView = (ExpandableListView) findViewById(R.id.expandablelisteFormations);
 
 
+
         // Listeners
         btnRetourHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.closeDB();
                 Intent i = new Intent(ListFormations.this, Home.class);
                 startActivity(i);
             }
@@ -83,6 +87,7 @@ public class ListFormations extends Activity {
         btnDevis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.closeDB();
                 Intent i = new Intent(ListFormations.this, Devis.class);
                 startActivity(i);
             }
@@ -91,6 +96,7 @@ public class ListFormations extends Activity {
         btnTutos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.closeDB();
                 Intent i = new Intent(ListFormations.this, ListTutoriaux.class);
                 startActivity(i);
             }
@@ -99,6 +105,7 @@ public class ListFormations extends Activity {
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.closeDB();
                 Intent i = new Intent(ListFormations.this, Contact.class);
                 startActivity(i);
             }
@@ -109,8 +116,15 @@ public class ListFormations extends Activity {
         // preparing list data
         //prepareListData();
 
+        // Creation d'un objet db
+        db = new DBHandler(this.getApplicationContext());
+
         // Appel du web service pour la récup des infos
          new DataFormation(this).execute();
+
+
+
+
 
 
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -123,9 +137,13 @@ public class ListFormations extends Activity {
 
                 Log.i("==> item clicked :",item);
                 Log.i("==> item parent clicked :",itemParentName+" at position :"+ groupPosition);
-                for (Categorie c : listOfCategories.keySet()){
+                Log.i("==> listOfFormation keys :", listOfFormations.keySet().toString());
+                for (Formation c : listOfFormations.keySet()){
                     if (c.getTitle().equals(itemParentName)){
+                        Log.i("==> item parent clicked detail :",c.toString());
                         presentation = c.getContent().get(childPosition);
+
+
                     }
                 }
 
@@ -143,8 +161,192 @@ public class ListFormations extends Activity {
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.list_formations, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    // Class de collect des titres et sous-titre
+
+    public class DataFormation extends AsyncTask<Void, Void, Void> {
+
+        private ProgressDialog progressDialog;
+        private static final String urlFormation = "http://api.mistra.fr/full.php";
+
+        public DataFormation(Context c) {
+            this.progressDialog = new ProgressDialog(c);
+            this.progressDialog.setMessage("Please wait ");
+            this.progressDialog.setCancelable(false);
+            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            listOfFormations = new HashMap<>();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            this.progressDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            Log.i("====>","PostExecte");
+            if (this.progressDialog.isShowing()){
+                this.progressDialog.dismiss();
+            }
+            // Creation de l'adapter depuis l'url
+            //listAdapter = new CustomExpandableList(ListFormations.this, listDataChild);
+
+
+            List<Formation> l = db.getAllFormations();
+            HashMap<String, List<String>> listDataChildFromDB = new HashMap<>();
+            for (Formation f : l){
+                int idF = f.getId();
+                List<Presentation> listPre = db.getPresentation(idF);
+                //f.setContent(listPre);
+                List<String> listPreString = new ArrayList<>() ;
+                for(Presentation p : listPre){
+                    listPreString.add(p.getTitle());
+                }
+                listDataChildFromDB.put(f.getTitle(),listPreString);
+                listOfFormations.put(f,listPre);
+            }
+
+            listAdapter = new CustomExpandableList(ListFormations.this, listDataChildFromDB);
+
+
+            // setting list adapter
+            expListView.setAdapter(listAdapter);
+            db.closeDB();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params)  {
+            boolean testConnection = isNetworkAvailable();
+            if(testConnection) {
+                // ToDo check the db version
+                 /* // Creation de l'adapter depuis la db
+            // Enregistrement des formation dans la table de formation
+            for (Formation f : listOfFormations.keySet()){
+                Log.i("Creation de la table ","Formation");
+                long creationFrom = db.createFormation(f);
+
+            }
+            // Enregistrement des formation dans la table de presentation
+            for (Formation e : listOfFormations.keySet()){
+                for (Presentation p : listOfFormations.get(e)) {
+                    long creationPre = db.createPresentation(e,p);
+                }
+            }*/
+
+
+
+                String fullcode = null;
+                listDataChild = new HashMap<String, List<String>>();
+                try {
+                    fullcode = getDataFromURL(urlFormation);
+                    return titlesFromInputStream(fullcode);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                }
+
+            }else{
+            Log.i("Not connection network ", "return null");
+            return null;
+        }
+            Log.i("Error in doInBackground ", "return null");
+            return null;
+        }
+
+        private String getDataFromURL(String url)
+                throws ClientProtocolException, IOException {
+            HttpClient client = new DefaultHttpClient();
+            HttpUriRequest request = new HttpGet(url);
+            HttpResponse response = client.execute(request);
+            HttpEntity httpEntity = response.getEntity();
+            return EntityUtils.toString(httpEntity);
+        }
+
+        private  Void  titlesFromInputStream(String fullcode)
+                throws SAXException {
+            //ArrayList<String> arrayList = new ArrayList<String>();
+            String titre= null;
+            Presentation presentation;
+           if (fullcode != null){
+               try{
+                   JSONObject jsonObject = new JSONObject(fullcode);
+                  // Log.e("==> fullcode :",fullcode);
+
+                   formations = jsonObject.getJSONArray("formation");
+
+                   for( int i =0; i<formations.length(); i++){
+                       JSONObject titreObject = formations.getJSONObject(i);
+                       titre = new String(titreObject.getString("title").getBytes("UTF8"));
+                       int idC = Integer.parseInt(titreObject.getString("id"));
+                       String typeCategorie = titreObject.getString("type");
+                       String description = titreObject.getString("description");
+                       List<Presentation> listItemCategorie = new ArrayList<>();
+                       //Log.i("==> titre ",titre);
+                       JSONArray tabItems = titreObject.getJSONArray("content");
+                       List<String > listItems  = new ArrayList<>();
+                       for( int j =0 ; j< tabItems.length();j++ ){
+                           JSONObject item = tabItems.getJSONObject(j);
+                           String name = item.getString("title");
+                           int idI = Integer.parseInt(item.getString("id"));
+                           String typeItem = item.getString("type");
+                           String contentItem = item.getString("content");
+                           presentation = new Presentation(idI,name,typeItem,contentItem);
+                           listItemCategorie.add(presentation);
+                           listItems.add(name);
+
+
+                       }
+                       listDataChild.put(titre, listItems);
+                       listOfFormations.put(new Formation(idC,titre,typeCategorie, description,listItemCategorie),listItemCategorie);
+                   }
+
+               }catch(JSONException e ){
+                   e.printStackTrace();
+               }catch(Exception e){
+                   e.printStackTrace();
+               }
+           }else{
+               Log.e("web service", "Couldn't get any data from the url");
+           }
+            return null;
+        }
+    }
+
+
+    private  boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+
     /*
-     * Preparing the list data
+     * Preparing the list data version Java
      */
     /*
     private void prepareListData() {
@@ -215,135 +417,4 @@ public class ListFormations extends Activity {
 
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.list_formations, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
-
-    // Class de collect des titres et sous-titre
-
-    public class DataFormation extends AsyncTask<Void, Void, Void> {
-
-        private ProgressDialog progressDialog;
-        private static final String urlFormation = "http://api.mistra.fr/full.php";
-
-        public DataFormation(Context c) {
-            this.progressDialog = new ProgressDialog(c);
-            this.progressDialog.setMessage("Please wait ");
-            this.progressDialog.setCancelable(false);
-            this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            listOfCategories = new HashMap<>();
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            this.progressDialog.show();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-            if (this.progressDialog.isShowing()){
-                this.progressDialog.dismiss();
-            }
-            listAdapter = new CustomExpandableList(ListFormations.this, listDataChild);
-
-            // setting list adapter
-            expListView.setAdapter(listAdapter);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params)  {
-            String fullcode = null;
-            listDataChild = new HashMap<String, List<String>>();
-            try {
-                fullcode = getDataFromURL(urlFormation);
-                return titlesFromInputStream(fullcode);
-            }catch (IOException e){
-                e.printStackTrace();
-            }catch(SAXException e){
-                e.printStackTrace();
-            }
-            Log.i("Error in doInBackground ", "return null");
-            return null;
-        }
-
-        private String getDataFromURL(String url)
-                throws ClientProtocolException, IOException {
-            HttpClient client = new DefaultHttpClient();
-            HttpUriRequest request = new HttpGet(url);
-            HttpResponse response = client.execute(request);
-            HttpEntity httpEntity = response.getEntity();
-            return EntityUtils.toString(httpEntity);
-        }
-
-        private  Void  titlesFromInputStream(String fullcode)
-                throws SAXException {
-            //ArrayList<String> arrayList = new ArrayList<String>();
-            String titre= null;
-            Presentation presentation;
-           if (fullcode != null){
-               try{
-                   JSONObject jsonObject = new JSONObject(fullcode);
-                   Log.e("==> fullcode :",fullcode);
-
-                   formations = jsonObject.getJSONArray("formation");
-
-                   for( int i =0; i<formations.length(); i++){
-                       JSONObject titreObject = formations.getJSONObject(i);
-                       titre = new String(titreObject.getString("title").getBytes("UTF8"));
-                       int idC = Integer.parseInt(titreObject.getString("id"));
-                       String typeCategorie = titreObject.getString("type");
-                       String description = titreObject.getString("description");
-                       List<Presentation> listItemCategorie = new ArrayList<>();
-                       Log.e("==> titre :",titre);
-                       JSONArray tabItems = titreObject.getJSONArray("content");
-                       List<String > listItems  = new ArrayList<>();
-                       for( int j =0 ; j< tabItems.length();j++ ){
-                           JSONObject item = tabItems.getJSONObject(j);
-                           String name = item.getString("title");
-                           int idI = Integer.parseInt(item.getString("id"));
-                           String typeItem = item.getString("type");
-                           String contentItem = item.getString("content");
-                           presentation = new Presentation(typeItem,idI,name,contentItem);
-                           listItemCategorie.add(presentation);
-                           listItems.add(name);
-
-
-                       }
-                       listDataChild.put(titre, listItems);
-                       listOfCategories.put(new Categorie(description,typeCategorie,titre,idC,listItemCategorie),listItemCategorie);
-                   }
-
-               }catch(JSONException e ){
-                   e.printStackTrace();
-               }catch(Exception e){
-                   e.printStackTrace();
-               }
-           }else{
-               Log.e("web service", "Couldn't get any data from the url");
-           }
-            return null;
-        }
-    }
 }

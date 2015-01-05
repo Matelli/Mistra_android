@@ -10,12 +10,12 @@ import java.util.List;
  * Created by matelli on 22/12/2014.
  */
 
-public class Categorie {
+public class Formation {
     String type, title,description ;
     int id;
     List<Presentation> content;
 
-    public Categorie(int id, String title, String type, String description, List<Presentation> content) {
+    public Formation(int id, String title, String type, String description, List<Presentation> content) {
         this.description = description;
         this.type = type;
         this.title = title;
@@ -66,7 +66,7 @@ public class Categorie {
 
     @Override
     public String toString() {
-        return "Categorie{" +
+        return "Formation{" +
                 "type='" + type + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
