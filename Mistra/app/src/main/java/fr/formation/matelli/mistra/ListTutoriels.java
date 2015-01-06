@@ -37,11 +37,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import dao.DBHandlerF;
-import data.Formation;
+import dao.DBHandlerT;
+import data.Tutoriel;
 import data.Presentation;
 
 
-public class ListFormations extends Activity {
+public class ListTutoriels extends Activity {
+
     ImageButton btnRetourHome;
     Button btnFormations;
     Button btnTutos;
@@ -51,33 +53,30 @@ public class ListFormations extends Activity {
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
-    HashMap<Formation, List<Presentation>> listOfFormations;
-    // Handler de db
-    DBHandlerF db;
-
-    JSONArray formations = null;
+    HashMap<Tutoriel, List<Presentation>> listOfTutoriels;
+    DBHandlerT db;
+    JSONArray tutoriels = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_formations);
+        setContentView(R.layout.activity_list_tutoriels);
+
         // ImageButton
         btnRetourHome = (ImageButton) findViewById(R.id.btnRetourHome);
         // Button
-        btnFormations = (Button) findViewById(R.id.btnFormationFooter);
-        btnTutos = (Button) findViewById(R.id.btnTutosFooter);
-        btnDevis = (Button) findViewById(R.id.btnDevisFooter);
-        btnContact = (Button) findViewById(R.id.btnContactFooter);
+        btnFormations = (Button) findViewById(R.id.btnFormationFooterTutos);
+        btnTutos = (Button) findViewById(R.id.btnTutosFooterTutos);
+        btnDevis = (Button) findViewById(R.id.btnDevisFooterTutos);
+        btnContact = (Button) findViewById(R.id.btnContactFooterTutos);
         // ExpandableList
-        expListView = (ExpandableListView) findViewById(R.id.expandablelisteFormations);
-
+        expListView = (ExpandableListView) findViewById(R.id.expandablelisteTutos);
 
         // Listeners
         btnRetourHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.closeDB();
-                Intent i = new Intent(ListFormations.this, Home.class);
+                Intent i = new Intent(ListTutoriels.this, Home.class);
                 startActivity(i);
             }
         });
@@ -85,17 +84,15 @@ public class ListFormations extends Activity {
         btnDevis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.closeDB();
-                Intent i = new Intent(ListFormations.this, Devis.class);
+                Intent i = new Intent(ListTutoriels.this, Devis.class);
                 startActivity(i);
             }
         });
 
-        btnTutos.setOnClickListener(new View.OnClickListener() {
+        btnFormations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.closeDB();
-                Intent i = new Intent(ListFormations.this, ListTutoriels.class);
+                Intent i = new Intent(ListTutoriels.this, ListFormations.class);
                 startActivity(i);
             }
         });
@@ -103,19 +100,14 @@ public class ListFormations extends Activity {
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.closeDB();
-                Intent i = new Intent(ListFormations.this, Contact.class);
+                Intent i = new Intent(ListTutoriels.this, Contact.class);
                 startActivity(i);
             }
         });
 
 
-        // affichage de l'expandable list
-        // preparing list data
-        //prepareListData();
-
         // Creation d'un objet db
-        db = new DBHandlerF(this.getApplicationContext());
+        db = new DBHandlerT(this.getApplicationContext());
 
         // Appel du web service pour la récup des infos
         new DataFormation(this).execute();
@@ -131,47 +123,38 @@ public class ListFormations extends Activity {
 
                 Log.i("==> item clicked :", item);
                 Log.i("==> item parent clicked :", itemParentName + " at position :" + groupPosition);
-                Log.i("==> listOfFormation keys :", listOfFormations.keySet().toString());
-                for (Formation c : listOfFormations.keySet()) {
+                Log.i("==> listOfFormation keys :", listOfTutoriels.keySet().toString());
+                for (Tutoriel c : listOfTutoriels.keySet()) {
                     if (c.getTitle().equals(itemParentName)) {
                         Log.i("==> item parent clicked detail :", c.toString());
-                        presentation = c.getContent().get(childPosition);
+
+                        presentation = c.getListSubTuto().get(childPosition);
 
                     }
                 }
                 Log.i("==> item object clicked :", presentation.toString());
-                Toast.makeText(ListFormations.this, "clicked", Toast.LENGTH_LONG).show();
-                //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
+                if(presentation.getType().equals("categorie")){
+                    // ToDo Ajouter la redirection pour tuto qui contient des d'autre tuto
+                    Tutoriel t = (Tutoriel) presentation;
+                    Intent i = new Intent(ListTutoriels.this,SubListView.class);
+                    // toDo check the parcelable element
+                    i.putExtra("objet", (android.os.Parcelable) t);
+                    i.putExtra("titre","Tutoriels");
+                    startActivity(i);
+                }else {
 
-                Intent i = new Intent(ListFormations.this, DetailSelection.class);
-                i.putExtra("htmlcode", presentation.getContent());
-                startActivity(i);
+                    Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
 
+                    Intent i = new Intent(ListTutoriels.this, DetailSelection.class);
+                    i.putExtra("htmlcode", presentation.getContent());
+                    startActivity(i);
+                }
                 return false;
             }
         });
+
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.list_formations, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     // Class de collect des titres et sous-titre
 
@@ -185,7 +168,7 @@ public class ListFormations extends Activity {
             this.progressDialog.setMessage("Please wait ");
             this.progressDialog.setCancelable(false);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            listOfFormations = new HashMap<>();
+            listOfTutoriels = new HashMap<>();
 
         }
 
@@ -206,21 +189,21 @@ public class ListFormations extends Activity {
             //listAdapter = new CustomExpandableList(ListFormations.this, listDataChild);
 
 
-            List<Formation> l = db.getAllFormations();
+            List<Tutoriel> l = db.getAllTutoriels();
             HashMap<String, List<String>> listDataChildFromDB = new HashMap<>();
-            for (Formation f : l) {
-                int idF = f.getId();
-                List<Presentation> listPre = db.getPresentation(idF);
-                //f.setContent(listPre);
+            for (Tutoriel t : l) {
+                int idT = t.getId();
+                List<Presentation> listPre = db.getPresentationT(idT);
+                //t.setContent(listPre);
                 List<String> listPreString = new ArrayList<>();
                 for (Presentation p : listPre) {
                     listPreString.add(p.getTitle());
                 }
-                listDataChildFromDB.put(f.getTitle(), listPreString);
-                listOfFormations.put(f, listPre);
+                listDataChildFromDB.put(t.getTitle(), listPreString);
+                listOfTutoriels.put(t, listPre);
             }
 
-            listAdapter = new CustomExpandableList(ListFormations.this, listDataChildFromDB);
+            listAdapter = new CustomExpandableList(ListTutoriels.this, listDataChildFromDB);
 
 
             // setting list adapter
@@ -235,14 +218,14 @@ public class ListFormations extends Activity {
                 // ToDo check the db version
                  /* // Creation de l'adapter depuis la db
             // Enregistrement des formation dans la table de formation
-            for (Formation f : listOfFormations.keySet()){
-                Log.i("Creation de la table ","Formation");
-                long creationFrom = db.createFormation(f);
+            for (Tutoriel t : listOfTutoriels.keySet()){
+                Log.i("Creation de la table ","Tutoriel");
+                long creationFrom = db.createFormation(t);
 
             }
             // Enregistrement des formation dans la table de presentation
-            for (Formation e : listOfFormations.keySet()){
-                for (Presentation p : listOfFormations.get(e)) {
+            for (Tutoriel e : listOfTutoriels.keySet()){
+                for (Presentation p : listOfTutoriels.get(e)) {
                     long creationPre = db.createPresentation(e,p);
                 }
             }*/
@@ -279,37 +262,60 @@ public class ListFormations extends Activity {
         private Void titlesFromInputStream(String fullcode)
                 throws SAXException {
             //ArrayList<String> arrayList = new ArrayList<String>();
-            String titreF = null;
+            String titreT = null;
             Presentation presentation;
             if (fullcode != null) {
                 try {
                     JSONObject jsonObject = new JSONObject(fullcode);
                     // Log.e("==> fullcode :",fullcode);
 
-                    formations = jsonObject.getJSONArray("formation");
+                    tutoriels = jsonObject.getJSONArray("tutoriels");
 
-                    for (int i = 0; i < formations.length(); i++) {
-                        JSONObject titreObject = formations.getJSONObject(i);
-                        titreF = new String(titreObject.getString("title").getBytes("UTF8"));
-                        int idF = Integer.parseInt(titreObject.getString("id"));
-                        String typeF = titreObject.getString("type");
-                        String descriptionF = titreObject.getString("description");
-                        List<Presentation> listItemFormations = new ArrayList<>();
+                    for (int i = 0; i < tutoriels.length(); i++) {
+                        JSONObject titreObject = tutoriels.getJSONObject(i);
+                        titreT = new String(titreObject.getString("title").getBytes("UTF-8"));
+                        int idT = Integer.parseInt(titreObject.getString("id"));
+                        String typeT = titreObject.getString("type");
+                        String descriptionT = titreObject.getString("description");
+                        List<Presentation> listItemTutoriels = new ArrayList<>();
                         //Log.i("==> titre ",titre);
                         JSONArray tabItems = titreObject.getJSONArray("content");
                         List<String> listItems = new ArrayList<>();
                         for (int j = 0; j < tabItems.length(); j++) {
                             JSONObject item = tabItems.getJSONObject(j);
-                            String name = item.getString("title");
-                            int idI = Integer.parseInt(item.getString("id"));
-                            String typeItem = item.getString("type");
-                            String contentItem = item.getString("content");
-                            presentation = new Presentation(idI, name, typeItem, contentItem);
-                            listItemFormations.add(presentation);
-                            listItems.add(name);
+                            // ToDo select if it is an other tuto or it is a presentation
+                            if (item.getString("type").equals("categorie")){
+                                String titreT2 = new String(titreObject.getString("title").getBytes("UTF-8"));
+                                int idT2 = Integer.parseInt(titreObject.getString("id"));
+                                String typeT2 = titreObject.getString("type");
+                                String descriptionT2 = titreObject.getString("description");
+                                JSONArray tabItems2 = titreObject.getJSONArray("content");
+                                List<Presentation> listItemTutoriels2 = new ArrayList<>();
+                                List<String> listItems2 = new ArrayList<>();
+                                for(int k=0;k<tabItems2.length();k++){
+                                    String name2 = item.getString("title");
+                                    int idI2 = Integer.parseInt(item.getString("id"));
+                                    String typeItem2 = item.getString("type");
+                                    String contentItem2 = item.getString("content");
+                                    Presentation presentation2 = new Presentation(idI2, name2, typeItem2, contentItem2);
+                                    listItemTutoriels2.add(presentation2);
+                                    listItems2.add(name2);
+                                }
+                                listDataChild.put(titreT2, listItems2);
+                                listOfTutoriels.put(new Tutoriel(idT2, titreT2, typeT2, descriptionT2, listItemTutoriels2), listItemTutoriels2);
+
+                            }else {
+                                String name = item.getString("title");
+                                int idI = Integer.parseInt(item.getString("id"));
+                                String typeItem = item.getString("type");
+                                String contentItem = item.getString("content");
+                                presentation = new Presentation(idI, name, typeItem, contentItem);
+                                listItemTutoriels.add(presentation);
+                                listItems.add(name);
+                            }
                         }
-                        listDataChild.put(titreF, listItems);
-                        listOfFormations.put(new Formation(idF, titreF, typeF, descriptionF, listItemFormations), listItemFormations);
+                        listDataChild.put(titreT, listItems);
+                        listOfTutoriels.put(new Tutoriel(idT, titreT, typeT, descriptionT, listItemTutoriels), listItemTutoriels);
                     }
 
                 } catch (JSONException e) {
@@ -331,12 +337,49 @@ public class ListFormations extends Activity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+    
+    
+    
+    
+    
 
 
-    /*
-     * Preparing the list data version Java
-     */
-    /*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.list_tutoriaux, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+      /*  *//*
+     * Preparing the list data
+     *//*
+
+     *//*
+     partie a mettre dans le onCreate()
+     // affichage de l'expandable list
+        // preparing list data
+        prepareListData();
+
+        listAdapter = new CustomExpandableList(ListTutoriels.this, listDataHeader, listDataChild);
+
+        // setting list adapter
+        expListView.setAdapter(listAdapter);*//*
+
+    // partie hors onCreate()
+
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
@@ -347,59 +390,34 @@ public class ListFormations extends Activity {
         listDataHeader.add("ANDROID");
 
         // Adding child data
-        List<String> fjava = new ArrayList<String>();
-        fjava.add("Formation Java 01");
-        fjava.add("Formation Java 02");
-        fjava.add("Formation Java 03");
-        fjava.add("Formation Java 04");
-        fjava.add("Formation Java 05");
-        fjava.add("Formation Java 06");
-        fjava.add("Formation Java 07");
+        List<String> tjava = new ArrayList<String>();
+        tjava.add("Tutoriel Java 01");
+        tjava.add("Tutoriel Java 02");
+        tjava.add("Tutoriel Java 03");
+        tjava.add("Tutoriel Java 04");
+        tjava.add("Tutoriel Java 05");
+        tjava.add("Tutoriel Java 06");
+        tjava.add("Tutoriel Java 07");
 
-        List<String> fmicrosoft = new ArrayList<String>();
-        fmicrosoft.add("Formation Microsoft .net 01 ");
-        fmicrosoft.add("Formation Microsoft .net 02");
-        fmicrosoft.add("Formation Microsoft .net 03");
-        fmicrosoft.add("Formation Microsoft .net 04");
-        fmicrosoft.add("Formation Microsoft .net 05");
-        fmicrosoft.add("Formation Microsoft .net 06");
+        List<String> tmicrosoft = new ArrayList<String>();
+        tmicrosoft.add("Tutoriel Microsoft .net 01 ");
+        tmicrosoft.add("Tutoriel Microsoft .net 02");
+        tmicrosoft.add("Tutoriel Microsoft .net 03");
+        tmicrosoft.add("Tutoriel Microsoft .net 04");
+        tmicrosoft.add("Tutoriel Microsoft .net 05");
+        tmicrosoft.add("Tutoriel Microsoft .net 06");
 
-        List<String> fandroid = new ArrayList<String>();
-        fandroid.add("Formation Android 01");
-        fandroid.add("Formation Android 02");
-        fandroid.add("Formation Android 03");
-        fandroid.add("Formation Android 04");
-        fandroid.add("Formation Android 05");
+        List<String> tandroid = new ArrayList<String>();
+        tandroid.add("Tutoriel Android 01");
+        tandroid.add("Tutoriel Android 02");
+        tandroid.add("Tutoriel Android 03");
+        tandroid.add("Tutoriel Android 04");
+        tandroid.add("Tutoriel Android 05");
 
-        listDataChild.put(listDataHeader.get(0), fjava); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), fmicrosoft);
-        listDataChild.put(listDataHeader.get(2), fandroid);
+        listDataChild.put(listDataHeader.get(0), tjava); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), tmicrosoft);
+        listDataChild.put(listDataHeader.get(2), tandroid);
 
-
-        listAdapter = new CustomExpandableList(ListFormations.this, listDataHeader, listDataChild);
-
-        // setting list adapter
-        expListView.setAdapter(listAdapter);
-
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                long p = parent.getSelectedPosition();
-                String item = (String ) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
-                Log.i("==> item clicked :",item);
-                //Toast.makeText(ListFormations.this,"clicked",Toast.LENGTH_LONG).show();
-                Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
-                Intent i = new Intent(ListFormations.this, DetailSelection.class);
-
-
-
-
-                startActivity(i);
-
-                return false;
-            }
-        });
-    }*/
-
-
+    }
+*/
 }

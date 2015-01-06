@@ -37,7 +37,7 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".ListTutoriaux"
+            android:name=".ListTutoriels"
             android:label="@string/title_activity_list_tutoriaux"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
@@ -54,7 +54,12 @@
         <activity
             android:name=".Blog"
             android:label="@string/title_activity_blog"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".SubListView"
+            android:label="@string/title_activity_sub_list_view"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
     </application>
 

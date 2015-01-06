@@ -11,8 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.security.cert.LDAPCertStoreParameters;
-
 
 public class Devis extends Activity {
 
@@ -69,7 +67,7 @@ public class Devis extends Activity {
         btnTutos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Devis.this, ListTutoriaux.class);
+                Intent i = new Intent(Devis.this, ListTutoriels.class);
                 startActivity(i);
             }
         });

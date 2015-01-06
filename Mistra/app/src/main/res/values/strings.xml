@@ -7,7 +7,7 @@
     <string name="title_activity_home">Home</string>
     <string name="background_home_with_logo">background_home_with_logo</string>
     <string name="formations">Formations</string>
-    <string name="tutos">Tutoriaux</string>
+    <string name="tutos">Tutoriels</string>
     <string name="devis">Demande de devis</string>
     <string name="blog">Blog Mistra</string>
     <string name="devisMenu">Devis</string>
@@ -17,7 +17,7 @@
     <string name="title_activity_list_formations">ListFormations</string>
     <string name="retour">Retour home</string>
     <string name="title_activity_devis">Devis</string>
-    <string name="title_activity_list_tutoriaux">ListTutoriaux</string>
+    <string name="title_activity_list_tutoriaux">ListTutoriels</string>
     <string name="title_activity_contact">Contact</string>
     <string name="adresseText">Adresse</string>
     <string name="adresseMistra">19 rue Béranger, 75003 Paris </string>
@@ -27,5 +27,6 @@
     <string name="emailMistra">formation@mistra.fr</string>
     <string name="title_activity_detail_selection">DetailSelection</string>
     <string name="title_activity_blog">Blog</string>
+    <string name="title_activity_sub_list_view">SubListView</string>
 
 </resources>
