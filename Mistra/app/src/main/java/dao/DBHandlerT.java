@@ -11,6 +11,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.Selection;
 import data.Tutoriel;
 import data.Presentation;
 
@@ -20,9 +21,9 @@ import data.Presentation;
 public class DBHandlerT extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "MistraDB.db";
+    private static final String DATABASE_NAME = "MistraDB_Tuto.db";
     private static final String TABLE_TUTORIELS = "tutoriels";
-    private static final String TABLE_PRESENTATION_T = "presentationTsT";
+    private static final String TABLE_PRESENTATION_T = "presentationT";
     // Column name of the tutoriels table
     private static final String  id_T = "id_T";
     private static final String  type_T = "type_T";
@@ -78,7 +79,7 @@ public class DBHandlerT extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        Log.i("===> Creation des tables", "tutoriel et presentationT");
         // Creation des tables
         db.execSQL(createT_table);
         db.execSQL(createPT_table);
@@ -157,12 +158,17 @@ public class DBHandlerT extends SQLiteOpenHelper {
         String query = "SELECT * FROM "+ TABLE_TUTORIELS + " WHERE id_T = " + formID + ";";
         Cursor c = db.rawQuery(query , null);
         c.moveToFirst();
-        int idF = c.getInt(0);
-        String titleF = c.getString(1);
-        String typeF = c.getString(2);
+        int idT = c.getInt(0);
+        String titleT = c.getString(1);
+        String typeT = c.getString(2);
         String descriptifT = c.getString(3);
-        List<Presentation> contentF = getPresentationT( formID);
-        return new Tutoriel(idF, titleF,typeF,descriptifT,contentF);
+
+        List<Presentation> listPreFromTId =  getPresentationT( formID);
+        List<Selection> contentT = new ArrayList<>();
+        for (Presentation p : listPreFromTId){
+            contentT.add(p);
+        }
+        return new Tutoriel(idT, titleT,typeT,descriptifT,contentT);
 
     }
 
@@ -176,12 +182,16 @@ public class DBHandlerT extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         while (!c.isAfterLast()){
-            int idF = c.getInt(0);
-            String titleF = c.getString(1);
-            String typeF = c.getString(2);
+            int idT = c.getInt(0);
+            String titleT = c.getString(1);
+            String typeT = c.getString(2);
             String descriptifT = c.getString(3);
-            List<Presentation> contentF = getPresentationT(idF);
-            Tutoriel cat = new Tutoriel(idF, titleF,typeF,descriptifT,contentF);
+            List<Presentation> listPreFromT = getPresentationT(idT);
+            List<Selection> contentT = new ArrayList<>();
+            for (Presentation p : listPreFromT){
+                contentT.add(p);
+            }
+            Tutoriel cat = new Tutoriel(idT, titleT,typeT,descriptifT,contentT);
             listeForm.add(cat);
             c.moveToNext();
         }

@@ -2,17 +2,14 @@
 package data;
 
 
-import android.database.sqlite.SQLiteDatabase;
-
 import java.util.List;
 
 /**
  * Created by matelli on 22/12/2014.
  */
 
-public class Formation {
-    String type, title,description ;
-    int id;
+public class Formation extends Selection {
+    String description ;
     List<Presentation> content;
 
     public Formation(int id, String title, String type, String description, List<Presentation> content) {
@@ -23,21 +20,6 @@ public class Formation {
         this.content = content;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getDescription() {
         return description;
@@ -45,14 +27,6 @@ public class Formation {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public List<Presentation> getContent() {

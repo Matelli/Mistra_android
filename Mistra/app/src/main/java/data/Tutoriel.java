@@ -5,19 +5,17 @@ import java.util.List;
 /**
  * Created by matelli on 06/01/2015.
  */
-public class Tutoriel extends Presentation {
+public class Tutoriel extends Selection {
 
     private String description;
-    private List<Presentation> listSubTuto;
+    private List<Selection> content;
 
-    public Tutoriel() {
-        super.setContent(null);
-    }
 
-    public Tutoriel(int id, String title, String type, String description,  List<Presentation> listSubTuto) {
-        super(id, title, type, null);
+
+    public Tutoriel(int id, String title, String type, String description,  List<Selection> content) {
+        
         this.description = description;
-        this.listSubTuto = listSubTuto;
+        this.content = content;
     }
 
     public String getDescription() {
@@ -28,19 +26,19 @@ public class Tutoriel extends Presentation {
         this.description = description;
     }
 
-    public List<Presentation> getListSubTuto() {
-        return listSubTuto;
+    public List<Selection> getContent() {
+        return content;
     }
 
-    public void setListSubTuto(List<Presentation> listSubTuto) {
-        this.listSubTuto = listSubTuto;
+    public void setContent(List<Selection> content) {
+        this.content = content;
     }
 
     @Override
     public String toString() {
-        return "Tutoriel{" +  super.toString() +
+        return "Tutoriel{" +
                 "description='" + description + '\'' +
-                ", listSubTuto=" + listSubTuto +
-                "} " ;
+                ", content=" + content +
+                "} " + super.toString();
     }
 }

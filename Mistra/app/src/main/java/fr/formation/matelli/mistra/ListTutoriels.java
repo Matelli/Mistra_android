@@ -38,6 +38,7 @@ import java.util.List;
 
 import dao.DBHandlerF;
 import dao.DBHandlerT;
+import data.Selection;
 import data.Tutoriel;
 import data.Presentation;
 
@@ -53,7 +54,7 @@ public class ListTutoriels extends Activity {
     ExpandableListView expListView;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
-    HashMap<Tutoriel, List<Presentation>> listOfTutoriels;
+    HashMap<Tutoriel, List<Selection>> listOfTutoriels;
     DBHandlerT db;
     JSONArray tutoriels = null;
 
@@ -117,7 +118,7 @@ public class ListTutoriels extends Activity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 long p = parent.getSelectedPosition();
-                Presentation presentation = null;
+                Selection selection = null;
                 String item = (String) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
                 String itemParentName = (String) parent.getExpandableListAdapter().getGroup(groupPosition);
 
@@ -128,21 +129,21 @@ public class ListTutoriels extends Activity {
                     if (c.getTitle().equals(itemParentName)) {
                         Log.i("==> item parent clicked detail :", c.toString());
 
-                        presentation = c.getListSubTuto().get(childPosition);
+                        selection = c.getContent().get(childPosition);
 
                     }
                 }
-                Log.i("==> item object clicked :", presentation.toString());
-                if(presentation.getType().equals("categorie")){
+                Log.i("==> item object clicked :", selection.toString());
+                if (selection.getType().equals("categorie")) {
                     // ToDo Ajouter la redirection pour tuto qui contient des d'autre tuto
-                    Tutoriel t = (Tutoriel) presentation;
-                    Intent i = new Intent(ListTutoriels.this,SubListView.class);
+                    Tutoriel t = (Tutoriel) selection;
+                    Intent i = new Intent(ListTutoriels.this, SubListView.class);
                     // toDo check the parcelable element
                     i.putExtra("objet", (android.os.Parcelable) t);
-                    i.putExtra("titre","Tutoriels");
+                    i.putExtra("titre", "Tutoriels");
                     startActivity(i);
-                }else {
-
+                } else {
+                    Presentation presentation = (Presentation) selection;
                     Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
                     //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
 
@@ -181,6 +182,34 @@ public class ListTutoriels extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            // ToDo verification des version ici
+            // ToDo pour l'instant cette boucle ne doivent fonctinné que 1 fois pour eviter la
+            // ToDo duplication de l'info il faut verifier si la base du web service est modifier pour faire un upgrade
+
+              // Insert into tables if they are empty
+
+            for (Tutoriel t : listOfTutoriels.keySet()) {
+                Log.i("Insertion d'un tuto ", "Tutoriel");
+                long creationFrom = db.createTutoriel(t);
+
+            }
+            // Enregistrement des formation dans la table de presentation
+            for (Tutoriel e : listOfTutoriels.keySet()) {
+                for (Selection s : listOfTutoriels.get(e)) {
+                    if (s.getType().equals("categorie")) {
+                        Log.i("Insertion d'un tuto ", "Tutoriel avec un sub tuto");
+                        Log.i("Insertion d'un tuto ", s.toString());
+                        Tutoriel t = (Tutoriel) s;
+                        long creationFrom = db.createTutoriel(t);
+                    } else {
+                        Presentation p = (Presentation) s;
+                        long creationPre = db.createPresentationT(e, p);
+                    }
+                }
+            }
+
+
+
             Log.i("====>", "PostExecte");
             if (this.progressDialog.isShowing()) {
                 this.progressDialog.dismiss();
@@ -193,10 +222,14 @@ public class ListTutoriels extends Activity {
             HashMap<String, List<String>> listDataChildFromDB = new HashMap<>();
             for (Tutoriel t : l) {
                 int idT = t.getId();
-                List<Presentation> listPre = db.getPresentationT(idT);
+                List<Presentation> listPreFromDB = db.getPresentationT(idT);
+                List<Selection> listPre = new ArrayList<>();
+                for (Presentation e : listPreFromDB) {
+                    listPre.add(e);
+                }
                 //t.setContent(listPre);
                 List<String> listPreString = new ArrayList<>();
-                for (Presentation p : listPre) {
+                for (Selection p : listPre) {
                     listPreString.add(p.getTitle());
                 }
                 listDataChildFromDB.put(t.getTitle(), listPreString);
@@ -216,19 +249,7 @@ public class ListTutoriels extends Activity {
             boolean testConnection = isNetworkAvailable();
             if (testConnection) {
                 // ToDo check the db version
-                 /* // Creation de l'adapter depuis la db
-            // Enregistrement des formation dans la table de formation
-            for (Tutoriel t : listOfTutoriels.keySet()){
-                Log.i("Creation de la table ","Tutoriel");
-                long creationFrom = db.createFormation(t);
-
-            }
-            // Enregistrement des formation dans la table de presentation
-            for (Tutoriel e : listOfTutoriels.keySet()){
-                for (Presentation p : listOfTutoriels.get(e)) {
-                    long creationPre = db.createPresentation(e,p);
-                }
-            }*/
+                Log.i("Connection  ", "" + testConnection);
 
 
                 String fullcode = null;
@@ -277,22 +298,25 @@ public class ListTutoriels extends Activity {
                         int idT = Integer.parseInt(titreObject.getString("id"));
                         String typeT = titreObject.getString("type");
                         String descriptionT = titreObject.getString("description");
-                        List<Presentation> listItemTutoriels = new ArrayList<>();
+                        List<Selection> listItemTutoriels = new ArrayList<>();
                         //Log.i("==> titre ",titre);
-                        JSONArray tabItems = titreObject.getJSONArray("content");
                         List<String> listItems = new ArrayList<>();
+                        JSONArray tabItems = titreObject.getJSONArray("content");
                         for (int j = 0; j < tabItems.length(); j++) {
                             JSONObject item = tabItems.getJSONObject(j);
                             // ToDo select if it is an other tuto or it is a presentation
-                            if (item.getString("type").equals("categorie")){
+                            // ToDo revoir le parse
+                            if (item.getString("type").equals("categorie")) {
+                                Log.i("==> test du type pour T ",item.getString("type"));
                                 String titreT2 = new String(titreObject.getString("title").getBytes("UTF-8"));
                                 int idT2 = Integer.parseInt(titreObject.getString("id"));
+                                Log.i("==> insertion du tuto id  ",""+idT2);
                                 String typeT2 = titreObject.getString("type");
                                 String descriptionT2 = titreObject.getString("description");
                                 JSONArray tabItems2 = titreObject.getJSONArray("content");
-                                List<Presentation> listItemTutoriels2 = new ArrayList<>();
+                                List<Selection> listItemTutoriels2 = new ArrayList<>();
                                 List<String> listItems2 = new ArrayList<>();
-                                for(int k=0;k<tabItems2.length();k++){
+                                for (int k = 0; k < tabItems2.length(); k++) {
                                     String name2 = item.getString("title");
                                     int idI2 = Integer.parseInt(item.getString("id"));
                                     String typeItem2 = item.getString("type");
@@ -304,10 +328,11 @@ public class ListTutoriels extends Activity {
                                 listDataChild.put(titreT2, listItems2);
                                 listOfTutoriels.put(new Tutoriel(idT2, titreT2, typeT2, descriptionT2, listItemTutoriels2), listItemTutoriels2);
 
-                            }else {
+                            } else {
                                 String name = item.getString("title");
                                 int idI = Integer.parseInt(item.getString("id"));
                                 String typeItem = item.getString("type");
+                                Log.i("==> test du type pour P ",item.getString("type"));
                                 String contentItem = item.getString("content");
                                 presentation = new Presentation(idI, name, typeItem, contentItem);
                                 listItemTutoriels.add(presentation);
@@ -328,6 +353,17 @@ public class ListTutoriels extends Activity {
             }
             return null;
         }
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -337,11 +373,6 @@ public class ListTutoriels extends Activity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-    
-    
-    
-    
-    
 
 
     @Override

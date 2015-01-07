@@ -198,6 +198,22 @@ public class ListFormations extends Activity {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+
+             // Insert dans les tables
+            // ToDo version la version de la base a ce niveau
+           /* // Enregistrement des formation dans la table de formation
+            for (Formation f : listOfFormations.keySet()){
+                Log.i("Creation de la table ","Formation");
+                long creationFrom = db.createFormation(f);
+
+            }
+            // Enregistrement des formation dans la table de presentation
+            for (Formation e : listOfFormations.keySet()){
+                for (Presentation p : listOfFormations.get(e)) {
+                    long creationPre = db.createPresentation(e,p);
+                }
+            }*/
+
             Log.i("====>", "PostExecte");
             if (this.progressDialog.isShowing()) {
                 this.progressDialog.dismiss();
@@ -233,20 +249,6 @@ public class ListFormations extends Activity {
             boolean testConnection = isNetworkAvailable();
             if (testConnection) {
                 // ToDo check the db version
-                 /* // Creation de l'adapter depuis la db
-            // Enregistrement des formation dans la table de formation
-            for (Formation f : listOfFormations.keySet()){
-                Log.i("Creation de la table ","Formation");
-                long creationFrom = db.createFormation(f);
-
-            }
-            // Enregistrement des formation dans la table de presentation
-            for (Formation e : listOfFormations.keySet()){
-                for (Presentation p : listOfFormations.get(e)) {
-                    long creationPre = db.createPresentation(e,p);
-                }
-            }*/
-
 
                 String fullcode = null;
                 listDataChild = new HashMap<String, List<String>>();
