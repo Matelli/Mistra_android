@@ -13,7 +13,7 @@ public class Tutoriel extends Selection {
 
 
     public Tutoriel(int id, String title, String type, String description,  List<Selection> content) {
-        
+        super(id,title,type);
         this.description = description;
         this.content = content;
     }

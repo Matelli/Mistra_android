@@ -9,6 +9,16 @@ public class Selection {
     protected String title ;
     protected String type ;
 
+    public Selection() {
+
+    }
+
+    public Selection(int id, String title, String type) {
+        this.id = id;
+        this.title = title;
+        this.type = type;
+    }
+
     public int getId() {
         return id;
     }

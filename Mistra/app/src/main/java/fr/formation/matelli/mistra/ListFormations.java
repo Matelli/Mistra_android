@@ -31,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xml.sax.SAXException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -201,7 +202,7 @@ public class ListFormations extends Activity {
 
              // Insert dans les tables
             // ToDo version la version de la base a ce niveau
-           /* // Enregistrement des formation dans la table de formation
+            // Enregistrement des formation dans la table de formation
             for (Formation f : listOfFormations.keySet()){
                 Log.i("Creation de la table ","Formation");
                 long creationFrom = db.createFormation(f);
@@ -212,7 +213,7 @@ public class ListFormations extends Activity {
                 for (Presentation p : listOfFormations.get(e)) {
                     long creationPre = db.createPresentation(e,p);
                 }
-            }*/
+            }
 
             Log.i("====>", "PostExecte");
             if (this.progressDialog.isShowing()) {
@@ -246,9 +247,13 @@ public class ListFormations extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
+            // Get the network connection
             boolean testConnection = isNetworkAvailable();
+            // Get the database file
+            File databaseFile =getApplicationContext().getDatabasePath("MistraDB.db");
             if (testConnection) {
                 // ToDo check the db version
+
 
                 String fullcode = null;
                 listDataChild = new HashMap<String, List<String>>();
@@ -333,6 +338,16 @@ public class ListFormations extends Activity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    // Test if there the database has been changed
+
+    private void testDatabasseModification(){
+        //AsyncHttpClient client = new AsyncHttpClient();
+
+
+
+    }
+
 
 
     /*

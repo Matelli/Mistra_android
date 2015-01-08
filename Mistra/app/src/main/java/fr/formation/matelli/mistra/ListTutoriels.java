@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +58,8 @@ public class ListTutoriels extends Activity {
     HashMap<Tutoriel, List<Selection>> listOfTutoriels;
     DBHandlerT db;
     JSONArray tutoriels = null;
+    JSONArray tabItems = null;
+    List<Integer> listIdCategorieParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,7 @@ public class ListTutoriels extends Activity {
         btnRetourHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.closeDB();
                 Intent i = new Intent(ListTutoriels.this, Home.class);
                 startActivity(i);
             }
@@ -85,6 +89,7 @@ public class ListTutoriels extends Activity {
         btnDevis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.closeDB();
                 Intent i = new Intent(ListTutoriels.this, Devis.class);
                 startActivity(i);
             }
@@ -93,6 +98,7 @@ public class ListTutoriels extends Activity {
         btnFormations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.closeDB();
                 Intent i = new Intent(ListTutoriels.this, ListFormations.class);
                 startActivity(i);
             }
@@ -101,6 +107,7 @@ public class ListTutoriels extends Activity {
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.closeDB();
                 Intent i = new Intent(ListTutoriels.this, Contact.class);
                 startActivity(i);
             }
@@ -127,7 +134,7 @@ public class ListTutoriels extends Activity {
                 Log.i("==> listOfFormation keys :", listOfTutoriels.keySet().toString());
                 for (Tutoriel c : listOfTutoriels.keySet()) {
                     if (c.getTitle().equals(itemParentName)) {
-                        Log.i("==> item parent clicked detail :", c.toString());
+                        Log.i("==> item parent clicked detail :", "" + c.getId());
 
                         selection = c.getContent().get(childPosition);
 
@@ -186,7 +193,7 @@ public class ListTutoriels extends Activity {
             // ToDo pour l'instant cette boucle ne doivent fonctinné que 1 fois pour eviter la
             // ToDo duplication de l'info il faut verifier si la base du web service est modifier pour faire un upgrade
 
-              // Insert into tables if they are empty
+            // Insert into tables if they are empty
 
             for (Tutoriel t : listOfTutoriels.keySet()) {
                 Log.i("Insertion d'un tuto ", "Tutoriel");
@@ -198,7 +205,7 @@ public class ListTutoriels extends Activity {
                 for (Selection s : listOfTutoriels.get(e)) {
                     if (s.getType().equals("categorie")) {
                         Log.i("Insertion d'un tuto ", "Tutoriel avec un sub tuto");
-                        Log.i("Insertion d'un tuto ", s.toString());
+                        Log.i("Insertion d'un tuto ", "" + s.getId());
                         Tutoriel t = (Tutoriel) s;
                         long creationFrom = db.createTutoriel(t);
                     } else {
@@ -207,7 +214,6 @@ public class ListTutoriels extends Activity {
                     }
                 }
             }
-
 
 
             Log.i("====>", "PostExecte");
@@ -291,58 +297,9 @@ public class ListTutoriels extends Activity {
                     // Log.e("==> fullcode :",fullcode);
 
                     tutoriels = jsonObject.getJSONArray("tutoriels");
-
-                    for (int i = 0; i < tutoriels.length(); i++) {
-                        JSONObject titreObject = tutoriels.getJSONObject(i);
-                        titreT = new String(titreObject.getString("title").getBytes("UTF-8"));
-                        int idT = Integer.parseInt(titreObject.getString("id"));
-                        String typeT = titreObject.getString("type");
-                        String descriptionT = titreObject.getString("description");
-                        List<Selection> listItemTutoriels = new ArrayList<>();
-                        //Log.i("==> titre ",titre);
-                        List<String> listItems = new ArrayList<>();
-                        JSONArray tabItems = titreObject.getJSONArray("content");
-                        for (int j = 0; j < tabItems.length(); j++) {
-                            JSONObject item = tabItems.getJSONObject(j);
-                            // ToDo select if it is an other tuto or it is a presentation
-                            // ToDo revoir le parse
-                            if (item.getString("type").equals("categorie")) {
-                                Log.i("==> test du type pour T ",item.getString("type"));
-                                String titreT2 = new String(titreObject.getString("title").getBytes("UTF-8"));
-                                int idT2 = Integer.parseInt(titreObject.getString("id"));
-                                Log.i("==> insertion du tuto id  ",""+idT2);
-                                String typeT2 = titreObject.getString("type");
-                                String descriptionT2 = titreObject.getString("description");
-                                JSONArray tabItems2 = titreObject.getJSONArray("content");
-                                List<Selection> listItemTutoriels2 = new ArrayList<>();
-                                List<String> listItems2 = new ArrayList<>();
-                                for (int k = 0; k < tabItems2.length(); k++) {
-                                    String name2 = item.getString("title");
-                                    int idI2 = Integer.parseInt(item.getString("id"));
-                                    String typeItem2 = item.getString("type");
-                                    String contentItem2 = item.getString("content");
-                                    Presentation presentation2 = new Presentation(idI2, name2, typeItem2, contentItem2);
-                                    listItemTutoriels2.add(presentation2);
-                                    listItems2.add(name2);
-                                }
-                                listDataChild.put(titreT2, listItems2);
-                                listOfTutoriels.put(new Tutoriel(idT2, titreT2, typeT2, descriptionT2, listItemTutoriels2), listItemTutoriels2);
-
-                            } else {
-                                String name = item.getString("title");
-                                int idI = Integer.parseInt(item.getString("id"));
-                                String typeItem = item.getString("type");
-                                Log.i("==> test du type pour P ",item.getString("type"));
-                                String contentItem = item.getString("content");
-                                presentation = new Presentation(idI, name, typeItem, contentItem);
-                                listItemTutoriels.add(presentation);
-                                listItems.add(name);
-                            }
-                        }
-                        listDataChild.put(titreT, listItems);
-                        listOfTutoriels.put(new Tutoriel(idT, titreT, typeT, descriptionT, listItemTutoriels), listItemTutoriels);
-                    }
-
+                    //Log.i("==> racine tuto 1er element in the table ", tutoriels.get(0).toString());
+                    List<Selection> listSelection = parsingJSONFile(tutoriels, true);
+                    affichageDesElements(listSelection, listIdCategorieParent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
@@ -353,15 +310,6 @@ public class ListTutoriels extends Activity {
             }
             return null;
         }
-
-
-
-
-
-
-
-
-
 
 
     }
@@ -393,6 +341,86 @@ public class ListTutoriels extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    private List<Selection> parsingJSONFile(JSONArray t, boolean categorieParent) {
+        List<Selection> listSelection = new ArrayList<>();
+        listIdCategorieParent = new ArrayList<>();
+        for (int i = 0; i < t.length(); i++) {
+            JSONObject titreObject = null;
+            try {
+                //Log.i("==> niveau racine content 1er element in the table ", t.get(0).toString());
+                titreObject = t.getJSONObject(i);
+                String titre = new String(titreObject.getString("title").getBytes("UTF-8"));
+                //Log.i("==> niveau tuto ", titre);
+                int id = Integer.parseInt(titreObject.getString("id"));
+                //Log.i("==> niveau tuto id ", "" + id);
+                String type = titreObject.getString("type");
+                /// Modification
+
+                if (type.equals("categorie")) {
+                    String descriptionT = titreObject.getString("description");
+                    tabItems = titreObject.getJSONArray("content");
+                    Tutoriel tutoriel = new Tutoriel(id, titre, type, descriptionT, parsingJSONFile(tabItems, false));
+                    Log.i("new tutoriel  ", tutoriel.getId() + " titre " + tutoriel.getTitle());
+                    if (categorieParent) {
+                        Log.i("id tutorielparent  ", tutoriel.getId() + " titre " + tutoriel.getTitle());
+                        listIdCategorieParent.add(id);
+                    }
+                    listSelection.add(tutoriel);
+                } else {
+
+                    String contentPresentation = titreObject.getString("content");
+                    Presentation presentation = new Presentation(id, titre, type, contentPresentation);
+                    Log.i("new presentation  ", presentation.getId() + " titre " + presentation.getTitle());
+                    listSelection.add(presentation);
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+        return listSelection;
+    }
+
+    private void affichageDesElements(List<Selection> listSelection, List<Integer> listIdCategorieParent) {
+
+        for (int i = 0; i < listSelection.size(); i++) {
+            Selection s = listSelection.get(i);
+            if (s instanceof Tutoriel) {
+                if (listIdCategorieParent.contains(s.getId())) {
+                    ArrayList<String> titreItems = new ArrayList<>();
+                    for (Selection select : ((Tutoriel) s).getContent()) {
+                        titreItems.add(select.getTitle());
+                        Log.i("Tutotriel parent a afficher  ", "titre: " + s.getTitle() + " elems : " + titreItems);
+                    }
+
+                    listDataChild.put(s.getTitle(), titreItems);
+                }
+                listOfTutoriels.put((Tutoriel) s, ((Tutoriel) s).getContent());
+                affichageDesElements(((Tutoriel) s).getContent(), listIdCategorieParent);
+            }
+        }
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
 
       /*  *//*
      * Preparing the list data
@@ -451,4 +479,4 @@ public class ListTutoriels extends Activity {
 
     }
 */
-}
+

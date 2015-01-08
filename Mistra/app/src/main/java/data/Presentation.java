@@ -12,9 +12,7 @@ public class Presentation extends Selection {
     }
 
     public Presentation(int id, String title,String type, String content){
-        this.type = type;
-        this.id= id;
-        this.title = title;
+        super(id,title,type);
         this.content = content;
 
     }
