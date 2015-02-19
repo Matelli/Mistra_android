@@ -3,6 +3,8 @@ package fr.formation.matelli.mistra;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,15 +16,18 @@ import android.widget.Toast;
 
 public class Devis extends Activity {
 
+    private Activity activity;
+
     ImageButton btnRetour, btnSend;
     Button btnFormations, btnTutos,btnDevis, btnContact;
-    EditText etObjet, etNom, etNumTel,etEmail, etVille, etSociete;
+    EditText etObjet, etNom, etNumTel,etEmail, etVille, etSociete, etCommentaire;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.activity = this;
         setContentView(R.layout.activity_devis);
         // ImageButton
         btnRetour = (ImageButton) findViewById(R.id.btnRetourHome);
@@ -39,6 +44,7 @@ public class Devis extends Activity {
         etEmail = (EditText) findViewById(R.id.editEmail);
         etVille = (EditText) findViewById(R.id.editVille);
         etSociete = (EditText) findViewById(R.id.editSociete);
+        etCommentaire = (EditText) findViewById(R.id.editCommentaire);
 
         initialisation();
 
@@ -81,6 +87,22 @@ public class Devis extends Activity {
             }
         });
 
+        etCommentaire.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {  }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(etCommentaire.getText().length()>=500) {
+                    Toast.makeText(activity,"Vous avez atteint le maximum de caractères !",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
     }
 
     private void initialisation() {
@@ -88,7 +110,7 @@ public class Devis extends Activity {
         //si l'on vient d'un item "Presentation" depuis "Formation", on a passé le nom de la formation donc on le champs objet avec
         if(getIntent()!=null && getIntent().getExtras()!=null &&  getIntent().getExtras().getString("objetDevis") != null) {
             etObjet.setText(getIntent().getExtras().getString("objetDevis"));
-            etNom.requestFocus();//on donnel e focus au champs suivant
+            etNom.requestFocus();//on donne le focus au champs suivant
         }
     }
 
