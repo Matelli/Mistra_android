@@ -44,6 +44,7 @@ import data.Presentation;
 
 
 public class ListFormations extends Activity {
+
     ImageButton btnRetourHome;
     Button btnFormations;
     Button btnTutos;
@@ -155,6 +156,8 @@ public class ListFormations extends Activity {
                 return false;
             }
         });
+
+
     }
 
 
@@ -250,6 +253,12 @@ public class ListFormations extends Activity {
             // setting list adapter
             expListView.setAdapter(listAdapter);
             db.closeDB();
+
+            //on expand toutes les catégories
+            for(int i=0;i<listAdapter.getGroupCount();i++)
+            {
+                expListView.expandGroup(i);
+            }
         }
 
         @Override

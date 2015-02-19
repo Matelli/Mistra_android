@@ -58,6 +58,14 @@ public class DetailSelection extends Activity {
             pageView.setBackgroundColor(0x00000000);
         }
 
+        btnRetourPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DetailSelection.this, ListFormations.class);
+                startActivity(i);
+            }
+        });
+
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +77,6 @@ public class DetailSelection extends Activity {
         btnDevis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent i = new Intent(DetailSelection.this, Devis.class);
                 i.putExtra("objetDevis",detailTitre.getText());
                 startActivity(i);
