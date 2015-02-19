@@ -31,7 +31,7 @@ public class CustomExpandableList extends BaseExpandableListAdapter {
     }
     public CustomExpandableList(Context context,  HashMap<String, List<String>> listChildData) {
         this.context = context;
-        this.listDataHeader = new ArrayList<>();
+        this.listDataHeader = new ArrayList<String>();
         for(String entry : listChildData.keySet() ){
             this.listDataHeader.add(entry);
           //  Log.e("==> titre :",entry);

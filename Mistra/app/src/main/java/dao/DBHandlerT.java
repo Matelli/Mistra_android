@@ -164,7 +164,7 @@ public class DBHandlerT extends SQLiteOpenHelper {
         String descriptifT = c.getString(3);
 
         List<Presentation> listPreFromTId =  getPresentationT( formID);
-        List<Selection> contentT = new ArrayList<>();
+        List<Selection> contentT = new ArrayList<Selection>();
         for (Presentation p : listPreFromTId){
             contentT.add(p);
         }
@@ -178,7 +178,7 @@ public class DBHandlerT extends SQLiteOpenHelper {
         Log.i("===> Get all tutoriel", " " + "");
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM "+ TABLE_TUTORIELS;
-        List<Tutoriel> listeForm = new ArrayList<>();
+        List<Tutoriel> listeForm = new ArrayList<Tutoriel>();
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         while (!c.isAfterLast()){
@@ -187,7 +187,7 @@ public class DBHandlerT extends SQLiteOpenHelper {
             String typeT = c.getString(2);
             String descriptifT = c.getString(3);
             List<Presentation> listPreFromT = getPresentationT(idT);
-            List<Selection> contentT = new ArrayList<>();
+            List<Selection> contentT = new ArrayList<Selection>();
             for (Presentation p : listPreFromT){
                 contentT.add(p);
             }
@@ -206,7 +206,7 @@ public class DBHandlerT extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM "+ TABLE_PRESENTATION_T +" WHERE id_T = "+ formId ;
         Cursor c = db.rawQuery(query, null);
-        List<Presentation> liste_p = new ArrayList<>();
+        List<Presentation> liste_p = new ArrayList<Presentation>();
         c.moveToFirst();
         while(!c.isAfterLast()){
             int idP = c.getInt(0);

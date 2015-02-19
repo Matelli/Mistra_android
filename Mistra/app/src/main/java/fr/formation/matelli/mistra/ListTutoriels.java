@@ -151,7 +151,7 @@ public class ListTutoriels extends Activity {
                     startActivity(i);
                 } else {
                     Presentation presentation = (Presentation) selection;
-                    Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
                     //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
 
                     Intent i = new Intent(ListTutoriels.this, DetailSelection.class);
@@ -176,7 +176,7 @@ public class ListTutoriels extends Activity {
             this.progressDialog.setMessage("Please wait ");
             this.progressDialog.setCancelable(false);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            listOfTutoriels = new HashMap<>();
+            listOfTutoriels = new HashMap<Tutoriel, List<Selection>>();
 
         }
 
@@ -225,16 +225,16 @@ public class ListTutoriels extends Activity {
 
 
             List<Tutoriel> l = db.getAllTutoriels();
-            HashMap<String, List<String>> listDataChildFromDB = new HashMap<>();
+            HashMap<String, List<String>> listDataChildFromDB = new HashMap<String, List<String>>();
             for (Tutoriel t : l) {
                 int idT = t.getId();
                 List<Presentation> listPreFromDB = db.getPresentationT(idT);
-                List<Selection> listPre = new ArrayList<>();
+                List<Selection> listPre = new ArrayList<Selection>();
                 for (Presentation e : listPreFromDB) {
                     listPre.add(e);
                 }
                 //t.setContent(listPre);
-                List<String> listPreString = new ArrayList<>();
+                List<String> listPreString = new ArrayList<String>();
                 for (Selection p : listPre) {
                     listPreString.add(p.getTitle());
                 }
@@ -344,8 +344,8 @@ public class ListTutoriels extends Activity {
 
 
     private List<Selection> parsingJSONFile(JSONArray t, boolean categorieParent) {
-        List<Selection> listSelection = new ArrayList<>();
-        listIdCategorieParent = new ArrayList<>();
+        List<Selection> listSelection = new ArrayList<Selection>();
+        listIdCategorieParent = new ArrayList<Integer>();
         for (int i = 0; i < t.length(); i++) {
             JSONObject titreObject = null;
             try {
@@ -396,7 +396,7 @@ public class ListTutoriels extends Activity {
             Selection s = listSelection.get(i);
             if (s instanceof Tutoriel) {
                 if (listIdCategorieParent.contains(s.getId())) {
-                    ArrayList<String> titreItems = new ArrayList<>();
+                    ArrayList<String> titreItems = new ArrayList<String>();
                     for (Selection select : ((Tutoriel) s).getContent()) {
                         titreItems.add(select.getTitle());
                         Log.i("Tutotriel parent a afficher  ", "titre: " + s.getTitle() + " elems : " + titreItems);

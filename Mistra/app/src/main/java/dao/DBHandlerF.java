@@ -171,7 +171,7 @@ public class DBHandlerF extends SQLiteOpenHelper {
         Log.i("===> Get all formation", " " + "");
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM "+ TABLE_FORMATION;
-        List<Formation> listeForm = new ArrayList<>();
+        List<Formation> listeForm = new ArrayList<Formation>();
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         while (!c.isAfterLast()){
@@ -195,7 +195,7 @@ public class DBHandlerF extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM "+ TABLE_PRESENTATION +" WHERE id_F = "+ formId ;
         Cursor c = db.rawQuery(query, null);
-        List<Presentation> liste_p = new ArrayList<>();
+        List<Presentation> liste_p = new ArrayList<Presentation>();
         c.moveToFirst();
         while(!c.isAfterLast()){
             int idP = c.getInt(0);

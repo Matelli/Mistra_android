@@ -38,7 +38,7 @@ public class SubListView extends Activity {
         Intent i = this.getIntent();
         t = (Tutoriel) i.getExtras().getParcelable("objet");
         textViewTitre.setText(i.getExtras().getString("titre")+": "+t.getTitle());
-        List<String> listItemToShow = new ArrayList<>();
+        List<String> listItemToShow = new ArrayList<String>();
         for( Selection s : t.getContent()){
             listItemToShow.add(s.getTitle());
              }

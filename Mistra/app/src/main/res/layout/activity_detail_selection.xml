@@ -26,12 +26,16 @@
 
         <TextView
             android:id="@+id/detailTitre"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:hint="Item"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:layout_alignParentEnd="false"
+            android:layout_toEndOf="@id/btnRetourPrevious"
+            android:layout_toStartOf="@+id/btnShare"
+            android:gravity="center_vertical|center_horizontal" />
 
         <ImageButton
             android:id="@+id/btnShare"

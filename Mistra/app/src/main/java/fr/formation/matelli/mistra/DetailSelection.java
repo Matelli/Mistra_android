@@ -20,6 +20,7 @@ public class DetailSelection extends Activity {
     Button btnContact, btnDevis;
     WebView pageView ;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +45,12 @@ public class DetailSelection extends Activity {
 
 
 
-        // Listeners
 
-        detailTitre.setText("Titre");
+        String titre = new String("Formations");
+        if(getIntent() != null && getIntent().getExtras()!=null && getIntent().getExtras().getString("detailTitre")!=null)
+            titre = getIntent().getExtras().getString("detailTitre");
+        detailTitre.setText(titre);
+        // Listeners
         pageView.getSettings().setJavaScriptEnabled(true);
 
         pageView.getSettings().setLoadWithOverviewMode(true);

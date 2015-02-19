@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -130,21 +131,22 @@ public class ListFormations extends Activity {
                 String item = (String) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
                 String itemParentName = (String) parent.getExpandableListAdapter().getGroup(groupPosition);
 
-                Log.i("==> item clicked :", item);
-                Log.i("==> item parent clicked :", itemParentName + " at position :" + groupPosition);
-                Log.i("==> listOfFormation keys :", listOfFormations.keySet().toString());
+                Log.e("==> item clicked :", item);
+                Log.e("==> item parent clicked :", itemParentName + " at position :" + groupPosition);
+                Log.e("==> listOfFormation keys :", listOfFormations.keySet().toString());
                 for (Formation c : listOfFormations.keySet()) {
                     if (c.getTitle().equals(itemParentName)) {
-                        Log.i("==> item parent clicked detail :", c.toString());
+                        Log.e("==> item parent clicked detail :", c.toString());
                         presentation = c.getContent().get(childPosition);
 
                     }
                 }
-                Log.i("==> item object clicked :", presentation.toString());
-                Toast.makeText(ListFormations.this, "clicked", Toast.LENGTH_LONG).show();
+                Log.e("==> item object clicked :", presentation.toString());
+                //Toast.makeText(ListFormations.this, "clicked", Toast.LENGTH_LONG).show();
                 //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
 
                 Intent i = new Intent(ListFormations.this, DetailSelection.class);
+                i.putExtra("detailTitre", presentation.getTitle());
                 i.putExtra("htmlcode", presentation.getContent());
                 startActivity(i);
 
@@ -186,7 +188,7 @@ public class ListFormations extends Activity {
             this.progressDialog.setMessage("Please wait ");
             this.progressDialog.setCancelable(false);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            listOfFormations = new HashMap<>();
+            listOfFormations = new HashMap<Formation, List<Presentation>>();
 
         }
 
@@ -224,12 +226,12 @@ public class ListFormations extends Activity {
 
 
             List<Formation> l = db.getAllFormations();
-            HashMap<String, List<String>> listDataChildFromDB = new HashMap<>();
+            HashMap<String, List<String>> listDataChildFromDB = new HashMap<String, List<String>>();
             for (Formation f : l) {
                 int idF = f.getId();
                 List<Presentation> listPre = db.getPresentation(idF);
                 //f.setContent(listPre);
-                List<String> listPreString = new ArrayList<>();
+                List<String> listPreString = new ArrayList<String>();
                 for (Presentation p : listPre) {
                     listPreString.add(p.getTitle());
                 }
@@ -301,10 +303,10 @@ public class ListFormations extends Activity {
                         int idF = Integer.parseInt(titreObject.getString("id"));
                         String typeF = titreObject.getString("type");
                         String descriptionF = titreObject.getString("description");
-                        List<Presentation> listItemFormations = new ArrayList<>();
+                        List<Presentation> listItemFormations = new ArrayList<Presentation>();
                         //Log.i("==> titre ",titre);
                         JSONArray tabItems = titreObject.getJSONArray("content");
-                        List<String> listItems = new ArrayList<>();
+                        List<String> listItems = new ArrayList<String>();
                         for (int j = 0; j < tabItems.length(); j++) {
                             JSONObject item = tabItems.getJSONObject(j);
                             String name = item.getString("title");
