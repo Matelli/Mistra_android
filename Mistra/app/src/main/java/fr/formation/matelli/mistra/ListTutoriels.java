@@ -174,7 +174,7 @@ public class ListTutoriels extends Activity {
 
         public DataFormation(Context c) {
             this.progressDialog = new ProgressDialog(c);
-            this.progressDialog.setMessage("Please wait ");
+            this.progressDialog.setMessage("Chargement");
             this.progressDialog.setCancelable(false);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             listOfTutoriels = new HashMap<Tutoriel, List<Selection>>();
