@@ -16,9 +16,6 @@ import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -35,8 +32,11 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import dao.DBHandlerF;
 import data.Formation;
@@ -52,6 +52,8 @@ public class ListFormations extends Activity {
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
+    /*TreeMap<String, List<String>> listDataChild;
+    TreeMap<Formation, List<Presentation>> listOfFormations;*/
     HashMap<String, List<String>> listDataChild;
     HashMap<Formation, List<Presentation>> listOfFormations;
     // Handler de db
@@ -185,9 +187,10 @@ public class ListFormations extends Activity {
 
         public DataFormation(Context c) {
             this.progressDialog = new ProgressDialog(c);
-            this.progressDialog.setMessage("Please wait ");
+            this.progressDialog.setMessage("Chargement");
             this.progressDialog.setCancelable(false);
             this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            /*listOfFormations = new TreeMap<Formation, List<Presentation>>(); */
             listOfFormations = new HashMap<Formation, List<Presentation>>();
 
         }
@@ -226,10 +229,12 @@ public class ListFormations extends Activity {
 
 
             List<Formation> l = db.getAllFormations();
-            HashMap<String, List<String>> listDataChildFromDB = new HashMap<String, List<String>>();
+            /* TreeMap<String, List<String>> listDataChildFromDB = new TreeMap<String, List<String>>();*/
+            TreeMap<String, List<String>> listDataChildFromDB = new TreeMap<String, List<String>>();
             for (Formation f : l) {
                 int idF = f.getId();
                 List<Presentation> listPre = db.getPresentation(idF);
+                //Collections.sort(listPre);
                 //f.setContent(listPre);
                 List<String> listPreString = new ArrayList<String>();
                 for (Presentation p : listPre) {
@@ -258,6 +263,7 @@ public class ListFormations extends Activity {
 
 
                 String fullcode = null;
+                /* listDataChild = new TreeMap<String, List<String>>();*/
                 listDataChild = new HashMap<String, List<String>>();
                 try {
                     fullcode = getDataFromURL(urlFormation);
@@ -304,6 +310,7 @@ public class ListFormations extends Activity {
                         String typeF = titreObject.getString("type");
                         String descriptionF = titreObject.getString("description");
                         List<Presentation> listItemFormations = new ArrayList<Presentation>();
+
                         //Log.i("==> titre ",titre);
                         JSONArray tabItems = titreObject.getJSONArray("content");
                         List<String> listItems = new ArrayList<String>();
@@ -317,6 +324,7 @@ public class ListFormations extends Activity {
                             listItemFormations.add(presentation);
                             listItems.add(name);
                         }
+                        //Collections.sort(listItemFormations);
                         listDataChild.put(titreF, listItems);
                         listOfFormations.put(new Formation(idF, titreF, typeF, descriptionF, listItemFormations), listItemFormations);
                     }

@@ -177,7 +177,7 @@ public class DBHandlerT extends SQLiteOpenHelper {
     public List<Tutoriel> getAllTutoriels(){
         Log.i("===> Get all tutoriel", " " + "");
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM "+ TABLE_TUTORIELS;
+        String query = "SELECT * FROM "+ TABLE_TUTORIELS+" ORDER BY "+title_T;
         List<Tutoriel> listeForm = new ArrayList<Tutoriel>();
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();

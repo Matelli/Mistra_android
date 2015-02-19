@@ -37,15 +37,6 @@ public class DetailSelection extends Activity {
         pageView = (WebView) findViewById(R.id.webView );
 
 
-
-
-
-
-
-
-
-
-
         String titre = new String("Formations");
         if(getIntent() != null && getIntent().getExtras()!=null && getIntent().getExtras().getString("detailTitre")!=null)
             titre = getIntent().getExtras().getString("detailTitre");
@@ -78,7 +69,9 @@ public class DetailSelection extends Activity {
         btnDevis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent i = new Intent(DetailSelection.this, Devis.class);
+                i.putExtra("objetDevis",detailTitre.getText());
                 startActivity(i);
             }
         });

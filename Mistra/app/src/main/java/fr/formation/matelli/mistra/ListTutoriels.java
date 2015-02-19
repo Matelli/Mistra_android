@@ -36,6 +36,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import dao.DBHandlerF;
 import dao.DBHandlerT;
@@ -225,7 +226,8 @@ public class ListTutoriels extends Activity {
 
 
             List<Tutoriel> l = db.getAllTutoriels();
-            HashMap<String, List<String>> listDataChildFromDB = new HashMap<String, List<String>>();
+            /* TreeMap<String, List<String>> listDataChildFromDB = new TreeMap<String, List<String>>(); */
+            TreeMap<String, List<String>> listDataChildFromDB = new TreeMap<String, List<String>>();
             for (Tutoriel t : l) {
                 int idT = t.getId();
                 List<Presentation> listPreFromDB = db.getPresentationT(idT);

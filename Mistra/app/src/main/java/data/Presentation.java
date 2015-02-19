@@ -3,7 +3,7 @@ package data;
 /**
  * Created by matelli on 23/12/2014.
  */
-public class Presentation extends Selection {
+public class Presentation extends Selection implements Comparable<Presentation> {
 
     String  content;
 
@@ -36,4 +36,14 @@ public class Presentation extends Selection {
                 ", id=" + id +
                 '}';
     }
+
+    @Override
+    public int compareTo(Presentation p) {
+        if (this.getTitle().toLowerCase().equalsIgnoreCase(p.getTitle().toLowerCase())) {
+            return this.getType().toLowerCase().compareToIgnoreCase(p.getType().toLowerCase());
+        } else {
+            return this.getTitle().toLowerCase().compareToIgnoreCase(p.getTitle().toLowerCase());
+        }
+    }
+
 }

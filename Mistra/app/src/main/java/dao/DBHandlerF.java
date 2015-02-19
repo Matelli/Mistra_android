@@ -170,7 +170,7 @@ public class DBHandlerF extends SQLiteOpenHelper {
     public List<Formation> getAllFormations(){
         Log.i("===> Get all formation", " " + "");
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM "+ TABLE_FORMATION;
+        String query = "SELECT * FROM "+ TABLE_FORMATION+" ORDER BY "+title_F;
         List<Formation> listeForm = new ArrayList<Formation>();
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();

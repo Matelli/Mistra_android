@@ -40,6 +40,8 @@ public class Devis extends Activity {
         etVille = (EditText) findViewById(R.id.editVille);
         etSociete = (EditText) findViewById(R.id.editSociete);
 
+        initialisation();
+
         btnRetour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,10 +81,15 @@ public class Devis extends Activity {
             }
         });
 
+    }
 
+    private void initialisation() {
 
-
-
+        //si l'on vient d'un item "Presentation" depuis "Formation", on a passé le nom de la formation donc on le champs objet avec
+        if(getIntent()!=null && getIntent().getExtras()!=null &&  getIntent().getExtras().getString("objetDevis") != null) {
+            etObjet.setText(getIntent().getExtras().getString("objetDevis"));
+            etNom.requestFocus();//on donnel e focus au champs suivant
+        }
     }
 
 

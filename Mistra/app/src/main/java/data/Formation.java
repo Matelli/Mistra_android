@@ -2,13 +2,17 @@
 package data;
 
 
+import android.util.Base64;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
  * Created by matelli on 22/12/2014.
  */
 
-public class Formation extends Selection {
+public class Formation extends Selection implements Comparable<Formation> {
     String description ;
     List<Presentation> content;
 
@@ -49,6 +53,14 @@ public class Formation extends Selection {
                 '}';
     }
 
+    @Override
+    public int compareTo(Formation o) {
+        if (this.getTitle().toLowerCase().equalsIgnoreCase(o.getTitle().toLowerCase())) {
+            return this.getType().toLowerCase().compareToIgnoreCase(o.getType().toLowerCase());
+        } else {
+            return this.getTitle().toLowerCase().compareToIgnoreCase(o.getTitle().toLowerCase());
+        }
+    }
 
 }
 

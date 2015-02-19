@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Created by matelli on 22/10/2014.
@@ -21,15 +22,17 @@ public class CustomExpandableList extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> listDataHeader; // header titles
-    private HashMap<String, List<String>> listDataChild;
+    /* private TreeMap<String, List<String>> listDataChild; */
+    private TreeMap<String, List<String>> listDataChild;
 
     public CustomExpandableList(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData) {
+                                TreeMap<String, List<String>> listChildData) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listDataChild = listChildData;
     }
-    public CustomExpandableList(Context context,  HashMap<String, List<String>> listChildData) {
+    /* public CustomExpandableList(Context context,  TreeMap<String, List<String>> listChildData) {*/
+    public CustomExpandableList(Context context,  TreeMap<String, List<String>> listChildData) {
         this.context = context;
         this.listDataHeader = new ArrayList<String>();
         for(String entry : listChildData.keySet() ){
