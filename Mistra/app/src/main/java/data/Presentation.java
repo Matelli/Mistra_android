@@ -2,7 +2,10 @@ package data;
 
 /**
  * Created by matelli on 23/12/2014.
+ *
+ * @deprecated uitiliser {@link data.Article}.
  */
+@Deprecated
 public class Presentation extends Selection implements Comparable<Presentation> {
 
     String  content;

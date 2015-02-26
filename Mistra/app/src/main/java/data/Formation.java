@@ -14,14 +14,12 @@ import java.util.List;
 
 public class Formation extends Selection implements Comparable<Formation> {
     String description ;
-    List<Presentation> content;
+    List<Article> articles;
 
-    public Formation(int id, String title, String type, String description, List<Presentation> content) {
+    public Formation(int id, String title, Type type, String description, List<Article> articles) {
+        super(id,title,type);
         this.description = description;
-        this.type = type;
-        this.title = title;
-        this.id = id;
-        this.content = content;
+        this.articles = articles;
     }
 
 
@@ -33,14 +31,17 @@ public class Formation extends Selection implements Comparable<Formation> {
         this.description = description;
     }
 
-    public List<Presentation> getContent() {
-        return content;
+    public List<Article> getArticles() {
+        return articles;
     }
 
-    public void setContent(List<Presentation> content) {
-        this.content = content;
+    public void setArticles(List<Article> content) {
+        this.articles = content;
     }
 
+    public void addArticle(Article article) {
+        this.articles.add(article);
+    }
 
     @Override
     public String toString() {
@@ -49,14 +50,14 @@ public class Formation extends Selection implements Comparable<Formation> {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
-                ", content=" + content +
+                ", articles=" + articles +
                 '}';
     }
 
     @Override
     public int compareTo(Formation o) {
         if (this.getTitle().toLowerCase().equalsIgnoreCase(o.getTitle().toLowerCase())) {
-            return this.getType().toLowerCase().compareToIgnoreCase(o.getType().toLowerCase());
+            return this.getType().name().toLowerCase().compareToIgnoreCase(o.getType().name().toLowerCase());
         } else {
             return this.getTitle().toLowerCase().compareToIgnoreCase(o.getTitle().toLowerCase());
         }

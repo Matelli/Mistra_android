@@ -1,12 +1,15 @@
 package fr.formation.matelli.mistra;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import services.UpdateDBService;
 
 
 public class Home extends Activity {
@@ -15,6 +18,8 @@ public class Home extends Activity {
     private Button btnBlog;
     private Button btnDevis;
     private Button btnContact;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +64,6 @@ public class Home extends Activity {
             }
         });
 
-
-
-
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,8 +73,21 @@ public class Home extends Activity {
         });
 
 
+        this.progressDialog = new ProgressDialog(this);
+        this.progressDialog.setMessage("Chargement");
+        this.progressDialog.setCancelable(false);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+        //on lance
+        //this.progressDialog.show();
+        //on arrete
+        //if (this.progressDialog.isShowing()) {
+        //    this.progressDialog.dismiss();
+        //}
 
 
+
+        startService(new Intent(Home.this, UpdateDBService.class));
     }
 
 
@@ -94,4 +109,6 @@ public class Home extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

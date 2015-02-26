@@ -7,13 +7,15 @@ public class Selection {
 
     protected int id ;
     protected String title ;
-    protected String type ;
+    protected Type type ;
 
     public Selection() {
-
+        this.id=-1;
+        this.title=new String();
+        this.type = null;
     }
 
-    public Selection(int id, String title, String type) {
+    public Selection(int id, String title, Type type) {
         this.id = id;
         this.title = title;
         this.type = type;
@@ -35,20 +37,23 @@ public class Selection {
         this.title = title;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
     @Override
     public String toString() {
-        return "Selection{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", type='" + type + '\'' +
-                '}';
+
+        final StringBuilder sb = new StringBuilder("Selection{");
+        sb.append("id=").append(id);
+        sb.append("title='").append(title).append("'");
+        if(type != null)
+            sb.append("type='").append(id).append("'");
+        sb.append('}');
+        return sb.toString();
     }
 }
