@@ -141,7 +141,7 @@ public class ListFormations extends Activity {
     private void remplirListData() {
         // Creation d'un objet db
         //this.db = new DBHandlerFormation(this.getApplicationContext());
-        this.db = new DBHandlerFormation(this.context);
+        this.db = new DBHandlerFormation(this);
         //récupération des infos depuis la DB
         this.listOfFormations.addAll(this.db.getAll());
 

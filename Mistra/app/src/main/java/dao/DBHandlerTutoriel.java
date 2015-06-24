@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.Article;
+import data.Formation;
 import data.Selection;
 import data.Tutoriel;
 import data.Type;
@@ -32,7 +33,7 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
 
     // Requete de creation de la table Tutoriels
     private static String creationTutoriel_table = "CREATE TABLE "
-            + TABLE_TUTORIELS + "(" + id_T + " INTEGER PRIMARY KEY, "
+            + TABLE_TUTORIELS + "(" + id_T + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + title_T + " TEXT,"
             + type_T + " TEXT,"
             + descriptif_T + " TEXT"
@@ -43,7 +44,7 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
         this.context = context;
     }
 
-    public DBHandlerTutoriel(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    /*public DBHandlerTutoriel(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         this.context = context;
     }
@@ -51,23 +52,41 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
     public DBHandlerTutoriel(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
         this.context = context;
-    }
+    }*/
 
     @Override
     public long insert(Tutoriel t) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(id_T, t.getId());
-        Log.i("DBHandlerTutoriel","===> insertion de tutoriel"+ t.getId());
-        values.put(title_T, t.getTitle());
-        values.put(type_T, t.getType().name());
-        values.put(descriptif_T, t.getDescription());
-        values.put(parent_T, t.getParent());
+            if (!existOnDb(db,t)) {
+                ContentValues values = new ContentValues();
+                values.put(id_T, t.getId());
+                Log.i("DBHandlerTutoriel", "===> insertion de tutoriel" + t.getId());
+                values.put(title_T, t.getTitle());
+                values.put(type_T, t.getType().name());
+                values.put(descriptif_T, t.getDescription());
+                values.put(parent_T, t.getParent());
 
-        Long cat_id = db.insert(TABLE_TUTORIELS, null, values);
+                Long cat_id = db.insert(TABLE_TUTORIELS, null, values);
 
-        return cat_id;
+                db.close();
+                return cat_id;
+            } else {
+                db.close();
+                return update(t);
+            }
+    }
+
+    public boolean existOnDb(final SQLiteDatabase db,final Tutoriel f) {
+        boolean b = false;
+        StringBuilder qry = new StringBuilder("SELECT ").append(id_T).append(" FROM ").append(TABLE_TUTORIELS).append(" WHERE ").append(id_T).append(" = ").append(f.getId()).append(";");
+        Cursor c = db.rawQuery(qry.toString() , null);
+        if(c.getCount() > 0) {
+            b = true;
+        }
+        db.close();
+        c.close();
+        return b;
     }
 
     @Override
@@ -79,13 +98,17 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
         values.put(type_T, t.getType().name());
         values.put(descriptif_T, t.getDescription());
 
-        return db.update(TABLE_TUTORIELS,values,id_T + " = ?",new String[]{String.valueOf(t.getId())});
+        final int id = db.update(TABLE_TUTORIELS,values,id_T + " = ?",new String[]{String.valueOf(t.getId())});
+
+        db.close();
+        return t.getId();
     }
 
     @Override
     public void deleteById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_TUTORIELS, id_T+ " = ?", new String[]{String.valueOf(id)});
+        db.close();
     }
 
     @Override
@@ -114,6 +137,7 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
             c.moveToNext();
         }
         c.close();
+        db.close();
         return listeForm;
     }
 
@@ -124,6 +148,7 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
         sb.append(type_T).append(",");
         sb.append(descriptif_T).append(",");
         sb.append(parent_T);
+
         return sb.toString();
     }
 
@@ -146,6 +171,7 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
         for (Article p : listArticleFromTId){
             contentT.add(p);
         }
+        db.close();
         return new Tutoriel(idT, titleT,typeT,descriptifT,contentT,parentT);
     }
 }

@@ -4,17 +4,24 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by hdmytrow on 25/02/2015.
  */
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "MistraDB.db";
 
     private String TABLE_NAME;
     private String CREATE_TABLE;
+
+    /*public DBHandler(Context context,String creationTable, String tableName) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.CREATE_TABLE = creationTable;
+        this.TABLE_NAME = tableName;
+    }*/
 
     public DBHandler(Context context,String creationTable, String tableName) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -22,13 +29,13 @@ public class DBHandler extends SQLiteOpenHelper {
         this.TABLE_NAME = tableName;
     }
 
-    public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    /*public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
-    }
+    }*/
 
 
     @Override
@@ -36,6 +43,7 @@ public class DBHandler extends SQLiteOpenHelper {
         // Creation des tables
         if(CREATE_TABLE != null) {
             db.execSQL(CREATE_TABLE);
+            Log.e("kikoo","CREATION DE LA TABLE : "+CREATE_TABLE);
         }
 
     }

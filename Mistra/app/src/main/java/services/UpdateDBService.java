@@ -112,7 +112,8 @@ public class UpdateDBService<T> extends Service {
                     final List<Formation> formations = parserFormations(fullJSON);
                     final List<Tutoriel> tutoriels = parserTutoriels(fullJSON);
                     alimenterDBFormation(formations);
-                    alimenterDBTutoriel(tutoriels);
+                   //alimenterDBTutoriel(tutoriels);
+                    return null;
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -162,7 +163,8 @@ public class UpdateDBService<T> extends Service {
 
                         final int idF = Integer.parseInt(titreObject.getString("id"));
                         final String titreF = new String(titreObject.getString("title").getBytes("UTF8"));
-                        final Type typeF = Type.valueOf(titreObject.getString("type"));
+                        final String tmpCat = titreObject.getString("type");
+                        final Type typeF = Type.valueOf(tmpCat.toUpperCase());
                         final String descriptionF = titreObject.getString("description");
                         final List<Article> listArticles = new ArrayList<Article>();
 
@@ -176,7 +178,8 @@ public class UpdateDBService<T> extends Service {
 
                             final int idI = Integer.parseInt(item.getString("id"));
                             final String titreI = new String(item.getString("title").getBytes("UTF8"));
-                            final Type typeItem = Type.valueOf(item.getString("type"));
+                            final String cat = item.getString("type");
+                            final Type typeItem = Type.valueOf(cat.toUpperCase());
                             final String contentItem = item.getString("content");
 
                             final Article article = new Article(idI, titreI, typeItem, contentItem,-1, Categorie.FORMATION);
@@ -218,7 +221,8 @@ public class UpdateDBService<T> extends Service {
 
                     final int idT = Integer.parseInt(titreObject.getString("id"));
                     final String titreT = new String(titreObject.getString("title").getBytes("UTF8"));
-                    final Type typeT = Type.valueOf(titreObject.getString("type"));
+                    final String tmpCat = titreObject.getString("type");
+                    final Type typeT = Type.valueOf(tmpCat.toUpperCase());
                     final String descriptionT = titreObject.getString("description");
                     final List<Selection> listItems = new ArrayList<Selection>();
                     final int idParent = Tutoriel.NO_PARENT_VALUE;
@@ -234,12 +238,12 @@ public class UpdateDBService<T> extends Service {
                 //e.printStackTrace();
                 Log.e(UpdateDBService.class.getName(), "Erreur de parsing du JSON " + e.getStackTrace());
                 //return listSelection;
-                return null;
+                return listSelection;
             } catch (Exception e) {
                 //e.printStackTrace();
                 Log.e(UpdateDBService.class.getName(), "Exception lors du parsing du JSON " + e.getStackTrace());
                 //return (List<Tutoriel>)listSelection;
-                return null;
+                return listSelection;
             }
         }
 
@@ -258,12 +262,13 @@ public class UpdateDBService<T> extends Service {
             for (int i = 0; i < tabItems.length(); i++) {
                 final JSONObject obj = tabItems.getJSONObject(i);
 
-                final Type t = Type.valueOf(obj.getString("type"));
+                final String tmpCat = obj.getString("type");
+                final Type t = Type.valueOf(tmpCat.toUpperCase());
                 switch (t) {
                     case CATEGORIE:
                         final int idTChild = Integer.parseInt(obj.getString("id"));
                         final String titreTChild = new String(obj.getString("title").getBytes("UTF8"));
-                        final Type typeTChild = Type.valueOf(obj.getString("type"));
+                        final Type typeTChild = t;
                         final String descriptionTChild = obj.getString("description");
                         final List<Article> listItemsChild = new ArrayList<Article>();//Nous savons qu'il n'y a pas plus de deux niveaux, on défini le type de la liste
                         final int idParentChild = Tutoriel.NO_PARENT_VALUE;
@@ -278,7 +283,7 @@ public class UpdateDBService<T> extends Service {
                     case ARTICLE:
                         final int idAChild = Integer.parseInt(obj.getString("id"));
                         final String titreAChild = new String(obj.getString("title").getBytes("UTF8"));
-                        final Type typeAChild = Type.valueOf(obj.getString("type"));
+                        final Type typeAChild = t;
                         final String descriptionAChild = obj.getString("content");
                         final long idParent = Article.NO_PARENT_VALUE;
 
@@ -306,29 +311,36 @@ public class UpdateDBService<T> extends Service {
 
 
     private void alimenterDBFormation(List<Formation> formations) {
-        final DBHandlerFormation dbhF = new DBHandlerFormation(this);
+        if(formations != null && formations.size() > 0) {
+            final DBHandlerFormation dbhF = new DBHandlerFormation(this);
 
-        for (final Formation form : formations) {
-            final long idParent = dbhF.insert(form);
 
-            for (final Article art : form.getArticles()) {
-                art.setItemParent(idParent);
+            for (final Formation form : formations) {
+                final long idParent = dbhF.insert(form);
+
+
                 final DBHandlerArticle dbhA = new DBHandlerArticle(this);
-                dbhA.insert(art);
+                for (final Article art : form.getArticles()) {
+                    art.setItemParent(idParent);
+                    dbhA.insert(art);
+                }
                 dbhA.close();
             }
+            dbhF.close();
         }
-
-        dbhF.close();
     }
 
     private void alimenterDBTutoriel(List<Tutoriel> tutoriels) {
-        for (final Tutoriel tuto : tutoriels) {
+        if(tutoriels != null && tutoriels.size() > 0) {
+
             final DBHandlerTutoriel dbhT = new DBHandlerTutoriel(this);
-            final long idParent = dbhT.insert(tuto);
+            for (final Tutoriel tuto : tutoriels) {
+                final long idParent = dbhT.insert(tuto);
 
-            loopDBTutoriel(dbhT,tuto,idParent);
+                loopDBTutoriel(dbhT, tuto, idParent);
 
+
+            }
             dbhT.close();
         }
     }

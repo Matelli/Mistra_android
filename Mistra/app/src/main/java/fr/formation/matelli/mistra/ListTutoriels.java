@@ -36,6 +36,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import dao.DBHandlerFormation;
@@ -133,12 +134,12 @@ public class ListTutoriels extends Activity {
 
                 Log.i("==> item clicked :", item);
                 Log.i("==> item parent clicked :", itemParentName + " at position :" + groupPosition);
-                Log.i("==> listOfFormation keys :", listOfTutoriels.keySet().toString());
-                for (Tutoriel c : listOfTutoriels.keySet()) {
+                //Log.i("==> listOfFormation keys :", listOfTutoriels.toString());
+                for (Tutoriel c : listOfTutoriels) {
                     if (c.getTitle().equals(itemParentName)) {
                         Log.i("==> item parent clicked detail :", "" + c.getId());
 
-                        selection = c.getContent().get(childPosition);
+                        selection = (Selection) c.getContent().get(childPosition);
 
                     }
                 }
@@ -182,8 +183,8 @@ public class ListTutoriels extends Activity {
                     listTitres.put(tuto.getTitle(), new ArrayList<String>());
             }
 
-            for(final Selection sel : tuto.getContent()) {
-                listTitres.get(tuto.getTitle()).add(sel.getTitle());
+            for(final Object sel : tuto.getContent()) {
+                listTitres.get(tuto.getTitle()).add(((Selection)sel).getTitle());
             }
         }
 
@@ -219,15 +220,15 @@ public class ListTutoriels extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void affichageDesElements(List<Selection> listSelection, List<Integer> listIdCategorieParent) {
+    /* private void affichageDesElements(List<Selection> listSelection, List<Integer> listIdCategorieParent) {
 
         for (int i = 0; i < listSelection.size(); i++) {
             Selection s = listSelection.get(i);
             if (s instanceof Tutoriel) {
                 if (listIdCategorieParent.contains(s.getId())) {
                     ArrayList<String> titreItems = new ArrayList<String>();
-                    for (Selection select : ((Tutoriel) s).getContent()) {
-                        titreItems.add(select.getTitle());
+                    for (Object select : ((Tutoriel) s).getContent()) {
+                        titreItems.add(((Selection)select).getTitle());
                         Log.i("Tutotriel parent a afficher  ", "titre: " + s.getTitle() + " elems : " + titreItems);
                     }
 
@@ -238,6 +239,7 @@ public class ListTutoriels extends Activity {
             }
         }
     }
+    */
 
 
 }

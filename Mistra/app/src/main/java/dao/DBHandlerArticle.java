@@ -12,6 +12,7 @@ import java.util.List;
 
 import data.Article;
 import data.Categorie;
+import data.Formation;
 import data.Type;
 
 /**
@@ -21,7 +22,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
 
     private Context context;
 
-    public static final String TABLE_ARTICLE = "article";
+    public static final String TABLE_ARTICLE = "articles";
 
     // Column name of the presentation table
     private static final String id_A = "id_A";
@@ -32,22 +33,24 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
     private static final String categorie_A = "categorie_A";//valeur d'énumeration de la CATEGORIE pour savoir si l'id parent est pour formation ou tutoriel
 
     // Requete de creation de la table presentation s'il n'éxiste pas déjà
-    private static String createTable = "CREATE TABLE IF NOT EXISTS "
-            + TABLE_ARTICLE + "(" + id_A + " INTEGER, "
+    //private static String createTable = "CREATE TABLE IF NOT EXISTS "
+    private static String createTable = "CREATE TABLE "
+            + TABLE_ARTICLE + "(" + id_A + " INTEGER PRIMARY KEY, "
             + title_A + " TEXT,"
             + type_A + " TEXT,"
             + description_A + " TEXT,"
             + id_parent + " INTEGER,"
-            + categorie_A + " TEXT,"
-            + " PRIMARY KEY ("+id_A +","+ id_parent +" ),"
-            + " FOREIGN KEY ( "+id_parent+" ) REFERENCES "+ DBHandlerFormation.TABLE_FORMATION +"("+id_parent+")"+ ");";
+            + categorie_A + " TEXT );";
+            //+ " PRIMARY KEY ("+id_A +","+ id_parent +" ),"
+            //+ " FOREIGN KEY ( "+id_parent+" ) REFERENCES "+ DBHandlerFormation.TABLE_FORMATION +"("+DBHandlerFormation.id_F+")"+ ");";
 
     public DBHandlerArticle(Context context) {
+
         super(context, createTable, TABLE_ARTICLE);
         this.context = context;
     }
 
-    public DBHandlerArticle(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    /*public DBHandlerArticle(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
         this.context = context;
     }
@@ -55,23 +58,43 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
     public DBHandlerArticle(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
         this.context = context;
-    }
+    }*/
 
     @Override
     public long insert(Article a) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Log.i("DBHandlerFormation", " ===> insertion d'Article" + a.getId());
-        ContentValues values = new ContentValues();
-        values.put(id_A, a.getId());
-        values.put(title_A, a.getTitle());
-        values.put(type_A, a.getType().name());
-        values.put(description_A, a.getDescription());
-        values.put(id_parent, a.getItemParent());
-        values.put(categorie_A, a.getCategorie().name());
 
-        Long cat_id = db.insert(TABLE_ARTICLE, null, values);
+        if(!existOnDb(db, a)) {
+            Log.i("DBHandlerFormation", " ===> insertion d'Article" + a.getId());
+            ContentValues values = new ContentValues();
+            values.put(id_A, a.getId());
+            values.put(title_A, a.getTitle());
+            values.put(type_A, a.getType().name());
+            values.put(description_A, a.getDescription());
+            values.put(id_parent, a.getItemParent());
+            values.put(categorie_A, a.getCategorie().name());
 
-        return cat_id;
+            Long cat_id = db.insert(TABLE_ARTICLE, null, values);
+
+            db.close();
+            return cat_id;
+        } else {
+
+            db.close();
+            return update(a);
+        }
+    }
+
+    public boolean existOnDb(final SQLiteDatabase db, final Article a) {
+        boolean b = false;
+        StringBuilder qry = new StringBuilder("SELECT ").append(id_A).append(" FROM ").append(TABLE_ARTICLE).append(" WHERE ").append(id_A).append(" = ").append(a.getId()).append(";");
+        Cursor c = db.rawQuery(qry.toString() , null);
+        if(c.getCount() > 0) {
+            b = true;
+        }
+        //db.close();
+        c.close();
+        return b;
     }
 
     @Override
@@ -85,13 +108,16 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
         values.put(id_parent, a.getItemParent());
         values.put(categorie_A, a.getCategorie().name());
 
-        return db.update(TABLE_ARTICLE,values,id_A + " = ?",new String[]{String.valueOf(a.getId())});
+        final int id = db.update(TABLE_ARTICLE,values,id_A + " = ?",new String[]{String.valueOf(a.getId())});
+        db.close();
+        return a.getId();
     }
 
     @Override
     public void deleteById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_ARTICLE, id_A+ " = ?", new String[]{String.valueOf(id)});
+        db.close();
     }
 
     private String allChampsArticle() {
@@ -125,6 +151,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
             c.moveToNext();
         }
         c.close();
+        db.close();
         return  liste_A;
     }
 
@@ -150,6 +177,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
             c.moveToNext();
         }
         c.close();
+        db.close();
         return  liste_A;
     }
 
@@ -174,6 +202,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
             c.moveToNext();
         }
         c.close();
+        db.close();
         return  liste_A;
     }
 
@@ -198,6 +227,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
             c.moveToNext();
         }
         c.close();
+        db.close();
         return  liste_A;
     }
 
@@ -216,6 +246,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
         int id_parent = c.getInt(4);
         Categorie categorieA = Categorie.valueOf(c.getString(5));
 
+        db.close();
         return new Article(idA, titleA,typeA,descriptionA,id_parent,categorieA);
     }
 }

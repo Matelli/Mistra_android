@@ -14,7 +14,7 @@ public class Presentation extends Selection implements Comparable<Presentation> 
 
     }
 
-    public Presentation(int id, String title,String type, String content){
+    public Presentation(int id, String title,Type type, String content){
         super(id,title,type);
         this.content = content;
 
@@ -43,7 +43,7 @@ public class Presentation extends Selection implements Comparable<Presentation> 
     @Override
     public int compareTo(Presentation p) {
         if (this.getTitle().toLowerCase().equalsIgnoreCase(p.getTitle().toLowerCase())) {
-            return this.getType().toLowerCase().compareToIgnoreCase(p.getType().toLowerCase());
+            return this.getType().name().toLowerCase().compareToIgnoreCase(p.getType().name().toLowerCase());
         } else {
             return this.getTitle().toLowerCase().compareToIgnoreCase(p.getTitle().toLowerCase());
         }

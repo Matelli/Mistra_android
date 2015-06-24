@@ -39,8 +39,8 @@ public class SubListView extends Activity {
         t = (Tutoriel) i.getExtras().getParcelable("objet");
         textViewTitre.setText(i.getExtras().getString("titre")+": "+t.getTitle());
         List<String> listItemToShow = new ArrayList<String>();
-        for( Selection s : t.getContent()){
-            listItemToShow.add(s.getTitle());
+        for( Object s : t.getContent()){
+            listItemToShow.add(((Selection)s).getTitle());
              }
         listAdapter = new ArrayAdapter<String>(SubListView.this,R.layout.simple_item_list, R.id.itemSubList,listItemToShow);
         listViewSubList.setAdapter(listAdapter);
@@ -50,8 +50,8 @@ public class SubListView extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position);
-                for(Selection s :t.getContent()){
-                    if(item.equals(s.getTitle())){
+                for(Object s :t.getContent()){
+                    if(item.equals(((Selection)s).getTitle())){
                         Presentation presentation = (Presentation) s;
                         Intent i = new Intent(SubListView.this, DetailSelection.class);
                         i.putExtra("htmlcode", presentation.getContent());

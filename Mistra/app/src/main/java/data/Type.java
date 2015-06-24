@@ -7,3 +7,5 @@ public enum Type {
     CATEGORIE,
     ARTICLE;
 }
+
+
