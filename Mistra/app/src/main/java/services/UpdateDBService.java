@@ -112,7 +112,7 @@ public class UpdateDBService<T> extends Service {
                     final List<Formation> formations = parserFormations(fullJSON);
                     final List<Tutoriel> tutoriels = parserTutoriels(fullJSON);
                     alimenterDBFormation(formations);
-                   //alimenterDBTutoriel(tutoriels);
+                    alimenterDBTutoriel(tutoriels);
                     return null;
 
                 } catch (IOException e) {

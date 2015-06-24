@@ -57,17 +57,41 @@ public class CustomExpandableList extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this.listTitres.get(groupPosition).size();
+        int cpt=0;
+        for (HashMap.Entry<String, List<String>> entry : listTitres.entrySet())
+        {
+            if(cpt==groupPosition) {
+                return entry.getValue().size();
+            }
+            cpt++;
+        }
+        return 0;
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this.listTitres.get(groupPosition);
+        int cpt=0;
+        for (HashMap.Entry<String, List<String>> entry : listTitres.entrySet())
+        {
+            if(cpt==groupPosition) {
+                return entry.getKey();
+            }
+            cpt++;
+        }
+        return null;
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return this.listTitres.get(groupPosition).get(childPosition);
+        int cpt=0;
+        for (HashMap.Entry<String, List<String>> entry : listTitres.entrySet())
+        {
+            if(cpt==groupPosition) {
+                return entry.getValue().get(childPosition);
+            }
+            cpt++;
+        }
+        return null;
     }
 
     @Override

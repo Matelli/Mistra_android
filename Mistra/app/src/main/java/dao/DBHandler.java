@@ -11,7 +11,7 @@ import android.util.Log;
  */
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "MistraDB.db";
 
     private String TABLE_NAME;
@@ -23,10 +23,8 @@ public class DBHandler extends SQLiteOpenHelper {
         this.TABLE_NAME = tableName;
     }*/
 
-    public DBHandler(Context context,String creationTable, String tableName) {
+    public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.CREATE_TABLE = creationTable;
-        this.TABLE_NAME = tableName;
     }
 
     /*public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -41,20 +39,24 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Creation des tables
-        if(CREATE_TABLE != null) {
-            db.execSQL(CREATE_TABLE);
+        //if(CREATE_TABLE != null) {
+        db.execSQL(DBHandlerTutoriel.creationTutoriel_table);
+        db.execSQL(DBHandlerFormation.creationFormationTable);
+        db.execSQL(DBHandlerArticle.createTable);
             Log.e("kikoo","CREATION DE LA TABLE : "+CREATE_TABLE);
-        }
+        //}
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop tables
-        if(this.TABLE_NAME != null) {
-            db.execSQL("Drop table if exists " + this.TABLE_NAME);
+        //if(this.TABLE_NAME != null) {
+        db.execSQL("Drop table if exists " + DBHandlerTutoriel.creationTutoriel_table);
+        db.execSQL("Drop table if exists " + DBHandlerFormation.creationFormationTable);
+        db.execSQL("Drop table if exists " + DBHandlerArticle.createTable);
             // Creation de nouvelles tables
-        }
+        //}
         onCreate(db);
     }
     @Override

@@ -34,7 +34,7 @@ public class DBHandlerFormation extends DBHandler implements IHandlerDB<Formatio
 
     // Requete de creation de la table Formation s'il n'existe pas déjà
     //private static String creationFormationTable = "CREATE TABLE IF NOT EXISTS "
-    private static String creationFormationTable = "CREATE TABLE "
+    public static String creationFormationTable = "CREATE TABLE "
             + TABLE_FORMATION + "(" + id_F + " INTEGER PRIMARY KEY, "
             + title_F + " TEXT,"
             + type_F  + " TEXT,"
@@ -43,7 +43,8 @@ public class DBHandlerFormation extends DBHandler implements IHandlerDB<Formatio
 
 
     public DBHandlerFormation(Context context) {
-        super(context,creationFormationTable, TABLE_FORMATION);
+        //super(context,creationFormationTable, TABLE_FORMATION);
+        super(context);
         this.context = context;
     }
 
@@ -120,7 +121,7 @@ public class DBHandlerFormation extends DBHandler implements IHandlerDB<Formatio
         sb.append(id_F).append(",");
         sb.append(title_F).append(",");
         sb.append(type_F).append(",");
-        sb.append(descriptif_F).append(",");
+        sb.append(descriptif_F);
         return sb.toString();
     }
 

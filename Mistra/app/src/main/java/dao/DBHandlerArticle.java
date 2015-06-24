@@ -34,7 +34,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
 
     // Requete de creation de la table presentation s'il n'éxiste pas déjà
     //private static String createTable = "CREATE TABLE IF NOT EXISTS "
-    private static String createTable = "CREATE TABLE "
+    public static String createTable = "CREATE TABLE "
             + TABLE_ARTICLE + "(" + id_A + " INTEGER PRIMARY KEY, "
             + title_A + " TEXT,"
             + type_A + " TEXT,"
@@ -46,7 +46,8 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
 
     public DBHandlerArticle(Context context) {
 
-        super(context, createTable, TABLE_ARTICLE);
+        //super(context, createTable, TABLE_ARTICLE);
+        super(context);
         this.context = context;
     }
 
@@ -161,7 +162,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
         Log.i("DBHandlerFormation", " ===> Get all Articles");
         SQLiteDatabase db = this.getReadableDatabase();
         StringBuilder qry = new StringBuilder("SELECT ").append(allChampsArticle()).append(" FROM ").append(TABLE_ARTICLE)
-                .append(" WHERE ").append(categorie_A).append(" = ").append(categorie.name()).append(";");
+                .append(" WHERE ").append(categorie_A).append(" = '").append(categorie.name()).append("';");
         Cursor c = db.rawQuery(qry.toString(), null);
         List<Article> liste_A = new ArrayList<Article>();
         c.moveToFirst();
@@ -186,7 +187,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
         SQLiteDatabase db = this.getReadableDatabase();
         StringBuilder qry = new StringBuilder("SELECT ").append(allChampsArticle()).append(" FROM ").append(TABLE_ARTICLE)
                 .append(" WHERE ").append(id_parent).append(" = ").append(idFormation)
-                .append(" AND ").append(categorie_A).append(" = ").append(Categorie.FORMATION.name()).append(";");
+                .append(" AND ").append(categorie_A).append(" = '").append(Categorie.FORMATION.name()).append("';");
         Cursor c = db.rawQuery(qry.toString(), null);
         List<Article> liste_A = new ArrayList<Article>();
         c.moveToFirst();
@@ -211,7 +212,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
         SQLiteDatabase db = this.getReadableDatabase();
         StringBuilder qry = new StringBuilder("SELECT ").append(allChampsArticle()).append(" FROM ").append(TABLE_ARTICLE)
                 .append(" WHERE ").append(id_parent).append(" = ").append(idTutoriel)
-                .append(" AND ").append(categorie_A).append(" = ").append(Categorie.TUTORIEL.name()).append(";");
+                .append(" AND ").append(categorie_A).append(" = '").append(Categorie.TUTORIEL.name()).append("';");
         Cursor c = db.rawQuery(qry.toString(), null);
         List<Article> liste_A = new ArrayList<Article>();
         c.moveToFirst();

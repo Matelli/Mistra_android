@@ -32,15 +32,16 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
     private static final String  parent_T = "parent_T";
 
     // Requete de creation de la table Tutoriels
-    private static String creationTutoriel_table = "CREATE TABLE "
+    public static String creationTutoriel_table = "CREATE TABLE "
             + TABLE_TUTORIELS + "(" + id_T + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + title_T + " TEXT,"
             + type_T + " TEXT,"
-            + descriptif_T + " TEXT"
+            + descriptif_T + " TEXT,"
             + parent_T + " TEXT" + " );";
 
     public DBHandlerTutoriel(Context context) {
-        super(context, creationTutoriel_table, TABLE_TUTORIELS);
+        //super(context, creationTutoriel_table, TABLE_TUTORIELS);
+        super(context);
         this.context = context;
     }
 
@@ -84,7 +85,7 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
         if(c.getCount() > 0) {
             b = true;
         }
-        db.close();
+        //db.close();
         c.close();
         return b;
     }

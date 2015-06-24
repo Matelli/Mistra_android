@@ -149,8 +149,9 @@ public class ListFormations extends Activity {
         final HashMap<String, List<String>> listTitres = new HashMap<String, List<String>>();
         for(final Formation form : this.listOfFormations) {
             //pas de Doublons !
-            if(!listTitres.containsKey(form.getTitle()))
+            if(!listTitres.containsKey(form.getTitle())) {
                 listTitres.put(form.getTitle(), new ArrayList<String>());
+            }
 
             for(final Article art : form.getArticles()) {
                 listTitres.get(form.getTitle()).add(art.getTitle());
@@ -163,6 +164,7 @@ public class ListFormations extends Activity {
         this.db.close();
 
         //on expand toutes les catégories
+        //TODO corriger bug sur l'expand !
         for(int i=0;i<this.listAdapter.getGroupCount();i++)
         {
             this.expListView.expandGroup(i);

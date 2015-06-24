@@ -182,9 +182,9 @@ public class ListTutoriels extends Activity {
                 if(!listTitres.containsKey(tuto.getTitle()))
                     listTitres.put(tuto.getTitle(), new ArrayList<String>());
             }
-
-            for(final Object sel : tuto.getContent()) {
-                listTitres.get(tuto.getTitle()).add(((Selection)sel).getTitle());
+            for (final Object sel : tuto.getContent()) {
+                if(listTitres.size()>0 && tuto != null &&  listTitres.get(tuto.getTitle()) != null)
+                    listTitres.get(tuto.getTitle()).add(((Selection) sel).getTitle());
             }
         }
 
