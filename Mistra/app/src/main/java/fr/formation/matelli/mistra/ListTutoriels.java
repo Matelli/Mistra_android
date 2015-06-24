@@ -140,7 +140,7 @@ public class ListTutoriels extends Activity {
                         Log.i("==> item parent clicked detail :", "" + c.getId());
 
                         selection = (Selection) c.getContent().get(childPosition);
-
+                        break;//on l'a trouvé, on sort !
                     }
                 }
                 Log.i("==> item object clicked :", selection.toString());
@@ -153,12 +153,21 @@ public class ListTutoriels extends Activity {
                     i.putExtra("titre", "Tutoriels");
                     startActivity(i);
                 } else {
-                    Presentation presentation = (Presentation) selection;
+                    /*Presentation presentation = (Presentation) selection;
                     //Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
                     //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
 
                     Intent i = new Intent(ListTutoriels.this, DetailSelection.class);
                     i.putExtra("htmlcode", presentation.getContent());
+                    startActivity(i);*/
+
+                    Article presentation = (Article) selection;
+                    //Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
+
+                    Intent i = new Intent(ListTutoriels.this, DetailSelection.class);
+                    i.putExtra("detailTitre", presentation.getTitle());
+                    i.putExtra("htmlcode", presentation.getDescription());
                     startActivity(i);
                 }
                 return false;

@@ -120,14 +120,16 @@ public class ListFormations extends Activity {
                     if (c.getTitle().equals(itemParentName)) {
                         Log.e("ListeFormation","==> item parent clicked detail :"+ c.toString());
                         article = c.getArticles().get(childPosition);
-
+                        break;//on l'a trouvé, on sort !
                     }
                 }
                 Log.e("ListeFormation","==> item object clicked :"+ article.toString());
 
                 Intent i = new Intent(ListFormations.this, DetailSelection.class);
-                i.putExtra("ListeFormation","detailTitre"+ article.getTitle());
-                i.putExtra("ListeFormation","htmlcode"+ article.getTitle());
+                //i.putExtra("ListeFormation","detailTitre"+ article.getTitle());
+                //i.putExtra("ListeFormation","htmlcode"+ article.getTitle());
+                i.putExtra("detailTitre", article.getTitle());
+                i.putExtra("htmlcode", article.getDescription());
                 startActivity(i);
 
                 return false;
