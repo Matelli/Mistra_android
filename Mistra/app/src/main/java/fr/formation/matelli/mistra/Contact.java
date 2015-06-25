@@ -9,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import java.text.Normalizer;
+
+import data.Formation;
+import data.Tutoriel;
+
 
 public class Contact extends Activity {
 
@@ -24,7 +29,21 @@ public class Contact extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Contact.this, Home.class);
+
+                if(getIntent() != null && getIntent().getExtras() != null) {
+                    String c = getIntent().getExtras().getString("whoIam");
+                    if (c != null) {
+                        if (c.equals(Formation.class.toString())) {
+                            i = new Intent(Contact.this, ListFormations.class);
+                        } else if (c.equals(Tutoriel.class.toString())) {
+                            i = new Intent(Contact.this, ListTutoriels.class);
+                        } else if (c.equals(Devis.class.toString())) {
+                            i=new Intent(Contact.this, Devis.class);
+                        }
+                    }
+                }
                 startActivity(i);
+                finish();
             }
         });
 

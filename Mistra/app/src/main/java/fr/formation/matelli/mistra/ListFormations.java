@@ -28,6 +28,7 @@ import data.Article;
 import data.Formation;
 import data.Presentation;
 import data.Selection;
+import data.Tutoriel;
 
 
 public class ListFormations extends Activity {
@@ -70,7 +71,23 @@ public class ListFormations extends Activity {
             public void onClick(View v) {
                 db.close();
                 Intent i = new Intent(ListFormations.this, Home.class);
+
+                if(getIntent() != null && getIntent().getExtras() != null) {
+                    String c = getIntent().getExtras().getString("whoIam");
+                    if (c != null) {
+                        if (c.equals(Formation.class.toString())) {
+                            i = new Intent(ListFormations.this, ListFormations.class);
+                        } else if (c.equals(Tutoriel.class.toString())) {
+                            i = new Intent(ListFormations.this, ListTutoriels.class);
+                        } else if (c.equals(Devis.class.toString())) {
+                            i=new Intent(ListFormations.this, Devis.class);
+                        }
+                    }
+                }
+
+                i.putExtra("whoIam", Formation.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -79,7 +96,9 @@ public class ListFormations extends Activity {
             public void onClick(View v) {
                 db.close();
                 Intent i = new Intent(ListFormations.this, Devis.class);
+                i.putExtra("whoIam", Formation.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -88,7 +107,9 @@ public class ListFormations extends Activity {
             public void onClick(View v) {
                 db.close();
                 Intent i = new Intent(ListFormations.this, ListTutoriels.class);
+                i.putExtra("whoIam", Formation.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -97,7 +118,9 @@ public class ListFormations extends Activity {
             public void onClick(View v) {
                 db.close();
                 Intent i = new Intent(ListFormations.this, Contact.class);
+                i.putExtra("whoIam", Formation.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -132,6 +155,7 @@ public class ListFormations extends Activity {
                 i.putExtra("htmlcode", article.getDescription());
                 i.putExtra("whoIam", Formation.class.toString());
                 startActivity(i);
+                finish();
 
                 return false;
             }
@@ -190,5 +214,10 @@ public class ListFormations extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

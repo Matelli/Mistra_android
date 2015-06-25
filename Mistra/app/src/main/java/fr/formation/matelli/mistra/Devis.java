@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import data.Formation;
+import data.Tutoriel;
+
 
 public class Devis extends Activity {
 
@@ -52,7 +55,22 @@ public class Devis extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Devis.this, Home.class);
+
+                if(getIntent() != null && getIntent().getExtras() != null) {
+                    String c = getIntent().getExtras().getString("whoIam");
+                    if (c != null) {
+                        if (c.equals(Formation.class.toString())) {
+                            i = new Intent(Devis.this, ListFormations.class);
+                        } else if (c.equals(Tutoriel.class.toString())) {
+                            i = new Intent(Devis.this, ListTutoriels.class);
+                        } else if (c.equals(Devis.class.toString())) {
+                            i=new Intent(Devis.this, Devis.class);
+                        }
+                    }
+                }
+                i.putExtra("whoIam", Devis.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -68,7 +86,9 @@ public class Devis extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Devis.this, ListFormations.class);
+                i.putExtra("whoIam", Devis.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -76,14 +96,18 @@ public class Devis extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Devis.this, ListTutoriels.class);
+                i.putExtra("whoIam", Devis.class.toString());
                 startActivity(i);
+                finish();
             }
         });
         btnContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Devis.this, Contact.class);
+                i.putExtra("whoIam", Devis.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 

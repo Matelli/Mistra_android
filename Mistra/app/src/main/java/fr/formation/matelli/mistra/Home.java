@@ -37,6 +37,7 @@ public class Home extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(Home.this, ListFormations.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -45,6 +46,7 @@ public class Home extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(Home.this, ListTutoriels.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -53,6 +55,7 @@ public class Home extends Activity {
             public void onClick(View v) {
                Intent i = new Intent(Home.this, Devis.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -61,6 +64,7 @@ public class Home extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(Home.this, Blog.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -69,6 +73,7 @@ public class Home extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(Home.this, Contact.class);
                 startActivity(i);
+                finish();
             }
         });
 

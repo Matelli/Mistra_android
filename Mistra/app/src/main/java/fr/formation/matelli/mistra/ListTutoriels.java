@@ -91,7 +91,23 @@ public class ListTutoriels extends Activity {
             public void onClick(View v) {
                 db.close();
                 Intent i = new Intent(ListTutoriels.this, Home.class);
+
+                if(getIntent() != null && getIntent().getExtras() != null) {
+                    String c = getIntent().getExtras().getString("whoIam");
+                    if (c != null) {
+                        if (c.equals(Formation.class.toString())) {
+                            i = new Intent(ListTutoriels.this, ListFormations.class);
+                        } else if (c.equals(Tutoriel.class.toString())) {
+                            i = new Intent(ListTutoriels.this, ListTutoriels.class);
+                        } else if (c.equals(Devis.class.toString())) {
+                            i=new Intent(ListTutoriels.this, Devis.class);
+                        }
+                    }
+                }
+
+                i.putExtra("whoIam", Tutoriel.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -100,7 +116,9 @@ public class ListTutoriels extends Activity {
             public void onClick(View v) {
                 db.close();
                 Intent i = new Intent(ListTutoriels.this, Devis.class);
+                i.putExtra("whoIam", Tutoriel.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -109,7 +127,9 @@ public class ListTutoriels extends Activity {
             public void onClick(View v) {
                 db.close();
                 Intent i = new Intent(ListTutoriels.this, ListFormations.class);
+                i.putExtra("whoIam", Tutoriel.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -118,7 +138,9 @@ public class ListTutoriels extends Activity {
             public void onClick(View v) {
                 db.close();
                 Intent i = new Intent(ListTutoriels.this, Contact.class);
+                i.putExtra("whoIam", Tutoriel.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -151,8 +173,9 @@ public class ListTutoriels extends Activity {
                     // toDo check the parcelable element
                     i.putExtra("objet", (android.os.Parcelable) t);
                     i.putExtra("titre", "Tutoriels");
-                    i.putExtra("whoIam", Formation.class.toString());
+                    i.putExtra("whoIam", Tutoriel.class.toString());
                     startActivity(i);
+                    finish();
                 } else {
                     /*Presentation presentation = (Presentation) selection;
                     //Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
@@ -171,6 +194,7 @@ public class ListTutoriels extends Activity {
                     i.putExtra("htmlcode", presentation.getDescription());
                     i.putExtra("whoIam", Tutoriel.class.toString());
                     startActivity(i);
+                    finish();
                 }
                 return false;
             }
