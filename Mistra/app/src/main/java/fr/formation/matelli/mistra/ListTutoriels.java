@@ -151,6 +151,7 @@ public class ListTutoriels extends Activity {
                     // toDo check the parcelable element
                     i.putExtra("objet", (android.os.Parcelable) t);
                     i.putExtra("titre", "Tutoriels");
+                    i.putExtra("whoIam", Formation.class.toString());
                     startActivity(i);
                 } else {
                     /*Presentation presentation = (Presentation) selection;
@@ -168,6 +169,7 @@ public class ListTutoriels extends Activity {
                     Intent i = new Intent(ListTutoriels.this, DetailSelection.class);
                     i.putExtra("detailTitre", presentation.getTitle());
                     i.putExtra("htmlcode", presentation.getDescription());
+                    i.putExtra("whoIam", Tutoriel.class.toString());
                     startActivity(i);
                 }
                 return false;

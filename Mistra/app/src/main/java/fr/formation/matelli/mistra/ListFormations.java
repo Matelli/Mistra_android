@@ -130,6 +130,7 @@ public class ListFormations extends Activity {
                 //i.putExtra("ListeFormation","htmlcode"+ article.getTitle());
                 i.putExtra("detailTitre", article.getTitle());
                 i.putExtra("htmlcode", article.getDescription());
+                i.putExtra("whoIam", Formation.class.toString());
                 startActivity(i);
 
                 return false;

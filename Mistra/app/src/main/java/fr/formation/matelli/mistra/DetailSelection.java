@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import data.Formation;
+import data.Tutoriel;
+
 
 public class DetailSelection extends Activity {
 
@@ -61,7 +64,17 @@ public class DetailSelection extends Activity {
         btnRetourPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(DetailSelection.this, ListFormations.class);
+                Intent i = new Intent(DetailSelection.this, Home.class);//par defaut
+
+                String c=getIntent().getExtras().getString("whoIam");
+                if(c!=null) {
+                    if (c.equals(Formation.class.toString())) {
+                        i = new Intent(DetailSelection.this, ListFormations.class);
+                    } else if (c.equals(Tutoriel.class.toString())) {
+                        i = new Intent(DetailSelection.this, ListTutoriels.class);
+                    }
+                }
+
                 startActivity(i);
             }
         });
