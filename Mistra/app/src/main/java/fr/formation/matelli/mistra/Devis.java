@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import data.Formation;
@@ -24,6 +27,10 @@ public class Devis extends Activity {
     ImageButton btnRetour, btnSend;
     Button btnFormations, btnTutos,btnDevis, btnContact;
     EditText etObjet, etNom, etNumTel,etEmail, etVille, etSociete, etCommentaire;
+
+    TextView compteur;
+    final private String TEXT_COMMENT_PREFIXE = new String("Commentaires (max: ");
+    final private String TEXT_COMMENT_SUFFIXE = new String(" car)");
 
 
 
@@ -49,14 +56,55 @@ public class Devis extends Activity {
         etSociete = (EditText) findViewById(R.id.editSociete);
         etCommentaire = (EditText) findViewById(R.id.editCommentaire);
 
+        compteur = (TextView) findViewById(R.id.Devis_compteur);
+
+
         initialisation();
+
+        etNumTel.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                activerSendBouton();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!telephoneValid(etNumTel.getText())) {
+                    etNumTel.setError(getString(R.string.devis_error_numTel));
+                }
+            }
+        });
+
+        etEmail.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                activerSendBouton();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!emailValid(etEmail.getText())) {
+                    etEmail.setError(getString(R.string.devis_error_email));
+                }
+            }
+        });
 
         btnRetour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Devis.this, Home.class);
 
-                if(getIntent() != null && getIntent().getExtras() != null) {
+                if (getIntent() != null && getIntent().getExtras() != null) {
                     String c = getIntent().getExtras().getString("whoIam");
                     if (c != null) {
                         if (c.equals(Formation.class.toString())) {
@@ -64,7 +112,7 @@ public class Devis extends Activity {
                         } else if (c.equals(Tutoriel.class.toString())) {
                             i = new Intent(Devis.this, ListTutoriels.class);
                         } else if (c.equals(Devis.class.toString())) {
-                            i=new Intent(Devis.this, Devis.class);
+                            i = new Intent(Devis.this, Devis.class);
                         }
                     }
                 }
@@ -78,9 +126,12 @@ public class Devis extends Activity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Devis.this,"Devis envoyé", Toast.LENGTH_SHORT).show();
+
+                //controle();
+                Toast.makeText(Devis.this, "Devis envoyé", Toast.LENGTH_SHORT).show();
             }
         });
+
 
         btnFormations.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +168,11 @@ public class Devis extends Activity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {  }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                final int nbTxt = etCommentaire.getText().length();
+                final StringBuilder str = new StringBuilder(TEXT_COMMENT_PREFIXE).append((500-nbTxt)).append(TEXT_COMMENT_SUFFIXE);
+                compteur.setText(str);
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -129,6 +184,52 @@ public class Devis extends Activity {
 
     }
 
+    /*private void controle() {
+        if(!telephoneValid(etNumTel.getText()) ){
+            etEmail.setError("L'email est non valide");
+        }
+        if(!emailValid(etEmail.getText())) {
+            etNumTel.setError("Le numéro de téléphone n'est pas valide");
+        }
+    }
+    */
+    /**
+     * Méthode qui se charge de vérifier si les champs obligatoire (téléphone et email) sont valide !
+     */
+    private void activerSendBouton() {
+        if(telephoneValid(etNumTel.getText()) && emailValid(etEmail.getText())) {
+            btnSend.setEnabled(true);
+            btnSend.setAlpha(1f);
+        } else {
+            btnSend.setEnabled(false);
+            btnSend.setAlpha(0.2f);
+        }
+    }
+
+    private boolean telephoneValid(CharSequence tel) {
+        if(tel != null && tel.length() >=10) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    /**
+     * Méthode qui vérifie que le Text passé en parametre est valide pour un Email
+     * @param text : l'adresse/texte à vérifier
+     * @return True si le text est un email valide !
+     */
+    private boolean emailValid(CharSequence text) {
+        if (TextUtils.isEmpty(text)) {
+            return false;
+        } else {
+
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches();
+        }
+
+    }
+
     private void initialisation() {
 
         //si l'on vient d'un item "Presentation" depuis "Formation", on a passé le nom de la formation donc on le champs objet avec
@@ -136,6 +237,10 @@ public class Devis extends Activity {
             etObjet.setText(getIntent().getExtras().getString("objetDevis"));
             etNom.requestFocus();//on donne le focus au champs suivant
         }
+
+        btnSend.setEnabled(false);//a la création on le désactive
+        btnSend.setAlpha(0.2f);
+
     }
 
 

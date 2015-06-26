@@ -157,6 +157,7 @@
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/Devis_compteur"
                     android:layout_weight="1"
                     android:background="@drawable/degrade_cellule"
                     android:drawableRight="@drawable/fleche_commentaire"
