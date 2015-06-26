@@ -93,7 +93,7 @@ public class Devis extends Activity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!emailValid(etEmail.getText())) {
+                if (!emailValid(etEmail.getText())) {
                     etEmail.setError(getString(R.string.devis_error_email));
                 }
             }
@@ -127,7 +127,7 @@ public class Devis extends Activity {
             @Override
             public void onClick(View v) {
 
-                //controle();
+                sendEmail();
                 Toast.makeText(Devis.this, "Devis envoyé", Toast.LENGTH_SHORT).show();
             }
         });
@@ -165,34 +165,77 @@ public class Devis extends Activity {
         etCommentaire.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 final int nbTxt = etCommentaire.getText().length();
-                final StringBuilder str = new StringBuilder(TEXT_COMMENT_PREFIXE).append((500-nbTxt)).append(TEXT_COMMENT_SUFFIXE);
+                final StringBuilder str = new StringBuilder(TEXT_COMMENT_PREFIXE).append((500 - nbTxt)).append(TEXT_COMMENT_SUFFIXE);
                 compteur.setText(str);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(etCommentaire.getText().length()>=500) {
-                    Toast.makeText(activity,"Vous avez atteint le maximum de caractères !",Toast.LENGTH_LONG).show();
+                if (etCommentaire.getText().length() >= 500) {
+                    Toast.makeText(activity, "Vous avez atteint le maximum de caractères !", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
     }
 
-    /*private void controle() {
-        if(!telephoneValid(etNumTel.getText()) ){
-            etEmail.setError("L'email est non valide");
+    public void sendEmail()
+    {
+        final String to = "contact@mistra.fr";
+        final String subject = "Demande de devis";
+        //final String message = etCommentaire.getText().toString();
+        final StringBuilder message = new StringBuilder("Demande de devis via appli Mistra \n\n");
+
+        if(etObjet.getText()!=null && etObjet.getText().length()>0) {
+            message.append("Objet: ").append(etObjet.getText().toString()).append("\n");
         }
-        if(!emailValid(etEmail.getText())) {
-            etNumTel.setError("Le numéro de téléphone n'est pas valide");
+        if(etNom.getText()!=null && etNom.getText().length()>0) {
+            message.append("Nom: ").append(etNom.getText().toString()).append("\n");
+        }
+
+        message.append("Email: ").append(etEmail.getText()).append("\n\n");
+        message.append("Télèphone: ").append(etNumTel.getText().toString()).append("\n");
+
+        if(etVille.getText()!=null && etVille.getText().length()>0) {
+            message.append("Ville: ").append(etVille.getText().toString()).append("\n");
+        }
+        if(etSociete.getText()!=null && etSociete.getText().length()>0) {
+            message.append("Société: ").append(etSociete.getText().toString()).append("\n");
+        }
+
+        if (etCommentaire.getText()!=null && etCommentaire.getText().length()>0) {
+            message.append("Commentaire:\n").append(etCommentaire.getText().toString());
+        }
+
+
+        //String toCc = "email de destinataire en CC";
+        //String toCci = "email de destinataire en CCi";
+        Intent email = new Intent(Intent.ACTION_SEND);
+        email.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+        //email.putExtra(Intent.EXTRA_CC, new String[]{ toCc});
+        //email.putExtra(Intent.EXTRA_BCC, new String[]{toCci});
+        //email.putExtra(Intent.EXTRA_STREAM, "file:///sdcard/file.pdf");
+        email.putExtra(Intent.EXTRA_SUBJECT, subject);
+        email.putExtra(Intent.EXTRA_TEXT, message.toString());
+        email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        email.setType("message/rfc822");
+
+        try {
+            startActivity(Intent.createChooser(email, "envoie de l'email..."));
+            //startActivity(email);
+            //
+            }
+        catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "Aucun client mail installé.", Toast.LENGTH_SHORT).show();
         }
     }
-    */
+
     /**
      * Méthode qui se charge de vérifier si les champs obligatoire (téléphone et email) sont valide !
      */
@@ -212,7 +255,6 @@ public class Devis extends Activity {
         } else {
             return false;
         }
-
     }
 
     /**
@@ -224,14 +266,12 @@ public class Devis extends Activity {
         if (TextUtils.isEmpty(text)) {
             return false;
         } else {
-
             return android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches();
         }
 
     }
 
     private void initialisation() {
-
         //si l'on vient d'un item "Presentation" depuis "Formation", on a passé le nom de la formation donc on le champs objet avec
         if(getIntent()!=null && getIntent().getExtras()!=null &&  getIntent().getExtras().getString("objetDevis") != null) {
             etObjet.setText(getIntent().getExtras().getString("objetDevis"));
