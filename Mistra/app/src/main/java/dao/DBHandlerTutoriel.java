@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
+import android.gesture.GestureOverlayView;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import data.Article;
 import data.Formation;
@@ -78,7 +80,7 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
             }
     }
 
-    public boolean existOnDb(final SQLiteDatabase db,final Tutoriel f) {
+    public boolean existOnDb(final SQLiteDatabase db,final Selection f) {
         boolean b = false;
         StringBuilder qry = new StringBuilder("SELECT ").append(id_T).append(" FROM ").append(TABLE_TUTORIELS).append(" WHERE ").append(id_T).append(" = ").append(f.getId()).append(";");
         Cursor c = db.rawQuery(qry.toString() , null);
@@ -108,38 +110,103 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
     @Override
     public void deleteById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_TUTORIELS, id_T+ " = ?", new String[]{String.valueOf(id)});
+        db.delete(TABLE_TUTORIELS, id_T + " = ?", new String[]{String.valueOf(id)});
         db.close();
     }
 
     @Override
-    public List getAll() {
+    public List<Tutoriel> getAll() {
         Log.i("===> Get all tutoriel", " " + "");
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM "+ TABLE_TUTORIELS+" ORDER BY "+title_T;
-        List<Tutoriel> listeForm = new ArrayList<Tutoriel>();
+        List<Tutoriel> listeParents = new ArrayList<Tutoriel>();
+        List<Tutoriel> listeEnfants = new ArrayList<Tutoriel>();
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
+        //1ere itération, on insere les tutos "mère", ceux n'ayant pas d'idParent. Si l'on tombe sur un tuto avec idParent mais qu'on a pas itéré sur le parent, on est baisé !
         while (!c.isAfterLast()){
-            int idT = c.getInt(0);
-            String titleT = c.getString(1);
-            Type typeT = Type.valueOf(c.getString(2));
-            String descriptifT = c.getString(3);
-            int parentT = c.getInt(4);
+            final Tutoriel tuto = new Tutoriel(c);
 
-            final DBHandlerArticle dbha = new DBHandlerArticle(context);
-            List<Article> listArticleFromT = dbha.getByIdTutoriel(idT);
-            List<Selection> contentT = new ArrayList<Selection>();
-            for (Article a : listArticleFromT){
-                contentT.add(a);
+            //normalement inutile car il n'y a que des tuto et pas d'article.
+            if(tuto.getType().equals(Type.CATEGORIE)) {
+
+                if(tuto.getParent() == Tutoriel.NO_PARENT_VALUE) {
+                    listeParents.add(tuto);
+                } else {
+                    listeEnfants.add(tuto);
+                }
+                /*else {
+                    final Tutoriel t = findTutoByIdParent(listeForm, tuto.getParent());
+                    if(t!=null) {
+                        tuto.addContent(t);
+                    }
+
+                    DBHandlerArticle dba = new DBHandlerArticle(this.context);
+                    final Article a = dba.getById(t.getId());
+                }*/
             }
-            Tutoriel cat = new Tutoriel(idT, titleT,typeT,descriptifT,contentT,parentT);
-            listeForm.add(cat);
             c.moveToNext();
         }
+
+        List<Tutoriel> listeTuto = loopTuto(listeParents, listeEnfants);
+
+
         c.close();
         db.close();
-        return listeForm;
+        return listeTuto;
+    }
+
+    /**
+     * Méthode qui se charge de définir qui sont les enfants d'un Tutoriel parent et se charge de récupérer les "Content" correspondant.
+     * Que ces derniers soient de type Article ou Tutoriel
+     * @param listeParents
+     * @param listeEnfants
+     * @return
+     */
+    private List<Tutoriel> loopTuto(final List<Tutoriel> listeParents, final List<Tutoriel> listeEnfants ){
+        final List<Tutoriel> tutos = new ArrayList<Tutoriel>();
+
+        for(Tutoriel t : listeParents) {
+            tutos.add(t);
+            List<Tutoriel> enfants = getSelectionByParentId(listeEnfants,t.getId());
+            //si on a des enfants, on peut descendre de niveu. SINON on doit aller chercher l'article correspondant
+            if(enfants!= null && enfants.size() > 0)
+                t.setContent(loopTuto(enfants,listeEnfants));
+            else {
+                final DBHandlerArticle dba = new DBHandlerArticle(this.context);
+                List<Article> rs = dba.getByIdTutoriel(t.getId());
+                t.setContent(rs);
+            }
+        }
+        return tutos;
+    }
+
+    /**
+     * La méthode permet de retourner une liste contenant tout les éléments présent dans le Cursor qui ont pour
+     * parentId, l'id passé en parametre.
+     * @param liste : la liste dans laquelle on doit trouver les "enfants"
+     * @param idParent : l'idParent auquel doit etre associé le(s) enfant(s) que l'ont cherche
+     * @return
+     */
+    private List<Tutoriel> getSelectionByParentId(final List<Tutoriel> liste, final int idParent) {
+        final List<Tutoriel> selections = new ArrayList<Tutoriel>();
+        if(liste!=null) {
+            for(Tutoriel t : liste){
+                if (t.getParent() == idParent) {
+                    selections.add(t);
+                }
+            }
+        }
+        return selections;
+    }
+
+    private Tutoriel findTutoByIdParent(List<Tutoriel> liste, long idParent) {
+        for(Tutoriel t : liste) {
+            if(t.getParent()== Tutoriel.NO_PARENT_VALUE && t.getId() == idParent) {
+                return t;
+            }
+        }
+        return null;
     }
 
     private String allChampsTutoriel() {

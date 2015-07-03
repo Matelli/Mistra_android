@@ -229,7 +229,7 @@ public class UpdateDBService<T> extends Service {
 
                     final Tutoriel tuto = new Tutoriel(idT, titreT, typeT, descriptionT, listItems, idParent);
 
-                    Tutoriel item = loopContent(titreObject, tuto);
+                    Tutoriel item = loopContent(titreObject, tuto, idT);
 
                     listSelection.add(item);
                 }
@@ -256,7 +256,7 @@ public class UpdateDBService<T> extends Service {
      * @param parentObj : l'instance JAVA de l'objet parent
      * @return le parametre parentObj MAIS qui contient maintenant la list de ses enfants
      */
-    private Tutoriel loopContent(JSONObject parentJSON, Tutoriel parentObj) {
+    private Tutoriel loopContent(JSONObject parentJSON, Tutoriel parentObj, int idParent) {
         try {
             final JSONArray tabItems = parentJSON.getJSONArray("content");
             for (int i = 0; i < tabItems.length(); i++) {
@@ -271,11 +271,11 @@ public class UpdateDBService<T> extends Service {
                         final Type typeTChild = t;
                         final String descriptionTChild = obj.getString("description");
                         final List<Article> listItemsChild = new ArrayList<Article>();//Nous savons qu'il n'y a pas plus de deux niveaux, on défini le type de la liste
-                        final int idParentChild = Tutoriel.NO_PARENT_VALUE;
+                        final int idParentChild = idParent;
 
                         final Tutoriel tutoChild = new Tutoriel(idTChild, titreTChild, typeTChild, descriptionTChild, listItemsChild, idParentChild);
 
-                        final Tutoriel tutoLoop = loopContent(obj, tutoChild);
+                        final Tutoriel tutoLoop = loopContent(obj, tutoChild, idTChild);
 
                         parentObj.addContent(tutoLoop);
 
@@ -285,9 +285,9 @@ public class UpdateDBService<T> extends Service {
                         final String titreAChild = new String(obj.getString("title").getBytes("UTF8"));
                         final Type typeAChild = t;
                         final String descriptionAChild = obj.getString("content");
-                        final long idParent = Article.NO_PARENT_VALUE;
+                        final long idP = idParent;
 
-                        final Article article = new Article(idAChild,titreAChild,typeAChild,descriptionAChild,idParent,Categorie.TUTORIEL);
+                        final Article article = new Article(idAChild,titreAChild,typeAChild,descriptionAChild,idP,Categorie.TUTORIEL);
                         parentObj.addContent(article);
 
                         break;
@@ -334,12 +334,11 @@ public class UpdateDBService<T> extends Service {
         if(tutoriels != null && tutoriels.size() > 0) {
 
             final DBHandlerTutoriel dbhT = new DBHandlerTutoriel(this);
+            long idParent=-1;
+
             for (final Tutoriel tuto : tutoriels) {
-                final long idParent = dbhT.insert(tuto);
-
+                idParent = dbhT.insert(tuto);
                 loopDBTutoriel(dbhT, tuto, idParent);
-
-
             }
             dbhT.close();
         }
@@ -347,6 +346,7 @@ public class UpdateDBService<T> extends Service {
 
 
     private void loopDBTutoriel(DBHandlerTutoriel dbhT, Tutoriel parent, long idParent) {
+
         for (Selection sel : (List<Selection>)parent.getContent()) {
             if(sel instanceof Tutoriel) {
                 final Tutoriel t = (Tutoriel) sel;

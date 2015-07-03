@@ -177,21 +177,15 @@ public class ListTutoriels extends Activity {
                     startActivity(i);
                     finish();
                 } else {
-                    /*Presentation presentation = (Presentation) selection;
+                    Selection presentation = (Selection) selection;
                     //Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
                     //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
 
-                    Intent i = new Intent(ListTutoriels.this, DetailSelection.class);
-                    i.putExtra("htmlcode", presentation.getContent());
-                    startActivity(i);*/
+                    Intent i = new Intent(ListTutoriels.this, SubListView.class);
+                    i.putExtra("titre", presentation.getTitle());
 
-                    Article presentation = (Article) selection;
-                    //Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
-                    //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
-
-                    Intent i = new Intent(ListTutoriels.this, DetailSelection.class);
-                    i.putExtra("detailTitre", presentation.getTitle());
-                    i.putExtra("htmlcode", presentation.getDescription());
+                    //i.putExtra("htmlcode", presentation.getDescription());
+                    i.putExtra("objet", selection);
                     i.putExtra("whoIam", Tutoriel.class.toString());
                     startActivity(i);
                     finish();

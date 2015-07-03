@@ -1,5 +1,7 @@
 package data;
 
+import android.database.Cursor;
+
 /**
  * Created by matelli on 23/12/2014.
  */
@@ -22,6 +24,14 @@ public class Article extends Selection implements Comparable<Article> {
         this.categorie = categorie;
 
     }
+
+    /*public Article(final Cursor c, final Categorie cat) {
+        super(c.getInt(0),c.getString(1),Type.valueOf(c.getString(2)));
+
+        this.description = c.getString(3);
+        this.itemParent= c.getInt(4);
+        this.categorie = cat;
+    }*/
 
 
     public String getDescription() {

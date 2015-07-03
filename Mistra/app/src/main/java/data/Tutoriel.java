@@ -1,5 +1,7 @@
 package data;
 
+import android.database.Cursor;
+
 import java.util.List;
 
 /**
@@ -28,6 +30,16 @@ public class Tutoriel<T> extends Selection {
         this.description = description;
         this.content = (List<Selection>)content;
         this.parent = parent;
+    }
+
+    public Tutoriel(final Cursor c) {
+        super(c.getInt(0),c.getString(1),Type.valueOf(c.getString(2)));
+
+        this.description = c.getString(3);
+        this.content = (List<Selection>)content;
+        this.parent= c.getInt(4);
+
+
     }
 
     public String getDescription() {

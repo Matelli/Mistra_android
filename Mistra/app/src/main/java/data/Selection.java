@@ -1,9 +1,13 @@
 package data;
 
+import android.database.Cursor;
+
+import java.io.Serializable;
+
 /**
  * Created by matelli on 07/01/2015.
  */
-public class Selection {
+public class Selection implements Serializable {
 
     protected int id ;
     protected String title ;
@@ -19,6 +23,12 @@ public class Selection {
         this.id = id;
         this.title = title;
         this.type = type;
+    }
+
+    public Selection(Cursor c) {
+        this.id = c.getInt(0);
+        this.title = c.getString(1);
+        this.type = Type.valueOf(c.getString(2));
     }
 
     public int getId() {
