@@ -46,6 +46,7 @@ import data.Formation;
 import data.Selection;
 import data.Tutoriel;
 import data.Presentation;
+import data.Type;
 
 
 public class ListTutoriels extends Activity {
@@ -168,12 +169,12 @@ public class ListTutoriels extends Activity {
                     }
                 }
                 Log.i("==> item object clicked :", selection.toString());
-                if (selection.getType().equals("categorie")) {
+                if (selection.getType().equals(Type.CATEGORIE)) {
 
                     Tutoriel t = (Tutoriel) selection;
                     Intent i = new Intent(ListTutoriels.this, SubListView.class);
 
-                    i.putExtra("objet", (android.os.Parcelable) t);
+                    i.putExtra("objet", (Tutoriel)t);
                     i.putExtra("titre", t.getTitle());
                     i.putExtra("whoIwas", Tutoriel.class.toString());
                     startActivity(i);

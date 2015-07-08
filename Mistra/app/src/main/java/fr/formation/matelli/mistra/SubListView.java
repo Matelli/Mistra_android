@@ -70,11 +70,13 @@ public class SubListView extends Activity {
                             i = new Intent(SubListView.this, ListFormations.class);
                         } else if (c.equals(Tutoriel.class.toString())) {
                             i = new Intent(SubListView.this, ListTutoriels.class);
+                        } else if (c.equals(DetailSelection.class.toString())) {
+                            i = new Intent(SubListView.this, ListTutoriels.class);
                         }
                     }
                 }
 
-                //i.putExtra("whoIam", SubListView.class.toString());
+                //i.putExtra("whoIwas", SubListView.class.toString());
                 startActivity(i);
                 finish();
             }
@@ -93,6 +95,9 @@ public class SubListView extends Activity {
                         //i.putExtra("ListeFormation","htmlcode"+ article.getTitle());
                         i.putExtra("detailTitre", presentation.getTitle());
                         i.putExtra("htmlcode", presentation.getDescription());
+                        if(t!=null) {
+                            i.putExtra("objet", (Tutoriel) t);
+                        }
                         i.putExtra("whoIwas", SubListView.class.toString());
                         startActivity(i);
                         finish();

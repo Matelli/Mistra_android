@@ -76,13 +76,18 @@ public class DetailSelection extends Activity {
                     } else if (c.equals(Devis.class.toString())) {
                         i = new Intent(DetailSelection.this, Devis.class);
                      } else if (c.equals(SubListView.class.toString())) {
-                        //TODO bug, la sublistview n'a pas les différentes catégorie du Tuto. A corriger ! pour la peine, on renvoit à la home
-                        // i = new Intent(DetailSelection.this, SubListView.class);
-                        i = new Intent(DetailSelection.this, Home.class);
+                        //on récupére l'objet Tutoriel que l'on renvoie afin d'afficher la sublist avec les sous-éléments du tutoriel
+                        Tutoriel t = (Tutoriel)getIntent().getSerializableExtra("objet");
+                        i = new Intent(DetailSelection.this, SubListView.class);
+                        if(t!=null) {
+                            i.putExtra("objet", (Tutoriel) t);
+                            i.putExtra("detailTitre",t.getTitle());
+                        }
                     }
                 }
-                i.putExtra("whoIam", SubListView.class.toString());
+                i.putExtra("whoIwas", DetailSelection.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -90,8 +95,9 @@ public class DetailSelection extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(DetailSelection.this, Contact.class);
-                i.putExtra("whoIam", SubListView.class.toString());
+                i.putExtra("whoIwas", SubListView.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
@@ -100,8 +106,9 @@ public class DetailSelection extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(DetailSelection.this, Devis.class);
                 i.putExtra("objetDevis",detailTitre.getText());
-                i.putExtra("whoIam", SubListView.class.toString());
+                i.putExtra("whoIwas", SubListView.class.toString());
                 startActivity(i);
+                finish();
             }
         });
 
