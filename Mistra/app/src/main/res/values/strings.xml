@@ -20,7 +20,7 @@
     <string name="title_activity_list_tutoriaux">ListTutoriels</string>
     <string name="title_activity_contact">Contact</string>
     <string name="adresseText">Adresse</string>
-    <string name="adresseMistra">19 rue Béranger, 75003 Paris </string>
+    <string name="adresseMistra">19 rue Béranger, 75003 Paris</string>
     <string name="telephoneText">Téléphone</string>
     <string name="telephoneMistra">01 82 52 25 25 </string>
     <string name="emailText">E-mail</string>
@@ -31,5 +31,21 @@
 
     <string name="devis_error_numTel">Le numéro de téléphone n\'est pas valide</string>
     <string name="devis_error_email">L\'email n\'est pas valide</string>
+
+    <string name="devis_objet">Objet: </string>
+    <string name="devis_nom">Nom: </string>
+    <string name="devis_email">Email: </string>
+    <string name="devis_telephone">Télèphone: </string>
+    <string name="devis_ville">Ville: </string>
+    <string name="devis_societe">Société: </string>
+    <string name="devis_commentaire">Commentaire: </string>
+    <string name="devis_envoye">Devis envoyé</string>
+    <string name="devis_max_caractere">Vous avez atteint le maximum de caractères !</string>
+    <string name="devis_envoie_mail">Envoie de l\'email...</string>
+    <string name="devis_aucun_client_mail">Aucun client mail installé.</string>
+    <string name="devis_comment_prefixe">Commentaires (max: </string>
+    <string name="devis_comment_suffixe"> car)</string>
+
+    <string name="contact_envoie_email">Demande de contact</string>
 
 </resources>

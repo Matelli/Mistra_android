@@ -29,8 +29,9 @@ public class Devis extends Activity {
     EditText etObjet, etNom, etNumTel,etEmail, etVille, etSociete, etCommentaire;
 
     TextView compteur;
-    final private String TEXT_COMMENT_PREFIXE = new String("Commentaires (max: ");
-    final private String TEXT_COMMENT_SUFFIXE = new String(" car)");
+    final private int MAX_CAR = 500;
+    //final private String TEXT_COMMENT_PREFIXE = getResources().getString(R.string.devis_comment_prefixe);
+    //final private String TEXT_COMMENT_SUFFIXE = getResources().getString(R.string.devis_comment_suffixe);
 
 
 
@@ -128,7 +129,7 @@ public class Devis extends Activity {
             public void onClick(View v) {
 
                 sendEmail();
-                Toast.makeText(Devis.this, "Devis envoyé", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Devis.this, getResources().getString(R.string.devis_envoye), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -171,14 +172,14 @@ public class Devis extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 final int nbTxt = etCommentaire.getText().length();
-                final StringBuilder str = new StringBuilder(TEXT_COMMENT_PREFIXE).append((500 - nbTxt)).append(TEXT_COMMENT_SUFFIXE);
+                final StringBuilder str = new StringBuilder(getResources().getString(R.string.devis_comment_prefixe)).append(" ").append((MAX_CAR - nbTxt)).append(" ").append(getResources().getString(R.string.devis_comment_suffixe));
                 compteur.setText(str);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (etCommentaire.getText().length() >= 500) {
-                    Toast.makeText(activity, "Vous avez atteint le maximum de caractères !", Toast.LENGTH_LONG).show();
+                if (etCommentaire.getText().length() >= MAX_CAR) {
+                    Toast.makeText(activity, getResources().getString(R.string.devis_max_caractere), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -187,30 +188,32 @@ public class Devis extends Activity {
 
     public void sendEmail()
     {
-        final String to = "contact@mistra.fr";
-        final String subject = "Demande de devis";
+        //final String to = "contact@mistra.fr";
+        final String to = getResources().getString(R.string.emailMistra);
+        //final String subject = "Demande de devis";
+        final String subject = getResources().getString(R.string.devis);
         //final String message = etCommentaire.getText().toString();
         final StringBuilder message = new StringBuilder("Demande de devis via appli Mistra \n\n");
 
         if(etObjet.getText()!=null && etObjet.getText().length()>0) {
-            message.append("Objet: ").append(etObjet.getText().toString()).append("\n");
+            message.append(getResources().getString(R.string.devis_objet)).append(" ").append(etObjet.getText().toString()).append("\n");
         }
         if(etNom.getText()!=null && etNom.getText().length()>0) {
-            message.append("Nom: ").append(etNom.getText().toString()).append("\n");
+            message.append(getResources().getString(R.string.devis_nom)).append(" ").append(etNom.getText().toString()).append("\n");
         }
 
-        message.append("Email: ").append(etEmail.getText()).append("\n\n");
-        message.append("Télèphone: ").append(etNumTel.getText().toString()).append("\n");
+        message.append(getResources().getString(R.string.devis_email)).append(" ").append(etEmail.getText()).append("\n\n");
+        message.append(getResources().getString(R.string.devis_telephone)).append(" ").append(etNumTel.getText().toString()).append("\n");
 
         if(etVille.getText()!=null && etVille.getText().length()>0) {
-            message.append("Ville: ").append(etVille.getText().toString()).append("\n");
+            message.append(getResources().getString(R.string.devis_ville)).append(" ").append(etVille.getText().toString()).append("\n");
         }
         if(etSociete.getText()!=null && etSociete.getText().length()>0) {
-            message.append("Société: ").append(etSociete.getText().toString()).append("\n");
+            message.append(getResources().getString(R.string.devis_societe)).append(" ").append(etSociete.getText().toString()).append("\n");
         }
 
         if (etCommentaire.getText()!=null && etCommentaire.getText().length()>0) {
-            message.append("Commentaire:\n").append(etCommentaire.getText().toString());
+            message.append(getResources().getString(R.string.devis_commentaire)).append("\n").append(etCommentaire.getText().toString());
         }
 
 
@@ -227,12 +230,12 @@ public class Devis extends Activity {
         email.setType("message/rfc822");
 
         try {
-            startActivity(Intent.createChooser(email, "envoie de l'email..."));
+            startActivity(Intent.createChooser(email, getResources().getString(R.string.devis_envoie_mail)));
             //startActivity(email);
             //
             }
         catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this, "Aucun client mail installé.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.devis_aucun_client_mail), Toast.LENGTH_SHORT).show();
         }
     }
 

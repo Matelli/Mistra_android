@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.text.Normalizer;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import data.Formation;
 import data.Tutoriel;
@@ -107,7 +108,8 @@ public class Contact extends Activity {
                         startActivity(mapIntent);
                         finish();
                     } else {
-                        final String adr = new String("19 rue b&eacute;ranger, 75003 paris");
+                        //final String adr = new String("19 rue b&eacute;ranger, 75003 paris");
+                        final String adr = getResources().getString(R.string.adresseMistra);
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.fr/maps/place/" + adr));
                         startActivity(intent);
                         finish();
@@ -129,6 +131,30 @@ public class Contact extends Activity {
                 i.putExtra("whoIam", Formation.class.toString());
                 startActivity(i);
                 finish();*/
+
+                final String to = getResources().getString(R.string.emailMistra);
+                final String subject = getResources().getString(R.string.contact_envoie_email);
+                //final String message = etCommentaire.getText().toString();
+                final StringBuilder message = new StringBuilder("Demande de contact appli Mistra \n\n");
+
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+                //email.putExtra(Intent.EXTRA_CC, new String[]{ toCc});
+                //email.putExtra(Intent.EXTRA_BCC, new String[]{toCci});
+                //email.putExtra(Intent.EXTRA_STREAM, "file:///sdcard/file.pdf");
+                email.putExtra(Intent.EXTRA_SUBJECT, subject);
+                email.putExtra(Intent.EXTRA_TEXT, message.toString());
+                email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                email.setType("message/rfc822");
+
+                try {
+                    startActivity(Intent.createChooser(email, getResources().getString(R.string.devis_envoie_mail)));
+                    //startActivity(email);
+                    //
+                }
+                catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(context, getResources().getString(R.string.devis_aucun_client_mail), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
