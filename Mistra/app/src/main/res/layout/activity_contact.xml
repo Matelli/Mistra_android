@@ -58,7 +58,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="2dp">
+            android:padding="2dp"
+            android:id="@+id/ll_adresse">
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -70,8 +71,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1"
-                android:padding="5dp"
-                >
+                android:padding="5dp">
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -95,7 +95,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="2dp">
+            android:padding="2dp"
+            android:id="@+id/ll_numTel">
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -107,8 +108,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1"
-                android:padding="5dp"
-                >
+                android:padding="5dp">
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -131,7 +131,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="2dp">
+            android:padding="2dp"
+            android:id="@+id/ll_email">
             <ImageView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -143,8 +144,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1"
-                android:padding="5dp"
-                >
+                android:padding="5dp">
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:layout_margin="2dp"
-            />
+            android:id="@+id/btn_facebook" />
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -206,7 +206,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:layout_margin="2dp"
-            />
+            android:id="@+id/btn_google" />
         </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
@@ -222,7 +222,7 @@
             android:layout_weight="1"
             android:background="@null"
             android:layout_margin="2dp"
-            />
+            android:id="@+id/btn_linkedin" />
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -232,7 +232,7 @@
             android:layout_margin="2dp"
 
 
-            />
+            android:id="@+id/btn_viadeo" />
 
     </LinearLayout>
 </LinearLayout>
