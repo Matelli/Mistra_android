@@ -53,10 +53,10 @@ public class ListTutoriels extends Activity {
     Context context;
 
     ImageButton btnRetourHome;
-    Button btnFormations;
+    /*Button btnFormations;
     Button btnTutos;
     Button btnDevis;
-    Button btnContact;
+    Button btnContact;*/
 
     DBHandlerTutoriel db;
 
@@ -78,10 +78,10 @@ public class ListTutoriels extends Activity {
         // ImageButton
         btnRetourHome = (ImageButton) findViewById(R.id.btnRetourHome);
         // Button
-        btnFormations = (Button) findViewById(R.id.btnFormationFooterTutos);
+        /*btnFormations = (Button) findViewById(R.id.btnFormationFooterTutos);
         btnTutos = (Button) findViewById(R.id.btnTutosFooterTutos);
         btnDevis = (Button) findViewById(R.id.btnDevisFooterTutos);
-        btnContact = (Button) findViewById(R.id.btnContactFooterTutos);
+        btnContact = (Button) findViewById(R.id.btnContactFooterTutos);*/
         // ExpandableList
         expListView = (ExpandableListView) findViewById(R.id.expandablelisteTutos);
 
@@ -92,7 +92,7 @@ public class ListTutoriels extends Activity {
                 db.close();
                 Intent i = new Intent(ListTutoriels.this, Home.class);
 
-                if(getIntent() != null && getIntent().getExtras() != null) {
+                /*if(getIntent() != null && getIntent().getExtras() != null) {
                     String c = getIntent().getExtras().getString("whoIam");
                     if (c != null) {
                         if (c.equals(Formation.class.toString())) {
@@ -101,17 +101,19 @@ public class ListTutoriels extends Activity {
                             i = new Intent(ListTutoriels.this, ListTutoriels.class);
                         } else if (c.equals(Devis.class.toString())) {
                             i=new Intent(ListTutoriels.this, Devis.class);
+                        } else if (c.equals(SubListView.class.toString())) {
+                            i = new Intent(ListTutoriels.this, SubListView.class);
                         }
                     }
-                }
+                }*/
 
-                i.putExtra("whoIam", Tutoriel.class.toString());
+                //i.putExtra("whoIam", Tutoriel.class.toString());
                 startActivity(i);
                 finish();
             }
         });
 
-        btnDevis.setOnClickListener(new View.OnClickListener() {
+        /*btnDevis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 db.close();
@@ -142,7 +144,7 @@ public class ListTutoriels extends Activity {
                 startActivity(i);
                 finish();
             }
-        });
+        });*/
 
         remplirListData();
 
@@ -167,26 +169,24 @@ public class ListTutoriels extends Activity {
                 }
                 Log.i("==> item object clicked :", selection.toString());
                 if (selection.getType().equals("categorie")) {
-                    // ToDo Ajouter la redirection pour tuto qui contient des d'autre tuto
+
                     Tutoriel t = (Tutoriel) selection;
                     Intent i = new Intent(ListTutoriels.this, SubListView.class);
-                    // toDo check the parcelable element
+
                     i.putExtra("objet", (android.os.Parcelable) t);
-                    i.putExtra("titre", "Tutoriels");
-                    i.putExtra("whoIam", Tutoriel.class.toString());
+                    i.putExtra("titre", t.getTitle());
+                    i.putExtra("whoIwas", Tutoriel.class.toString());
                     startActivity(i);
                     finish();
                 } else {
                     Selection presentation = (Selection) selection;
-                    //Toast.makeText(ListTutoriels.this, "clicked", Toast.LENGTH_LONG).show();
-                    //Toast.makeText(ListFormations.this,item,Toast.LENGTH_LONG).show();
 
                     Intent i = new Intent(ListTutoriels.this, SubListView.class);
                     i.putExtra("titre", presentation.getTitle());
 
                     //i.putExtra("htmlcode", presentation.getDescription());
                     i.putExtra("objet", selection);
-                    i.putExtra("whoIam", Tutoriel.class.toString());
+                    i.putExtra("whoIwas", Tutoriel.class.toString());
                     startActivity(i);
                     finish();
                 }

@@ -64,7 +64,7 @@ public class Contact extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(Contact.this, Home.class);
 
-                if(getIntent() != null && getIntent().getExtras() != null) {
+                /*if(getIntent() != null && getIntent().getExtras() != null) {
                     String c = getIntent().getExtras().getString("whoIam");
                     if (c != null) {
                         if (c.equals(Formation.class.toString())) {
@@ -75,7 +75,7 @@ public class Contact extends Activity {
                             i=new Intent(Contact.this, Devis.class);
                         }
                     }
-                }
+                }*/
                 startActivity(i);
                 finish();
             }

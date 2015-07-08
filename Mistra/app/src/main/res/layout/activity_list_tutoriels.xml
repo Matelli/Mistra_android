@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="@android:color/white"
     tools:context="fr.formation.matelli.mistra.ListTutoriels"
     >
@@ -11,8 +12,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_degade_head"
-        android:layout_alignParentTop="true"
-        >
+        android:layout_alignParentTop="true">
 
         <ImageButton
             android:id="@+id/btnRetourHome"
@@ -22,9 +22,7 @@
             android:layout_alignParentStart="false"
             android:background="@null"
             android:contentDescription="@string/retour"
-            android:padding="15dp"
-
-            />
+            android:padding="15dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,24 +37,22 @@
 
     <ExpandableListView
         android:id="@+id/expandablelisteTutos"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/headerTutos"
         android:layout_alignBottom="@+id/view"
         android:groupIndicator="@null"
         android:divider="@null"
         android:childDivider="@drawable/degrade_cellule"
-        android:background="@android:color/white"
-        />
+        android:background="@android:color/white"/>
 
 
     <View
         android:id = "@+id/view"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@android:color/background_dark"
-        android:layout_above="@+id/linearMenu"
-        />
+        android:background="@android:color/background_dark"/>
+
     <LinearLayout
         android:id="@+id/linearMenu"
         android:layout_width="fill_parent"
@@ -67,7 +63,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         style="?android:attr/buttonBarStyle"
-        >
+        android:visibility="gone">
 
 
 
@@ -125,7 +121,7 @@
 
 
 
-</RelativeLayout>
+</LinearLayout>
 
 
 

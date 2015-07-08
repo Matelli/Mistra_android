@@ -36,10 +36,10 @@ public class ListFormations extends Activity {
     Context context;
 
     ImageButton btnRetourHome;
-    Button btnFormations;
+    /*Button btnFormations;
     Button btnTutos;
     Button btnDevis;
-    Button btnContact;
+    Button btnContact;*/
 
 
     ExpandableListAdapter listAdapter;
@@ -57,10 +57,10 @@ public class ListFormations extends Activity {
         // ImageButton
         this.btnRetourHome = (ImageButton) findViewById(R.id.btnRetourHome);
         // Button
-        this.btnFormations = (Button) findViewById(R.id.btnFormationFooter);
+        /*this.btnFormations = (Button) findViewById(R.id.btnFormationFooter);
         this.btnTutos = (Button) findViewById(R.id.btnTutosFooter);
         this.btnDevis = (Button) findViewById(R.id.btnDevisFooter);
-        this.btnContact = (Button) findViewById(R.id.btnContactFooter);
+        this.btnContact = (Button) findViewById(R.id.btnContactFooter);*/
         // ExpandableList
         this.expListView = (ExpandableListView) findViewById(R.id.expandablelisteFormations);
 
@@ -72,7 +72,7 @@ public class ListFormations extends Activity {
                 db.close();
                 Intent i = new Intent(ListFormations.this, Home.class);
 
-                if(getIntent() != null && getIntent().getExtras() != null) {
+                /*if(getIntent() != null && getIntent().getExtras() != null) {
                     String c = getIntent().getExtras().getString("whoIam");
                     if (c != null) {
                         if (c.equals(Formation.class.toString())) {
@@ -81,17 +81,19 @@ public class ListFormations extends Activity {
                             i = new Intent(ListFormations.this, ListTutoriels.class);
                         } else if (c.equals(Devis.class.toString())) {
                             i=new Intent(ListFormations.this, Devis.class);
+                        } else if (c.equals(SubListView.class.toString())) {
+                            i = new Intent(ListFormations.this, SubListView.class);
                         }
                     }
-                }
+                }*/
 
-                i.putExtra("whoIam", Formation.class.toString());
+                //i.putExtra("whoIam", Formation.class.toString());
                 startActivity(i);
                 finish();
             }
         });
 
-        this.btnDevis.setOnClickListener(new View.OnClickListener() {
+        /*this.btnDevis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 db.close();
@@ -122,7 +124,7 @@ public class ListFormations extends Activity {
                 startActivity(i);
                 finish();
             }
-        });
+        });*/
 
 
         remplirListData();
@@ -153,7 +155,7 @@ public class ListFormations extends Activity {
                 //i.putExtra("ListeFormation","htmlcode"+ article.getTitle());
                 i.putExtra("detailTitre", article.getTitle());
                 i.putExtra("htmlcode", article.getDescription());
-                i.putExtra("whoIam", Formation.class.toString());
+                i.putExtra("whoIwas", Formation.class.toString());
                 startActivity(i);
                 finish();
 

@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -54,9 +55,8 @@
         android:id = "@+id/view"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@android:color/background_dark"
-        android:layout_above="@+id/linearMenu"
-        />
+        android:background="@android:color/background_dark"/>
+
     <LinearLayout
         android:id="@+id/linearMenu"
         android:layout_width="fill_parent"
@@ -67,7 +67,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         style="?android:attr/buttonBarStyle"
-        >
+        android:visibility="gone">
 
 
 
@@ -125,7 +125,7 @@
 
 
 
-</RelativeLayout>
+</LinearLayout>
 
 
 

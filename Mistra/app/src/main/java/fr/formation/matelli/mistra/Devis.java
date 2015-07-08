@@ -25,7 +25,7 @@ public class Devis extends Activity {
     private Activity activity;
 
     ImageButton btnRetour, btnSend;
-    Button btnFormations, btnTutos,btnDevis, btnContact;
+    //Button btnFormations, btnTutos,btnDevis, btnContact;
     EditText etObjet, etNom, etNumTel,etEmail, etVille, etSociete, etCommentaire;
 
     TextView compteur;
@@ -44,10 +44,10 @@ public class Devis extends Activity {
         btnRetour = (ImageButton) findViewById(R.id.btnRetourHome);
         btnSend = (ImageButton) findViewById(R.id.btnSendDevis);
         // Button
-        btnFormations = (Button) findViewById(R.id.btnFormationFooterDevis);
+        /*btnFormations = (Button) findViewById(R.id.btnFormationFooterDevis);
         btnTutos = (Button) findViewById(R.id.btnTutosFooterDevis);
         btnDevis  = (Button) findViewById(R.id.btnDevisFooterDevis);
-        btnContact = (Button) findViewById(R.id.btnContactFooterDevis);
+        btnContact = (Button) findViewById(R.id.btnContactFooterDevis);*/
         // EditText
         etObjet = (EditText) findViewById(R.id.editObjet);
         etNom = (EditText) findViewById(R.id.editNom);
@@ -105,7 +105,7 @@ public class Devis extends Activity {
             public void onClick(View v) {
                 Intent i = new Intent(Devis.this, Home.class);
 
-                if (getIntent() != null && getIntent().getExtras() != null) {
+                /*if (getIntent() != null && getIntent().getExtras() != null) {
                     String c = getIntent().getExtras().getString("whoIam");
                     if (c != null) {
                         if (c.equals(Formation.class.toString())) {
@@ -116,8 +116,8 @@ public class Devis extends Activity {
                             i = new Intent(Devis.this, Devis.class);
                         }
                     }
-                }
-                i.putExtra("whoIam", Devis.class.toString());
+                }*/
+                //i.putExtra("whoIam", Devis.class.toString());
                 startActivity(i);
                 finish();
             }
@@ -134,7 +134,7 @@ public class Devis extends Activity {
         });
 
 
-        btnFormations.setOnClickListener(new View.OnClickListener() {
+        /*btnFormations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Devis.this, ListFormations.class);
@@ -161,7 +161,7 @@ public class Devis extends Activity {
                 startActivity(i);
                 finish();
             }
-        });
+        });*/
 
         etCommentaire.addTextChangedListener(new TextWatcher() {
 
