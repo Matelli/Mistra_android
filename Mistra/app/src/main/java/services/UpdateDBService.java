@@ -9,6 +9,10 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
+import com.androidquery.util.XmlDom;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -20,18 +24,36 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import dao.DBHandler;
 import dao.DBHandlerArticle;
+import dao.DBHandlerBlog;
 import dao.DBHandlerFormation;
 import dao.DBHandlerTutoriel;
 import data.Article;
+import data.Blog;
 import data.Categorie;
 import data.Formation;
 import data.Selection;
@@ -81,6 +103,8 @@ public class UpdateDBService<T> extends Service {
 
         private Context context;
         private static final String URL_FORMATIONS = "http://api.mistra.fr/full.php";
+        private static final String URL_BLOG = "http://feeds.feedburner.com/MistraFormationBlog.xml";
+
 
 
         public DataFormation(Context c) {
@@ -113,6 +137,15 @@ public class UpdateDBService<T> extends Service {
                     final List<Tutoriel> tutoriels = parserTutoriels(fullJSON);
                     alimenterDBFormation(formations);
                     alimenterDBTutoriel(tutoriels);
+
+
+                    //String fullXML = getXMLFromURL(this.URL_BLOG);
+                    //final List<Article> blogs = parserBlog(this.URL_BLOG);
+                    //alimenterDBBlog(blogs);
+
+                    List<Blog> blogs = parserBlog(this.URL_BLOG);
+                    alimenterDBBlog(blogs);
+
                     return null;
 
                 } catch (IOException e) {
@@ -250,6 +283,7 @@ public class UpdateDBService<T> extends Service {
         return listSelection;
     }
 
+
     /**
      * Méthode qui se charge de parser le content de chaque "tutoriel" en profondeurs
      * @param parentJSON : l'objet JSON à parser
@@ -309,6 +343,82 @@ public class UpdateDBService<T> extends Service {
         }
     }
 
+    private List<Blog> parserBlog(String str) {
+        final String RACINE = "item";
+        final String TITRE = "title";
+        final String LINK = "link";
+        final String DATE = "pubDate";
+        final String DESCRIPTION = "description";
+        final String CONTENT = "content:encoded";
+
+        List<Blog> listBlog = new ArrayList<Blog>();
+
+        URL url = null;
+        try {
+            url = new URL(str);
+
+            HttpURLConnection conn = null;
+            conn = (HttpURLConnection) url.openConnection();
+            InputStream is = conn.getInputStream();
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(is);
+
+            Element element=doc.getDocumentElement();
+            element.normalize();
+
+            NodeList nList = doc.getElementsByTagName(RACINE);
+            Node node = null;
+            Date date = null;
+            String image = null;
+            for (int i=0; i<nList.getLength(); i++) {
+                image = null;
+                date=null;
+                node = nList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element2 = (Element) node;
+
+                    date = Blog.sdf.parse(getValue(DATE, element2));
+                    image = extractImageFromContent(getValue(CONTENT, element2));//TODO mettre la méthode de récupération de l'image
+                    final Blog blog = new Blog(getValue(TITRE, element2),Type.BLOG, getValue(LINK, element2),date,getValue(DESCRIPTION, element2),getValue(CONTENT, element2),image);
+                    listBlog.add(blog);
+                }
+            }//end of for loop
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return listBlog;
+
+    }
+
+    //TODO implementer la méthode. Celle-ci doit pouvoir "extraire" le lien html de l'image d'aperçu contenu dans la description de l'article.
+    private String extractImageFromContent(final String content) {
+
+        return new String();
+    }
+
+    private static String getValue(String tag, Element element) {
+        if(element != null && tag != null && element.getElementsByTagName(tag) != null && element.getElementsByTagName(tag).item(0) != null) {
+            NodeList nodeList = element.getElementsByTagName(tag).item(0).getChildNodes();
+            if(nodeList != null && nodeList.item(0) != null) {
+                Node node = (Node) nodeList.item(0);
+                return node.getNodeValue();
+            }
+        }
+        return new String();
+    }
+
 
     private void alimenterDBFormation(List<Formation> formations) {
         if(formations != null && formations.size() > 0) {
@@ -341,6 +451,18 @@ public class UpdateDBService<T> extends Service {
                 loopDBTutoriel(dbhT, tuto, idParent);
             }
             dbhT.close();
+        }
+    }
+
+    private void alimenterDBBlog(List<Blog> blogs) {
+        if(blogs != null && blogs.size() > 0) {
+
+            final DBHandlerBlog dbhB = new DBHandlerBlog(this);
+
+            for (final Blog b : blogs) {
+                dbhB.insert(b);
+            }
+            dbhB.close();
         }
     }
 

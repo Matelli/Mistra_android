@@ -38,7 +38,18 @@
 
     </RelativeLayout>
 
-    <ExpandableListView
+    <!--<ExpandableListView
+        android:id="@+id/expandablelisteBlog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerBlog"
+        android:layout_alignBottom="@+id/view"
+        android:groupIndicator="@null"
+        android:divider="@null"
+        android:childDivider="@drawable/degrade_cellule"
+        android:background="@android:color/white"
+        />-->
+    <ListView
         android:id="@+id/expandablelisteBlog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -4,16 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import data.Formation;
-import data.Tutoriel;
+import data.*;
 
 
 public class DetailSelection extends Activity {
@@ -21,6 +23,7 @@ public class DetailSelection extends Activity {
     ImageButton btnRetourPrevious, btnShare;
     TextView detailTitre;
     Button btnContact, btnDevis;
+    RelativeLayout ll_headerFormations;
     WebView pageView ;
 
 
@@ -33,6 +36,8 @@ public class DetailSelection extends Activity {
         btnShare  = (ImageButton) findViewById(R.id.btnShare);
         // TextView
         detailTitre = (TextView) findViewById(R.id.detailTitre);
+
+        ll_headerFormations = (RelativeLayout) findViewById(R.id.headerFormations);
         // Button
         btnContact = (Button) findViewById(R.id.btnGoContact);
         btnDevis = (Button) findViewById(R.id.btnGoDevis);
@@ -75,6 +80,8 @@ public class DetailSelection extends Activity {
                         i = new Intent(DetailSelection.this, ListTutoriels.class);
                     } else if (c.equals(Devis.class.toString())) {
                         i = new Intent(DetailSelection.this, Devis.class);
+                    } else if (c.equals(Blog.class.toString())) {
+                        i = new Intent(DetailSelection.this, Blog.class);
                      } else if (c.equals(SubListView.class.toString())) {
                         //on récupére l'objet Tutoriel que l'on renvoie afin d'afficher la sublist avec les sous-éléments du tutoriel
                         Tutoriel t = (Tutoriel)getIntent().getSerializableExtra("objet");
@@ -112,7 +119,12 @@ public class DetailSelection extends Activity {
             }
         });
 
-        //
+        if(getIntent()!= null && getIntent().getExtras() != null && getIntent().getExtras().getString("whoIwas")!=null) {
+            String c = getIntent().getExtras().getString("whoIwas");
+            if (c.equals(Blog.class.toString())) {
+                ll_headerFormations.setVisibility(View.GONE);
+            }
+        }
 
 
     }

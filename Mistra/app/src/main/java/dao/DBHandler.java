@@ -41,8 +41,9 @@ public class DBHandler extends SQLiteOpenHelper {
         // Creation des tables
         //if(CREATE_TABLE != null) {
         db.execSQL(DBHandlerTutoriel.creationTutoriel_table);
-        db.execSQL(DBHandlerFormation.creationFormationTable);
-        db.execSQL(DBHandlerArticle.createTable);
+        db.execSQL(DBHandlerFormation.creationFormation_table);
+        db.execSQL(DBHandlerBlog.creationBlog_table);
+        db.execSQL(DBHandlerArticle.createArticle_table);
             Log.e("kikoo","CREATION DE LA TABLE : "+CREATE_TABLE);
         //}
 
@@ -53,8 +54,9 @@ public class DBHandler extends SQLiteOpenHelper {
         // Drop tables
         //if(this.TABLE_NAME != null) {
         db.execSQL("Drop table if exists " + DBHandlerTutoriel.creationTutoriel_table);
-        db.execSQL("Drop table if exists " + DBHandlerFormation.creationFormationTable);
-        db.execSQL("Drop table if exists " + DBHandlerArticle.createTable);
+        db.execSQL("Drop table if exists " + DBHandlerFormation.creationFormation_table);
+        db.execSQL("Drop table if exists " + DBHandlerBlog.creationBlog_table);
+        db.execSQL("Drop table if exists " + DBHandlerArticle.createArticle_table);
             // Creation de nouvelles tables
         //}
         onCreate(db);

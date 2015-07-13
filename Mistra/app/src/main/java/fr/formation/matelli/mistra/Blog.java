@@ -8,8 +8,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.DBHandlerBlog;
+import dao.DBHandlerTutoriel;
 import data.Formation;
 import data.Tutoriel;
 
@@ -17,7 +26,12 @@ import data.Tutoriel;
 public class Blog extends Activity {
     Context context;
 
+    ListAdapter listAdapter;
     ImageButton btnRetourHome;
+    ListView listView;
+
+    DBHandlerBlog db;
+    List<data.Blog> listOfBlogs = new ArrayList<data.Blog>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +40,8 @@ public class Blog extends Activity {
         setContentView(R.layout.activity_blog);
 
         btnRetourHome = (ImageButton) findViewById(R.id.btnRetourHome);
+        listView = (ListView) findViewById(R.id.expandablelisteBlog);
+
 
         this.btnRetourHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,8 +68,41 @@ public class Blog extends Activity {
                 finish();
             }
         });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final data.Blog item = (data.Blog) parent.getItemAtPosition(position);
+
+                    data.Blog presentation = (data.Blog) item;
+
+                    Intent i = new Intent(Blog.this, DetailSelection.class);
+                    //i.putExtra("ListeFormation","detailTitre"+ article.getTitle());
+                    //i.putExtra("ListeFormation","htmlcode"+ article.getTitle());
+                    i.putExtra("detailTitre", presentation.getTitle());
+                    i.putExtra("htmlcode", presentation.getContent());
+                    i.putExtra("whoIwas", Blog.class.toString());
+                    startActivity(i);
+                    finish();
+
+
+        }});
+
+        remplirListData();
+
     }
 
+    private void remplirListData() {
+        // Creation d'un objet db
+        this.db = new DBHandlerBlog(this.context);
+        //récupération des infos depuis la DB
+        this.listOfBlogs.addAll(this.db.getAll());
+
+        listAdapter = new CustomListView(Blog.this, listOfBlogs);
+        listView.setAdapter(listAdapter);
+
+        this.db.close();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

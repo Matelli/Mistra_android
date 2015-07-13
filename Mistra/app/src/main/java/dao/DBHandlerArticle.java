@@ -34,7 +34,7 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
 
     // Requete de creation de la table presentation s'il n'éxiste pas déjà
     //private static String createTable = "CREATE TABLE IF NOT EXISTS "
-    public static String createTable = "CREATE TABLE "
+    public static String createArticle_table = "CREATE TABLE "
             + TABLE_ARTICLE + "(" + id_A + " INTEGER PRIMARY KEY, "
             + title_A + " TEXT,"
             + type_A + " TEXT,"
@@ -45,7 +45,6 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
             //+ " FOREIGN KEY ( "+id_parent+" ) REFERENCES "+ DBHandlerFormation.TABLE_FORMATION +"("+DBHandlerFormation.id_F+")"+ ");";
 
     public DBHandlerArticle(Context context) {
-
         //super(context, createTable, TABLE_ARTICLE);
         super(context);
         this.context = context;

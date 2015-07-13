@@ -5,7 +5,8 @@ package data;
  */
 public enum Type {
     CATEGORIE,
-    ARTICLE;
+    ARTICLE,
+    BLOG;
 }
 
 

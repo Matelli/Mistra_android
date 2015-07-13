@@ -34,7 +34,7 @@ public class DBHandlerFormation extends DBHandler implements IHandlerDB<Formatio
 
     // Requete de creation de la table Formation s'il n'existe pas déjà
     //private static String creationFormationTable = "CREATE TABLE IF NOT EXISTS "
-    public static String creationFormationTable = "CREATE TABLE "
+    public static String creationFormation_table = "CREATE TABLE "
             + TABLE_FORMATION + "(" + id_F + " INTEGER PRIMARY KEY, "
             + title_F + " TEXT,"
             + type_F  + " TEXT,"
