@@ -61,23 +61,25 @@ public class DBHandlerTutoriel extends DBHandler implements IHandlerDB<Tutoriel>
     public long insert(Tutoriel t) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-            if (!existOnDb(db,t)) {
-                ContentValues values = new ContentValues();
-                values.put(id_T, t.getId());
-                Log.i("DBHandlerTutoriel", "===> insertion de tutoriel" + t.getId());
-                values.put(title_T, t.getTitle());
-                values.put(type_T, t.getType().name());
-                values.put(descriptif_T, t.getDescription());
-                values.put(parent_T, t.getParent());
+        if (!existOnDb(db,t)) {
+            ContentValues values = new ContentValues();
+            values.put(id_T, t.getId());
+            Log.i("DBHandlerTutoriel", "===> insertion de tutoriel" + t.getId());
+            values.put(title_T, t.getTitle());
+            values.put(type_T, t.getType().name());
+            values.put(descriptif_T, t.getDescription());
+            values.put(parent_T, t.getParent());
 
-                Long cat_id = db.insert(TABLE_TUTORIELS, null, values);
+            Long cat_id = db.insert(TABLE_TUTORIELS, null, values);
 
-                db.close();
-                return cat_id;
-            } else {
-                db.close();
-                return update(t);
-            }
+            db.close();
+            return cat_id;
+        } else {
+
+            final int rs = update(t);
+            db.close();
+            return rs;
+        }
     }
 
     public boolean existOnDb(final SQLiteDatabase db,final Selection f) {

@@ -42,6 +42,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -347,6 +349,7 @@ public class UpdateDBService<T> extends Service {
         final String RACINE = "item";
         final String TITRE = "title";
         final String LINK = "link";
+        final String GUID = "guid";
         final String DATE = "pubDate";
         final String DESCRIPTION = "description";
         final String CONTENT = "content:encoded";
@@ -381,7 +384,7 @@ public class UpdateDBService<T> extends Service {
 
                     date = Blog.sdf.parse(getValue(DATE, element2));
                     image = extractImageFromContent(getValue(CONTENT, element2));//TODO mettre la méthode de récupération de l'image
-                    final Blog blog = new Blog(getValue(TITRE, element2),Type.BLOG, getValue(LINK, element2),date,getValue(DESCRIPTION, element2),getValue(CONTENT, element2),image);
+                    final Blog blog = new Blog(getValue(TITRE, element2),Type.BLOG, getValue(LINK, element2), getValue(GUID, element2),date,getValue(DESCRIPTION, element2),getValue(CONTENT, element2),image);
                     listBlog.add(blog);
                 }
             }//end of for loop
@@ -404,9 +407,45 @@ public class UpdateDBService<T> extends Service {
 
     //TODO implementer la méthode. Celle-ci doit pouvoir "extraire" le lien html de l'image d'aperçu contenu dans la description de l'article.
     private String extractImageFromContent(final String content) {
+        final String HTML_A_TAG_PATTERN = "(?i)<a([^>]+)>(.+?)</a>";
+        //final String HTML_A_HREF_TAG_PATTERN ="\\s*(?i)href\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))";
+        final String HTML_A_HREF_TAG_PATTERN ="\\s*(?i)href\\s*=\"\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))\"";
+
+        Pattern patternTag, patternLink;
+        Matcher matcherTag, matcherLink;
+
+        patternTag = Pattern.compile(HTML_A_TAG_PATTERN);
+        patternLink = Pattern.compile(HTML_A_HREF_TAG_PATTERN);
+
+        matcherTag = patternTag.matcher(content);
+
+        while (matcherTag.find()) {
+
+            String href = matcherTag.group(1); // href
+            String linkText = matcherTag.group(2); // link text
+
+            matcherLink = patternLink.matcher(href);
+
+            while (matcherLink.find()) {
+
+                String link = matcherLink.group(1).trim(); // link
+                if(link.contains("https")||link.contains("http")) {
+                    return link;
+                } else {
+                    return "https:"+link;
+                }
+
+
+            }
+
+        }
 
         return new String();
+
     }
+
+
+
 
     private static String getValue(String tag, Element element) {
         if(element != null && tag != null && element.getElementsByTagName(tag) != null && element.getElementsByTagName(tag).item(0) != null) {

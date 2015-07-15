@@ -80,9 +80,12 @@ public class DBHandlerArticle extends DBHandler implements IHandlerDB<Article>  
             return cat_id;
         } else {
 
+
+            final int rs = update(a);
             db.close();
-            return update(a);
+            return rs;
         }
+
     }
 
     public boolean existOnDb(final SQLiteDatabase db, final Article a) {

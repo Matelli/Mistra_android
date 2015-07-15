@@ -76,10 +76,11 @@ public class DBHandlerFormation extends DBHandler implements IHandlerDB<Formatio
             return cat_id;
 
         } else {
-            db.close();
-            return update(f);
-        }
 
+            final int rs = update(f);
+            db.close();
+            return rs;
+        }
     }
 
     public boolean existOnDb(final SQLiteDatabase db, final Formation f) {
