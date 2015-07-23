@@ -11,8 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_degade_head"
-        android:layout_alignParentTop="true"
-        >
+        android:layout_alignParentTop="true" >
 
         <ImageButton
             android:id="@+id/btnRetourHome"
@@ -23,6 +22,7 @@
             android:background="@null"
             android:contentDescription="@string/retour"
             android:padding="15dp"
+
 
             />
 
@@ -42,7 +42,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:layout_below="@id/headerFormations" >
+        android:layout_below="@id/headerFormations">
 
        <ImageView
            android:id="@+id/homeWithLogo"
@@ -54,44 +54,186 @@
            android:contentDescription="@string/background_home_with_logo" />
 
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="2dp"
-            android:id="@+id/ll_adresse">
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:src="@android:drawable/ic_menu_mylocation"
-                android:layout_weight="3"
-                android:background="@null"/>
-            <LinearLayout
+
+            <TableLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight="1"
-                android:padding="5dp">
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/adresseText"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    />
+                android:layout_gravity="center"
+                android:gravity="center">
 
-                <TextView
+                <TableRow
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:gravity="center_horizontal">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="2dp"
+                        android:id="@+id/ll_adresse">
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:src="@android:drawable/ic_menu_mylocation"
+                            android:layout_weight="3"
+                            android:background="@null"/>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:padding="5dp">
+                            <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/adresseText"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp"
+                                />
+
+                            <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/adresseMistra"
+                                android:textColor="@android:color/holo_purple"
+                                android:padding="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:gravity="center_horizontal">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="2dp"
+                        android:id="@+id/ll_numTel">
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:src="@android:drawable/sym_action_call"
+                            android:layout_weight="3"
+                            android:background="@null"/>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:padding="5dp">
+                            <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/telephoneText"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp"/>
+
+                            <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/telephoneMistra"
+                                android:textColor="@android:color/holo_purple"
+                                android:padding="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </TableRow>
+
+                <TableRow
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:gravity="center_horizontal">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="2dp"
+                        android:id="@+id/ll_email">
+                        <ImageView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:src="@android:drawable/sym_action_email"
+                            android:layout_weight="3"
+                            android:background="@null"/>
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:padding="5dp">
+                            <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/emailText"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp"/>
+
+                            <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/emailMistra"
+                                android:textColor="@android:color/holo_purple"
+                                android:padding="2dp"/>
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </TableRow>
+
+
+            </TableLayout>
+
+
+            <!--<LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="2dp"
+                android:id="@+id/ll_adresse"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:src="@android:drawable/ic_menu_mylocation"
+                    android:layout_weight="3"
+                    android:background="@null"/>
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/adresseMistra"
-                    android:textColor="@android:color/holo_purple"
-                    android:padding="2dp"/>
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:padding="5dp">
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/adresseText"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/adresseMistra"
+                        android:textColor="@android:color/holo_purple"
+                        android:padding="2dp"/>
 
 
                 </LinearLayout>
-            </LinearLayout>
+            </LinearLayout> -->
 
-        <LinearLayout
+
+
+        <!--<LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -125,9 +267,9 @@
 
 
             </LinearLayout>
-        </LinearLayout>
+        </LinearLayout> -->
 
-        <LinearLayout
+        <!-- <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -161,7 +303,7 @@
 
 
             </LinearLayout>
-        </LinearLayout>
+        </LinearLayout> -->
 
        <TextView
            android:id="@+id/view"
