@@ -48,7 +48,7 @@
     <string name="devis_envoie_mail">Envoie de l\'email...</string>
     <string name="devis_aucun_client_mail">Aucun client mail installé.</string>
     <string name="devis_comment_prefixe">Commentaires (max: </string>
-    <string name="devis_comment_suffixe"> car)</string>
+    <string name="devis_comment_suffixe"> caractères)</string>
 
     <string name="contact_envoie_email">Demande de contact</string>
 

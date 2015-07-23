@@ -30,8 +30,6 @@ public class Devis extends Activity {
 
     TextView compteur;
     final private int MAX_CAR = 500;
-    //final private String TEXT_COMMENT_PREFIXE = getResources().getString(R.string.devis_comment_prefixe);
-    //final private String TEXT_COMMENT_SUFFIXE = getResources().getString(R.string.devis_comment_suffixe);
 
 
 
@@ -62,6 +60,14 @@ public class Devis extends Activity {
 
         initialisation();
 
+        etNumTel.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+               if(!hasFocus)
+                    checkTelephone();
+            }
+        });
+
         etNumTel.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -70,14 +76,23 @@ public class Devis extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                activerSendBouton();
+                if (etNumTel != null && etNumTel.getText() != null && etNumTel.getText().length() > 0) {
+                    activerSendBouton();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!telephoneValid(etNumTel.getText())) {
-                    etNumTel.setError(getString(R.string.devis_error_numTel));
-                }
+                //checkTelephone();
+            }
+
+        });
+
+        etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus)
+                    checkEmail();
             }
         });
 
@@ -89,14 +104,13 @@ public class Devis extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                activerSendBouton();
+                if(etEmail!= null && etEmail.getText() != null && etEmail.getText().length()>0) {
+                    activerSendBouton();
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!emailValid(etEmail.getText())) {
-                    etEmail.setError(getString(R.string.devis_error_email));
-                }
             }
         });
 
@@ -127,9 +141,10 @@ public class Devis extends Activity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                sendEmail();
-                Toast.makeText(Devis.this, getResources().getString(R.string.devis_envoye), Toast.LENGTH_SHORT).show();
+                if(isValid()) {
+                    sendEmail();
+                    Toast.makeText(Devis.this, getResources().getString(R.string.devis_envoye), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -183,7 +198,6 @@ public class Devis extends Activity {
                 }
             }
         });
-
     }
 
     public void sendEmail()
@@ -243,15 +257,30 @@ public class Devis extends Activity {
      * Méthode qui se charge de vérifier si les champs obligatoire (téléphone et email) sont valide !
      */
     private void activerSendBouton() {
-        if(telephoneValid(etNumTel.getText()) && emailValid(etEmail.getText())) {
+        //if(telephoneValid(etNumTel.getText()) && emailValid(etEmail.getText())) {
             btnSend.setEnabled(true);
             btnSend.setAlpha(1f);
-        } else {
+        /*} else {
             btnSend.setEnabled(false);
             btnSend.setAlpha(0.2f);
-        }
+        }*/
     }
 
+    private void desactiverSendButton() {
+        btnSend.setEnabled(false);
+        btnSend.setAlpha(0.2f);
+    }
+
+    //On demande à vérifier si les infos sont valides, si non, on affiche un msg d'erreur
+    private boolean checkTelephone() {
+        if (!telephoneValid(etNumTel.getText())) {
+            etNumTel.setError(getString(R.string.devis_error_numTel));
+            return false;
+        }
+        return true;
+    }
+
+    //M2thode qui vérifie si les infos saisies dans le champs téléphone sont valident !
     private boolean telephoneValid(CharSequence tel) {
         if(tel != null && tel.length() >=10) {
             return true;
@@ -260,6 +289,14 @@ public class Devis extends Activity {
         }
     }
 
+    //On demande à vérifier si les infos sont valides, si non, on affiche un msg d'erreur
+    private boolean checkEmail() {
+        if (!emailValid(etEmail.getText())) {
+            etEmail.setError(getString(R.string.devis_error_email));
+            return false;
+        }
+        return true;
+    }
     /**
      * Méthode qui vérifie que le Text passé en parametre est valide pour un Email
      * @param text : l'adresse/texte à vérifier
@@ -275,14 +312,13 @@ public class Devis extends Activity {
     }
 
     private void initialisation() {
+        desactiverSendButton();
+
         //si l'on vient d'un item "Presentation" depuis "Formation", on a passé le nom de la formation donc on le champs objet avec
         if(getIntent()!=null && getIntent().getExtras()!=null &&  getIntent().getExtras().getString("objetDevis") != null) {
             etObjet.setText(getIntent().getExtras().getString("objetDevis"));
             etNom.requestFocus();//on donne le focus au champs suivant
         }
-
-        btnSend.setEnabled(false);//a la création on le désactive
-        btnSend.setAlpha(0.2f);
 
     }
 
@@ -304,5 +340,12 @@ public class Devis extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isValid() {
+        if(checkTelephone() && checkEmail()) {
+            return true;
+        }
+        return false;
     }
 }
