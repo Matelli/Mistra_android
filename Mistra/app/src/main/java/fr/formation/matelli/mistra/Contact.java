@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -85,9 +86,12 @@ public class Contact extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "0182522525"));
-                startActivity(intent);
-                finish();
+                boolean hasPhone = getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY);
+                if(hasPhone) {
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "0182522525"));
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
