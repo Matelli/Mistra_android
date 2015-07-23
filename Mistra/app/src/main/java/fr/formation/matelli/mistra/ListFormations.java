@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+
 import org.json.JSONArray;
 
 import java.text.Normalizer;
@@ -40,7 +42,7 @@ public class ListFormations extends Activity {
     Button btnTutos;
     Button btnDevis;
     Button btnContact;*/
-
+    RelativeLayout noFormations;
 
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
@@ -54,6 +56,8 @@ public class ListFormations extends Activity {
         this.context = this;
 
         setContentView(R.layout.activity_list_formations);
+
+        noFormations = (RelativeLayout) findViewById(R.id.no_formations);
         // ImageButton
         this.btnRetourHome = (ImageButton) findViewById(R.id.btnRetourHome);
         // Button
@@ -174,30 +178,42 @@ public class ListFormations extends Activity {
         //récupération des infos depuis la DB
         this.listOfFormations.addAll(this.db.getAll());
 
-        //clé : titre parent donc titre contenu dans la List "titres" | valeur : le sous titre (l'enfant)
-        final HashMap<String, List<String>> listTitres = new HashMap<String, List<String>>();
-        for(final Formation form : this.listOfFormations) {
-            //pas de Doublons !
-            if(!listTitres.containsKey(form.getTitle())) {
-                listTitres.put(form.getTitle(), new ArrayList<String>());
+        if(this.listOfFormations != null && this.listOfFormations.size()>0) {
+            noFormations.setVisibility(View.GONE);
+            this.expListView.setVisibility(View.VISIBLE);
+
+            //clé : titre parent donc titre contenu dans la List "titres" | valeur : le sous titre (l'enfant)
+            final HashMap<String, List<String>> listTitres = new HashMap<String, List<String>>();
+            for (final Formation form : this.listOfFormations) {
+                //pas de Doublons !
+                if (!listTitres.containsKey(form.getTitle())) {
+                    listTitres.put(form.getTitle(), new ArrayList<String>());
+                }
+
+                for (final Article art : form.getArticles()) {
+                    listTitres.get(form.getTitle()).add(art.getTitle());
+                }
             }
 
-            for(final Article art : form.getArticles()) {
-                listTitres.get(form.getTitle()).add(art.getTitle());
+            this.listAdapter = new CustomExpandableList(ListFormations.this, listTitres);
+            // setting list adapter
+            this.expListView.setAdapter(this.listAdapter);
+
+            //on expand toutes les catégories
+            //TODO corriger bug sur l'expand !
+            for(int i=0;i<this.listAdapter.getGroupCount();i++)
+            {
+                this.expListView.expandGroup(i);
             }
+
+        } else {
+            //pas d'article de formation, on affiche un message d'erreur.
+            noFormations.setVisibility(View.VISIBLE);
+            this.expListView.setVisibility(View.GONE);
         }
-
-        this.listAdapter = new CustomExpandableList(ListFormations.this, listTitres);
-        // setting list adapter
-        this.expListView.setAdapter(this.listAdapter);
         this.db.close();
 
-        //on expand toutes les catégories
-        //TODO corriger bug sur l'expand !
-        for(int i=0;i<this.listAdapter.getGroupCount();i++)
-        {
-            this.expListView.expandGroup(i);
-        }
+
     }
 
     @Override

@@ -44,8 +44,20 @@
         android:divider="@null"
         android:childDivider="@drawable/degrade_cellule"
         android:background="@android:color/white"
-
         />
+
+    <RelativeLayout
+        android:id="@+id/no_formations"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/formation_aucune_formation"
+            android:gravity="center" />
+    </RelativeLayout>
 
 
     <View

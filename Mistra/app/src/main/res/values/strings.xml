@@ -29,6 +29,10 @@
     <string name="title_activity_blog">Blog</string>
     <string name="title_activity_sub_list_view">SubListView</string>
 
+    <string name="tutoriel_aucun_tutoriel">Aucun tutoriel\nVeuillez vérifier votre connection internet !</string>
+    <string name="formation_aucune_formation">Aucune formation\nVeuillez vérifier votre connection internet !</string>
+    <string name="blog_aucun_article">Aucun article\nVeuillez vérifier votre connection internet !</string>
+
     <string name="devis_error_numTel">Le numéro de téléphone n\'est pas valide</string>
     <string name="devis_error_email">L\'email n\'est pas valide</string>
 

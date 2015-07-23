@@ -28,9 +28,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="0dp"
-        android:layout_weight="0.6"
-
-       >
+        android:layout_weight="0.6" >
 
 
         <Button
@@ -78,6 +76,7 @@
             android:paddingStart="@dimen/icon_horizontal_margin"
             android:paddingEnd="@dimen/icon_horizontal_margin"
             android:drawablePadding="-45dp"
+
 
             />
         <View

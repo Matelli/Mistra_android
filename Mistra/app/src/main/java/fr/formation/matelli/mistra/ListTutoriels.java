@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -54,6 +55,7 @@ public class ListTutoriels extends Activity {
     Context context;
 
     ImageButton btnRetourHome;
+    RelativeLayout noTuto;
     /*Button btnFormations;
     Button btnTutos;
     Button btnDevis;
@@ -78,6 +80,7 @@ public class ListTutoriels extends Activity {
 
         // ImageButton
         btnRetourHome = (ImageButton) findViewById(R.id.btnRetourHome);
+        noTuto = (RelativeLayout) findViewById(R.id.no_tutoriels);
         // Button
         /*btnFormations = (Button) findViewById(R.id.btnFormationFooterTutos);
         btnTutos = (Button) findViewById(R.id.btnTutosFooterTutos);
@@ -203,31 +206,40 @@ public class ListTutoriels extends Activity {
         //récupération des infos depuis la DB
         this.listOfTutoriels.addAll(this.db.getAll());
 
-        //clé : titre parent donc titre contenu dans la List "titres" | valeur : le sous titre (l'enfant)
-        final HashMap<String, List<String>> listTitres = new HashMap<String, List<String>>();
-        for(final Tutoriel tuto : this.listOfTutoriels) {
-            //test si c'est le titre principal !
-            if(tuto.isMainTutorial()) {
-                //pas de Doublons !
-                if(!listTitres.containsKey(tuto.getTitle()))
-                    listTitres.put(tuto.getTitle(), new ArrayList<String>());
-            }
-            for (final Object sel : tuto.getContent()) {
-                if(listTitres.size()>0 && tuto != null &&  listTitres.get(tuto.getTitle()) != null)
-                    listTitres.get(tuto.getTitle()).add(((Selection) sel).getTitle());
-            }
-        }
+        if(this.listOfTutoriels != null && this.listOfTutoriels.size()>0) {
+            expListView.setVisibility(View.VISIBLE);
+            noTuto.setVisibility(View.GONE);
 
-        this.listAdapter = new CustomExpandableList(ListTutoriels.this, listTitres);
-        // setting list adapter
-        this.expListView.setAdapter(this.listAdapter);
+            //clé : titre parent donc titre contenu dans la List "titres" | valeur : le sous titre (l'enfant)
+            final HashMap<String, List<String>> listTitres = new HashMap<String, List<String>>();
+            for (final Tutoriel tuto : this.listOfTutoriels) {
+                //test si c'est le titre principal !
+                if (tuto.isMainTutorial()) {
+                    //pas de Doublons !
+                    if (!listTitres.containsKey(tuto.getTitle()))
+                        listTitres.put(tuto.getTitle(), new ArrayList<String>());
+                }
+                for (final Object sel : tuto.getContent()) {
+                    if (listTitres.size() > 0 && tuto != null && listTitres.get(tuto.getTitle()) != null)
+                        listTitres.get(tuto.getTitle()).add(((Selection) sel).getTitle());
+                }
+            }
+
+            this.listAdapter = new CustomExpandableList(ListTutoriels.this, listTitres);
+            // setting list adapter
+            this.expListView.setAdapter(this.listAdapter);
+
+
+            //on expand toutes les catégories
+            for (int i = 0; i < this.listAdapter.getGroupCount(); i++) {
+                this.expListView.expandGroup(i);
+            }
+        } else {
+            //Pas de Tuto, on affiche le message et on cache la liste Expandable
+            expListView.setVisibility(View.GONE);
+            noTuto.setVisibility(View.VISIBLE);
+        }
         this.db.close();
-
-        //on expand toutes les catégories
-        for(int i=0;i<this.listAdapter.getGroupCount();i++)
-        {
-            this.expListView.expandGroup(i);
-        }
     }
 
 

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class Blog extends Activity {
     ListAdapter listAdapter;
     ImageButton btnRetourHome;
     ListView listView;
+    RelativeLayout noArticles;
 
     DBHandlerBlog db;
     List<data.Blog> listOfBlogs = new ArrayList<data.Blog>();
@@ -41,6 +43,7 @@ public class Blog extends Activity {
 
         btnRetourHome = (ImageButton) findViewById(R.id.btnRetourHome);
         listView = (ListView) findViewById(R.id.expandablelisteBlog);
+        noArticles = (RelativeLayout) findViewById(R.id.no_blogs);
 
 
         this.btnRetourHome.setOnClickListener(new View.OnClickListener() {
@@ -95,11 +98,22 @@ public class Blog extends Activity {
     private void remplirListData() {
         // Creation d'un objet db
         this.db = new DBHandlerBlog(this.context);
-        //récupération des infos depuis la DB
+        //rï¿½cupï¿½ration des infos depuis la DB
         this.listOfBlogs.addAll(this.db.getAll());
 
-        listAdapter = new CustomListView(Blog.this, listOfBlogs);
-        listView.setAdapter(listAdapter);
+        if(this.listOfBlogs != null && this.listOfBlogs.size()>0) {
+            noArticles.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+
+            listAdapter = new CustomListView(Blog.this, listOfBlogs);
+            listView.setAdapter(listAdapter);
+        } else {
+            //nous n'avons pas d'articles, donc, on affiche un message d'erreur
+            noArticles.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        }
+
+
 
         this.db.close();
     }
